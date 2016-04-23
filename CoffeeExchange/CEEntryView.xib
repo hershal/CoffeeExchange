@@ -21,6 +21,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P4V-Rb-ZkS" customClass="CEEntryContentView" customModule="CoffeeExchange" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="200" height="158"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="P4V-Rb-ZkS" secondAttribute="height" multiplier="100:79" id="n4f-nE-8mJ"/>
+                                </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xu5-cb-7Jv">
                                 <rect key="frame" x="79" y="158" width="42" height="21"/>
@@ -37,28 +40,17 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="P4V-Rb-ZkS" firstAttribute="leading" secondItem="H2k-GZ-QbJ" secondAttribute="leading" id="KTd-C0-7u7"/>
-                            <constraint firstItem="P4V-Rb-ZkS" firstAttribute="width" secondItem="H2k-GZ-QbJ" secondAttribute="height" multiplier="1:1" id="biv-zM-6id"/>
-                            <constraint firstItem="P4V-Rb-ZkS" firstAttribute="width" secondItem="H2k-GZ-QbJ" secondAttribute="width" id="i8s-8a-qy5"/>
                         </constraints>
                     </stackView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
-                <constraint firstItem="H2k-GZ-QbJ" firstAttribute="top" secondItem="ppq-Ln-0TT" secondAttribute="top" constant="22" id="LFG-Ha-2yU"/>
-                <constraint firstAttribute="trailing" secondItem="H2k-GZ-QbJ" secondAttribute="trailing" constant="20" id="UXY-XF-8I2"/>
-                <constraint firstItem="H2k-GZ-QbJ" firstAttribute="height" secondItem="ppq-Ln-0TT" secondAttribute="height" id="cEV-zL-bQO"/>
-                <constraint firstItem="H2k-GZ-QbJ" firstAttribute="width" secondItem="ppq-Ln-0TT" secondAttribute="width" id="cTe-K0-yYw"/>
-                <constraint firstItem="H2k-GZ-QbJ" firstAttribute="centerX" secondItem="ppq-Ln-0TT" secondAttribute="centerX" id="ewd-OH-iJU"/>
-                <constraint firstItem="H2k-GZ-QbJ" firstAttribute="centerY" secondItem="ppq-Ln-0TT" secondAttribute="centerY" id="n6o-5D-lhM"/>
+                <constraint firstItem="H2k-GZ-QbJ" firstAttribute="leading" secondItem="ppq-Ln-0TT" secondAttribute="leading" id="mrW-rh-v8Z"/>
+                <constraint firstAttribute="bottom" secondItem="H2k-GZ-QbJ" secondAttribute="bottom" id="rGP-eZ-Mzd"/>
+                <constraint firstItem="H2k-GZ-QbJ" firstAttribute="width" secondItem="ppq-Ln-0TT" secondAttribute="height" multiplier="1:1" id="xL2-ov-PIB"/>
             </constraints>
             <size key="customSize" width="200" height="200"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="LFG-Ha-2yU"/>
-                    <exclude reference="UXY-XF-8I2"/>
-                </mask>
-            </variation>
             <connections>
                 <outlet property="content" destination="P4V-Rb-ZkS" id="XaQ-8h-dlh"/>
                 <outlet property="lowerLabel" destination="1cK-Dw-Jf6" id="X9f-qy-J7R"/>

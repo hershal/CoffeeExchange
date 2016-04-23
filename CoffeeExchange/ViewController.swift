@@ -25,7 +25,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
 
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         NSLog("selected \(contact.identifier)")
-        collection.addEntry(contact.identifier)
+        collection.addEntry(contact)
         collectionView.reloadData()
     }
 
@@ -52,8 +52,18 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CEEntryView", forIndexPath: indexPath) as! CEEntryView
-        let lowerDisplayString = collection.entries[indexPath.item].identifier as String
-        cell.lowerLabel.text = lowerDisplayString
+        let entry = collection.entries[indexPath.item]
+        let contact = entry.contact
+        let upperDisplayString = "\(contact.givenName) \(contact.familyName)"
+        cell.upperLabel.text = upperDisplayString
+
+        var cupString = "cup"
+        if entry.balance != 1 {
+            cupString = "cups"
+        }
+
+        cell.lowerLabel.text = "\(entry.balance) \(cupString)";
+        cell.lowerLabel.textColor = UIColor.brownColor()
         return cell
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Contacts
 
 class CECollection {
 
@@ -14,7 +15,7 @@ class CECollection {
 
     var entries: [CEEntry]
     var identifiers: [String] {
-        return entries.map({$0.identifier})
+        return entries.map({$0.contact.identifier})
     }
 
     init(shouldUnarchive: Bool) {
@@ -35,13 +36,13 @@ class CECollection {
         archive()
     }
 
-    func addEntry(identifier: String) {
-        if (identifiers.contains(identifier)) {
+    func addEntry(contact: CNContact) {
+        if (identifiers.contains(contact.identifier)) {
             NSLog("CECollection:: Trying to add contact which already exists in store!")
             return
         }
-        entries.append(CEEntry(identifier: identifier))
-        NSLog("CECollection:: Added entry: \(identifier)")
+        entries.append(CEEntry(contact: contact))
+        NSLog("CECollection:: Added entry: \(contact.identifier)")
     }
 
     private func unarchive() {
