@@ -26,7 +26,17 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells/>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CEEntryView" id="4uS-8O-qUB" customClass="CEEntryView" customModule="CoffeeExchange" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="64" width="182" height="182"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="182" height="182"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -69,6 +79,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rOg-6D-DPG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="340" y="429"/>
+        </scene>
+        <!--Entry Detail View Controller-->
+        <scene sceneID="t6H-O0-pe8">
+            <objects>
+                <viewController storyboardIdentifier="CEEntryDetailViewController" id="f6W-ys-7bx" customClass="CEEntryDetailViewController" customModule="CoffeeExchange" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y6z-HU-VSE"/>
+                        <viewControllerLayoutGuide type="bottom" id="iqu-KH-jl6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8kT-uV-FXP">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="GOd-FH-UsE">
+                                <rect key="frame" x="253" y="285" width="94" height="29"/>
+                                <connections>
+                                    <action selector="balanceChanged:" destination="f6W-ys-7bx" eventType="valueChanged" id="KG1-w1-2t0"/>
+                                </connections>
+                            </stepper>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9qD-EG-XtR">
+                                <rect key="frame" x="279" y="256" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="balanceControl" destination="GOd-FH-UsE" id="Q8c-XG-HzV"/>
+                        <outlet property="balanceLabel" destination="9qD-EG-XtR" id="EaE-xl-hxx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cVw-Uz-Jkq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1860" y="429"/>
         </scene>
     </scenes>
 </document>

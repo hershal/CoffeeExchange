@@ -12,7 +12,7 @@ import ContactsUI
 class ViewController: UIViewController, CNContactPickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
 
     @IBOutlet weak var collectionView: UICollectionView!
-    var collection: CECollection!
+    private var collection: CECollection!
 
     @IBAction func addEntry(sender: AnyObject) {
         let picker = CNContactPickerViewController()
@@ -65,6 +65,14 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
         cell.lowerLabel.text = "\(entry.balance) \(cupString)";
         cell.lowerLabel.textColor = UIColor.brownColor()
         return cell
+    }
+
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let selectedEntry = collection.entries[indexPath.item]
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let detailView = mainStoryboard.instantiateViewControllerWithIdentifier("CEEntryDetailViewController") as! CEEntryDetailViewController
+        detailView.entry = selectedEntry
+        self.navigationController?.pushViewController(detailView, animated: true)
     }
 }
 
