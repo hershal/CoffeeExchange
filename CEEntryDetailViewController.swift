@@ -19,6 +19,7 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
     }
 
     var entry: CEEntry!
+    var delegate: CEEntryDetailDelegate?
 
     func refreshView() {
         if self.viewIfLoaded != nil {
@@ -33,6 +34,11 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
         refreshView()
     }
 
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        delegate?.detailWillDisappear(self, withEntry: entry)
+    }
+
     func commonInit() {
         balanceControl.stepValue = 1.0
         balanceControl.minimumValue = -1.0 * (balanceControl.maximumValue)
@@ -44,4 +50,8 @@ class CEEntryDetailBackgroundView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+}
+
+protocol CEEntryDetailDelegate {
+    func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry)
 }

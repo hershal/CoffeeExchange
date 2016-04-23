@@ -9,7 +9,7 @@
 import UIKit
 import ContactsUI
 
-class ViewController: UIViewController, CNContactPickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class ViewController: UIViewController, CNContactPickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, CEEntryDetailDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     private var collection: CECollection!
@@ -45,6 +45,11 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - CEEntryDetailDelegate Methods
+    func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
+        collectionView.reloadData()
+    }
+
     // MARK: - CollectionViewDataSource Methods
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collection.entries.count
@@ -72,6 +77,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let detailView = mainStoryboard.instantiateViewControllerWithIdentifier("CEEntryDetailViewController") as! CEEntryDetailViewController
         detailView.entry = selectedEntry
+        detailView.delegate = self
         self.navigationController?.pushViewController(detailView, animated: true)
     }
 }
