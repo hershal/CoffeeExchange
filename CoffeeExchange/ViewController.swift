@@ -7,19 +7,35 @@
 //
 
 import UIKit
+import ContactsUI
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CNContactPickerDelegate {
+
+    @IBAction func addEntry(sender: AnyObject) {
+        let picker = CNContactPickerViewController()
+        picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey]
+
+        picker.predicateForEnablingContact = NSPredicate(format: "NOT (identifier IN %@)",collection.identifiers)
+        picker.delegate = self
+        self.presentViewController(picker, animated: true, completion: nil)
+    }
+
+    func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
+        NSLog("selected \(contact.identifier)")
+        collection.addEntry(contact.identifier)
+    }
+
+    var collection: CECollection!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        collection = CECollection(shouldUnarchive: false)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
 

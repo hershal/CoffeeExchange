@@ -16,6 +16,7 @@
 		78BDBD661CCADAAA00718798 /* CoffeeExchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD651CCADAAA00718798 /* CoffeeExchangeTests.swift */; };
 		78BDBD711CCADAAA00718798 /* CoffeeExchangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD701CCADAAA00718798 /* CoffeeExchangeUITests.swift */; };
 		78BDBD7F1CCADB1D00718798 /* CEEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD7E1CCADB1D00718798 /* CEEntry.swift */; };
+		78BDBD811CCAE8C300718798 /* CECollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD801CCAE8C300718798 /* CECollection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		78BDBD701CCADAAA00718798 /* CoffeeExchangeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeExchangeUITests.swift; sourceTree = "<group>"; };
 		78BDBD721CCADAAA00718798 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		78BDBD7E1CCADB1D00718798 /* CEEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntry.swift; sourceTree = "<group>"; };
+		78BDBD801CCAE8C300718798 /* CECollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CECollection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				78BDBD7E1CCADB1D00718798 /* CEEntry.swift */,
+				78BDBD801CCAE8C300718798 /* CECollection.swift */,
 				78BDBD4C1CCADAAA00718798 /* CoffeeExchange */,
 				78BDBD641CCADAAA00718798 /* CoffeeExchangeTests */,
 				78BDBD6F1CCADAAA00718798 /* CoffeeExchangeUITests */,
@@ -264,6 +267,7 @@
 			files = (
 				78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */,
 				78BDBD561CCADAAA00718798 /* CoffeeExchange.xcdatamodeld in Sources */,
+				78BDBD811CCAE8C300718798 /* CECollection.swift in Sources */,
 				78BDBD7F1CCADB1D00718798 /* CEEntry.swift in Sources */,
 				78BDBD4E1CCADAAA00718798 /* AppDelegate.swift in Sources */,
 			);
