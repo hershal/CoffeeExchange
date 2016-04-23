@@ -20,17 +20,18 @@ class CoffeeExchangeTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+
+    func testEntryEquality() {
+        // Don't care if balance changes
+
+        let entry0 = CEEntry(identifier: "000")
+        entry0.balance = 10
+
+        let entry1 = CEEntry(identifier: "000")
+        entry1.balance = 10
+
+        XCTAssert(entry0 == entry1)
+        entry1.identifier = "001"
+        XCTAssert(entry0 != entry1)
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }
