@@ -16,9 +16,9 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
     @IBOutlet weak var balanceControl: UIStepper!
     @IBAction func balanceChanged(sender: AnyObject) {
         let value = balanceControl.value
-        entry.balance = value < 0 ? Int(value - 0.5) : Int(value + 0.5)
+        let intValue = value < 0 ? Int(value - 0.5) : Int(value + 0.5)
+        entry.balance = intValue
         refreshView()
-        detailBackgroundView.pushView()
     }
 
     var entry: CEEntry!
@@ -27,7 +27,7 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
     func refreshView() {
         if self.viewIfLoaded != nil {
             balanceLabel.text = "\(entry.balance)"
-            self.title = "\(entry.contact.givenName) \(entry.contact.familyName)"
+            detailBackgroundView.count = entry.balance
         }
     }
 
@@ -45,6 +45,7 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
     }
 
     private func commonInit() {
+        self.title = "\(entry.contact.givenName) \(entry.contact.familyName)"
         balanceControl.stepValue = 1.0
         balanceControl.minimumValue = -1.0 * (balanceControl.maximumValue)
         balanceControl.value = Double(entry.balance)
@@ -61,11 +62,17 @@ class CEEntryDetailBackgroundView: UIView {
     var gravity: UIGravityBehavior
     var initialBehavior: UIDynamicItemBehavior
     var boundsCollision: UICollisionBehavior
+    var count: Int {
+        didSet (newCount) {
+            // do something
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         gravity = UIGravityBehavior()
         initialBehavior = UIDynamicItemBehavior()
         boundsCollision = UICollisionBehavior()
+        count = 0
 
         super.init(coder: aDecoder)
         animator = UIDynamicAnimator(referenceView: self)
