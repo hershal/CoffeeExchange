@@ -25,8 +25,10 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
 
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         NSLog("selected \(contact.identifier)")
-        collection.addEntry(contact)
-        collectionView.reloadData()
+        if let entry = collection.addEntry(contact) {
+            showEntryDetail(entry)
+            collectionView.reloadData()
+        }
     }
 
     override func viewDidLoad() {
@@ -43,6 +45,14 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    func showEntryDetail(entry: CEEntry) {
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let detailView = mainStoryboard.instantiateViewControllerWithIdentifier("CEEntryDetailViewController") as! CEEntryDetailViewController
+        detailView.entry = entry
+        detailView.delegate = self
+        self.navigationController?.pushViewController(detailView, animated: true)
     }
 
     // MARK: - CEEntryDetailDelegate Methods
@@ -74,11 +84,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let selectedEntry = collection.entries[indexPath.item]
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let detailView = mainStoryboard.instantiateViewControllerWithIdentifier("CEEntryDetailViewController") as! CEEntryDetailViewController
-        detailView.entry = selectedEntry
-        detailView.delegate = self
-        self.navigationController?.pushViewController(detailView, animated: true)
+        showEntryDetail(selectedEntry)
     }
 }
 

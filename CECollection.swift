@@ -36,13 +36,15 @@ class CECollection {
         archive()
     }
 
-    func addEntry(contact: CNContact) {
+    func addEntry(contact: CNContact) -> CEEntry? {
         if (identifiers.contains(contact.identifier)) {
             NSLog("CECollection:: Trying to add contact which already exists in store!")
-            return
+            return nil
         }
-        entries.append(CEEntry(contact: contact))
+        let entry = CEEntry(contact: contact)
+        entries.append(entry)
         NSLog("CECollection:: Added entry: \(contact.identifier)")
+        return entry
     }
 
     private func unarchive() {
