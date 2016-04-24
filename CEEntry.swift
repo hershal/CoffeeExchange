@@ -10,10 +10,10 @@ import Foundation
 import Contacts
 
 // Would this be better as a value-type?
-class CEEntry: NSObject {
+class CEEntry: NSObject, NSCoding {
 
     static let balanceKey = "balance";
-    static let identifierKey = "identifier";
+    static let contactKey = "contact";
 
     var contact: CNContact
     var balance: Int
@@ -21,5 +21,15 @@ class CEEntry: NSObject {
     init(contact: CNContact) {
         self.contact = contact
         self.balance = 0
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        contact = aDecoder.decodeObjectForKey(CEEntry.contactKey) as! CNContact
+        balance = aDecoder.decodeIntegerForKey(CEEntry.balanceKey)
+    }
+
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(self.contact, forKey: CEEntry.contactKey)
+        aCoder.encodeInteger(self.balance, forKey: CEEntry.balanceKey)
     }
 }

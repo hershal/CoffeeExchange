@@ -27,14 +27,21 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
         NSLog("selected \(contact.identifier)")
         if let entry = collection.addEntry(contact) {
             showEntryDetail(entry)
-            collectionView.reloadData()
+            updateCollectionData()
+        }
+    }
+
+    private func updateCollectionData() {
+        self.collectionView.reloadData()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            self.collection.save()
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collection = CECollection(shouldUnarchive: false)
+        collection = CECollection(shouldUnarchive: true)
         collectionView.delegate = self
         collectionView.dataSource = self
         let nib = UINib(nibName: "CEEntryView", bundle: nil)
@@ -58,7 +65,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
 
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
-        collectionView.reloadData()
+        updateCollectionData()
     }
 
     // MARK: - CollectionViewDataSource Methods

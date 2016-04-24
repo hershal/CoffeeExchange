@@ -48,14 +48,16 @@ class CECollection {
     }
 
     private func unarchive() {
+        entries.removeAll()
         if let unarchivedEntries = NSKeyedUnarchiver.unarchiveObjectWithFile(archiveLocation) as? [CEEntry] {
             entries = unarchivedEntries
-        } else {
-            entries.removeAll()
         }
+        NSLog("CECollection::DidUnarchiveFrom: \(archiveLocation)")
+        NSLog("CECollection::Loaded \(entries.count) items")
     }
 
     private func archive() {
         NSKeyedArchiver.archiveRootObject(entries, toFile: archiveLocation)
+        NSLog("CECollection::DidArchiveTo: \(archiveLocation)")
     }
 }
