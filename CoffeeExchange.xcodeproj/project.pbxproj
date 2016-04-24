@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7880D8201CCCC0D800403730 /* CEEntryDetailBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880D81F1CCCC0D800403730 /* CEEntryDetailBackgroundView.swift */; };
+		7880D8221CCCC63900403730 /* CEThrowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880D8211CCCC63900403730 /* CEThrowBehavior.swift */; };
 		78BDBD4E1CCADAAA00718798 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */; };
 		78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4F1CCADAAA00718798 /* ViewController.swift */; };
 		78BDBD531CCADAAA00718798 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78BDBD511CCADAAA00718798 /* Main.storyboard */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		7880D81F1CCCC0D800403730 /* CEEntryDetailBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailBackgroundView.swift; sourceTree = "<group>"; };
+		7880D8211CCCC63900403730 /* CEThrowBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEThrowBehavior.swift; sourceTree = "<group>"; };
 		78BDBD4A1CCADAAA00718798 /* CoffeeExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78BDBD4F1CCADAAA00718798 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 		78BDBD411CCADAAA00718798 = {
 			isa = PBXGroup;
 			children = (
+				7880D8211CCCC63900403730 /* CEThrowBehavior.swift */,
 				7880D81F1CCCC0D800403730 /* CEEntryDetailBackgroundView.swift */,
 				78BDBD911CCCB65000718798 /* CEEntryViewModel.swift */,
 				78BDBD821CCB0F2100718798 /* CEEntryView.swift */,
@@ -283,6 +286,7 @@
 			files = (
 				78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */,
 				78BDBD871CCB580C00718798 /* CEEntryDetailViewController.swift in Sources */,
+				7880D8221CCCC63900403730 /* CEThrowBehavior.swift in Sources */,
 				78BDBD561CCADAAA00718798 /* CoffeeExchange.xcdatamodeld in Sources */,
 				78BDBD811CCAE8C300718798 /* CECollection.swift in Sources */,
 				7880D8201CCCC0D800403730 /* CEEntryDetailBackgroundView.swift in Sources */,

@@ -12,30 +12,13 @@ import CoreGraphics
 class CEEntryDetailBackgroundView: UIView {
 
     var animator: UIDynamicAnimator!
-    var gravity: UIGravityBehavior
-    var initialBehavior: UIDynamicItemBehavior
-    var boundsCollision: UICollisionBehavior
-    var count: Int {
-        didSet (newCount) {
-            // do something
-        }
-    }
+    var dynamicBehavior: CEThrowBehavior!
 
     required init?(coder aDecoder: NSCoder) {
-        gravity = UIGravityBehavior()
-        initialBehavior = UIDynamicItemBehavior()
-        boundsCollision = UICollisionBehavior()
-        count = 0
-
         super.init(coder: aDecoder)
+        dynamicBehavior = CEThrowBehavior(frame: self.frame)
         animator = UIDynamicAnimator(referenceView: self)
-
-        // TODO: work to remove this
-        boundsCollision.translatesReferenceBoundsIntoBoundary = true
-
-        animator.addBehavior(gravity)
-        animator.addBehavior(initialBehavior)
-        animator.addBehavior(boundsCollision)
+        animator.addBehavior(dynamicBehavior)
     }
 
     func pushView() {
@@ -43,25 +26,15 @@ class CEEntryDetailBackgroundView: UIView {
         let randomFloat = CGFloat.random()
         let maxRadius = sqrt(pow(CEEntryDynamicItem.size.height, 2) + pow(CEEntryDynamicItem.size.width, 2))
         let xSpawn = (frame.width - maxRadius) * randomFloat
-        let ySpawn = CGFloat(100) // detailBackgroundView.frame.origin.y
+        let ySpawn = self.frame.origin.y
         let origin = CGPoint(x: xSpawn, y: ySpawn)
         let dynamicItem = CEEntryDynamicItem(origin: origin)
         addSubview(dynamicItem)
+        dynamicBehavior.addSubview(dynamicItem)
     }
 
     func popView() {
 
-    }
-
-    internal override func addSubview(view: UIView) {
-        super.addSubview(view)
-
-        gravity.addItem(view)
-        boundsCollision.addItem(view)
-        initialBehavior.addItem(view)
-        initialBehavior.addAngularVelocity(CGFloat.srandom()*CGFloat(M_PI), forItem: view)
-        initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000, y: CGFloat.random()*1000), forItem: view)
-        initialBehavior.elasticity = 0.25
     }
 }
 

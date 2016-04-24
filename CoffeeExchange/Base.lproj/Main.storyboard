@@ -93,7 +93,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="APf-VS-Q5d" customClass="CEEntryDetailBackgroundView" customModule="CoffeeExchange" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="-130" width="600" height="730"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="qEh-0L-U99">
@@ -117,7 +117,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="iqu-KH-jl6" firstAttribute="top" secondItem="APf-VS-Q5d" secondAttribute="bottom" id="1sz-2l-zzb"/>
-                            <constraint firstItem="APf-VS-Q5d" firstAttribute="top" secondItem="y6z-HU-VSE" secondAttribute="bottom" constant="-150" id="9mI-Jo-dZ6"/>
+                            <constraint firstItem="APf-VS-Q5d" firstAttribute="centerY" secondItem="8kT-uV-FXP" secondAttribute="centerY" id="2Zq-If-ix9"/>
                             <constraint firstItem="qEh-0L-U99" firstAttribute="centerY" secondItem="8kT-uV-FXP" secondAttribute="centerY" id="BSb-ee-wq9"/>
                             <constraint firstItem="APf-VS-Q5d" firstAttribute="width" secondItem="8kT-uV-FXP" secondAttribute="width" id="uO3-nr-ehh"/>
                             <constraint firstItem="qEh-0L-U99" firstAttribute="centerX" secondItem="8kT-uV-FXP" secondAttribute="centerX" id="ukE-ZP-CE5"/>

@@ -57,6 +57,7 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
         switch keyPath {
         case CEEntry.balanceKey:
             balanceLabel.text = viewModel.balanceText
+            detailBackgroundView.pushView()
         default:
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
