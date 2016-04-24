@@ -15,8 +15,33 @@ class CEEntryDetailBackgroundView: UIView {
     var dynamicBehavior: CEThrowBehavior!
     var dynamicItems: [CEEntryDynamicItem]
 
+    var didLayoutSubviews: Bool
+
     var viewCount: Int {
         didSet {
+            updateViewCount()
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        dynamicItems = [CEEntryDynamicItem]()
+        viewCount = 0
+        didLayoutSubviews = false
+        super.init(coder: aDecoder)
+        dynamicBehavior = CEThrowBehavior()
+        animator = UIDynamicAnimator(referenceView: self)
+        animator.addBehavior(dynamicBehavior)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        dynamicBehavior.layoutCollisions(frame)
+        didLayoutSubviews = true
+        updateViewCount()
+    }
+
+    private func updateViewCount() {
+        if (didLayoutSubviews) {
             while viewCount > dynamicItems.count {
                 addView()
             }
@@ -26,23 +51,31 @@ class CEEntryDetailBackgroundView: UIView {
         }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        dynamicItems = [CEEntryDynamicItem]()
-        viewCount = 0
-        super.init(coder: aDecoder)
-        dynamicBehavior = CEThrowBehavior(frame: self.frame)
-        animator = UIDynamicAnimator(referenceView: self)
-        animator.addBehavior(dynamicBehavior)
+    private func viewIntersectsItems(view: UIView) -> Bool {
+        let doesIntersect = dynamicItems
+            .map { (item) -> Bool in CGRectIntersectsRect(item.frame, view.frame) }
+            .filter { (element) -> Bool in element == true }
+            .first
+        if let doesIntersect = doesIntersect {
+            return doesIntersect
+        }
+
+        return false
     }
 
     func addView() {
-        // gives a random float between 0 and 1
         let randomFloat = CGFloat.random()
         let maxRadius = sqrt(pow(CEEntryDynamicItem.size.height, 2) + pow(CEEntryDynamicItem.size.width, 2))
         let xSpawn = (frame.width - maxRadius) * randomFloat
-        let ySpawn = self.frame.origin.y
+        let ySpawn = self.frame.minY - maxRadius
+
         let origin = CGPoint(x: xSpawn, y: ySpawn)
         let dynamicItem = CEEntryDynamicItem(origin: origin)
+
+        while (viewIntersectsItems(dynamicItem)) {
+            dynamicItem.center.y -= maxRadius
+        }
+
         dynamicItems.append(dynamicItem)
         addSubview(dynamicItem)
         dynamicBehavior.addSubview(dynamicItem)

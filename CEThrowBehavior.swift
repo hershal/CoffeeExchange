@@ -14,16 +14,29 @@ class CEThrowBehavior: UIDynamicBehavior {
     var initialBehavior: UIDynamicItemBehavior
     var boundsCollision: UICollisionBehavior
 
-    init(frame: CGRect) {
+    override init() {
         gravity = UIGravityBehavior()
         initialBehavior = UIDynamicItemBehavior()
         boundsCollision = UICollisionBehavior()
         super.init()
 
-        boundsCollision.translatesReferenceBoundsIntoBoundary = true
         [gravity, initialBehavior, boundsCollision].forEach { (behavior) in
             addChildBehavior(behavior)
         }
+
+        action = printCenters
+    }
+
+    func layoutCollisions(frame: CGRect) {
+        let tl = CGPoint(x: frame.minX, y: -10000.0)
+        let tr = CGPoint(x: frame.maxX, y: -10000.0)
+        let bl = CGPoint(x: frame.minX, y: frame.maxY)
+        let br = CGPoint(x: frame.maxX, y: frame.maxY)
+
+        boundsCollision.removeAllBoundaries()
+        boundsCollision.addBoundaryWithIdentifier("bottom", fromPoint: bl, toPoint: br)
+        boundsCollision.addBoundaryWithIdentifier("left", fromPoint: tl, toPoint: bl)
+        boundsCollision.addBoundaryWithIdentifier("right", fromPoint: tr, toPoint: br)
     }
 
     func addSubview(view: UIView) {
@@ -39,5 +52,9 @@ class CEThrowBehavior: UIDynamicBehavior {
         gravity.removeItem(view)
         boundsCollision.removeItem(view)
         initialBehavior.removeItem(view)
+    }
+
+    func printCenters() {
+        NSLog(gravity.items.map { $0.center }.description)
     }
 }
