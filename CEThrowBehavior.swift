@@ -34,4 +34,10 @@ class CEThrowBehavior: UIDynamicBehavior {
         initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000, y: CGFloat.random()*1000), forItem: view)
         initialBehavior.elasticity = 0.25
     }
+
+    func removeSubview(view: UIView) {
+        gravity.removeItem(view)
+        boundsCollision.removeItem(view)
+        initialBehavior.removeItem(view)
+    }
 }

@@ -13,15 +13,29 @@ class CEEntryDetailBackgroundView: UIView {
 
     var animator: UIDynamicAnimator!
     var dynamicBehavior: CEThrowBehavior!
+    var dynamicItems: [CEEntryDynamicItem]
+
+    var viewCount: Int {
+        didSet {
+            while viewCount > dynamicItems.count {
+                addView()
+            }
+            while viewCount < dynamicItems.count {
+                removeView()
+            }
+        }
+    }
 
     required init?(coder aDecoder: NSCoder) {
+        dynamicItems = [CEEntryDynamicItem]()
+        viewCount = 0
         super.init(coder: aDecoder)
         dynamicBehavior = CEThrowBehavior(frame: self.frame)
         animator = UIDynamicAnimator(referenceView: self)
         animator.addBehavior(dynamicBehavior)
     }
 
-    func pushView() {
+    func addView() {
         // gives a random float between 0 and 1
         let randomFloat = CGFloat.random()
         let maxRadius = sqrt(pow(CEEntryDynamicItem.size.height, 2) + pow(CEEntryDynamicItem.size.width, 2))
@@ -29,12 +43,21 @@ class CEEntryDetailBackgroundView: UIView {
         let ySpawn = self.frame.origin.y
         let origin = CGPoint(x: xSpawn, y: ySpawn)
         let dynamicItem = CEEntryDynamicItem(origin: origin)
+        dynamicItems.append(dynamicItem)
         addSubview(dynamicItem)
         dynamicBehavior.addSubview(dynamicItem)
     }
 
-    func popView() {
-
+    func removeView() {
+        if let frontView = dynamicItems.first {
+            dynamicItems.removeFirst()
+            UIView.animateWithDuration(0.5, animations: { 
+                frontView.alpha = 0.0
+                }, completion: { (finished) in
+                    frontView.removeFromSuperview()
+                    self.dynamicBehavior.removeSubview(frontView)
+            })
+        }
     }
 }
 
