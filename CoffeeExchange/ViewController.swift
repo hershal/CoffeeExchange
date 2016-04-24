@@ -50,7 +50,8 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
     func showEntryDetail(entry: CEEntry) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let detailView = mainStoryboard.instantiateViewControllerWithIdentifier("CEEntryDetailViewController") as! CEEntryDetailViewController
-        detailView.entry = entry
+        let viewModel = CEEntryDetailViewModel(truth: entry)
+        detailView.viewModel = viewModel
         detailView.delegate = self
         self.navigationController?.pushViewController(detailView, animated: true)
     }

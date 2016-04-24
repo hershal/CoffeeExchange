@@ -10,27 +10,16 @@ import Foundation
 import Contacts
 
 // Would this be better as a value-type?
-class CEEntry {
+class CEEntry: NSObject {
 
     static let balanceKey = "balance";
     static let identifierKey = "identifier";
 
     var contact: CNContact
     var balance: Int
-    var hashValue: Int {
-        return contact.identifier.hashValue
-    }
 
     init(contact: CNContact) {
         self.contact = contact
         self.balance = 0
-    }
-
-    func increaseBalance(amount: Int) {
-        balance = balance + amount
-    }
-
-    func decreaseBalance(amount: Int) {
-        balance = balance - amount
     }
 }
