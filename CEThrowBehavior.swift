@@ -23,8 +23,6 @@ class CEThrowBehavior: UIDynamicBehavior {
         [gravity, initialBehavior, boundsCollision].forEach { (behavior) in
             addChildBehavior(behavior)
         }
-
-        action = printCenters
     }
 
     func layoutCollisions(frame: CGRect) {

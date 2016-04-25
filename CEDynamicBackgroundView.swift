@@ -65,8 +65,8 @@ class CEDynamicBackgroundView: UIView {
 
     func addView() {
         let dynamicItem = CEEntryDynamicItem()
-//        let randomX = CGFloat.random()*bounds.width
-        NSLog("center: \(dynamicItem.center)")
+        let randomX = CGFloat.random() * (bounds.width - dynamicItem.bounds.width) + dynamicItem.bounds.width
+        dynamicItem.center.x = randomX
 
         while (itemsIntersectWithItem(dynamicItem)) {
             dynamicItem.center.y -= dynamicItem.radius
