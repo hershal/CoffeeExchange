@@ -98,6 +98,10 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         }
     }
 
+    var radius: CGFloat {
+        return frame.radius
+    }
+
     var frame: CGRect {
         return CGRect(x: center.x - bounds.width/2, y: center.y - bounds.height/2,
                       width: bounds.width, height: bounds.height)
@@ -119,8 +123,7 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         }
     }
 
-    init(origin: CGPoint) {
-        // origin is unused in this demonstration
+    override init() {
         let cupTopFrame = CGRect(x: 0, y: 0, width: 100, height: 50)
         let cupBottomFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
         let cupSideFrame = CGRect(x: 75, y: 0, width: 50, height: 50)
@@ -134,5 +137,13 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
 extension CGFloat {
     static func lerp(x: CGFloat, x_min: CGFloat, x_max: CGFloat) -> CGFloat {
         return ((1 - x) * x_min) + (x * x_max)
+    }
+}
+
+extension CGRect {
+    var radius: CGFloat {
+        let xDist = maxX - minX
+        let yDist = maxY - minY
+        return sqrt(xDist*xDist + yDist*yDist)
     }
 }

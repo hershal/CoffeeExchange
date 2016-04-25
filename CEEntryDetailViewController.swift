@@ -11,7 +11,7 @@ import Darwin
 
 class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
 
-    @IBOutlet weak var detailBackgroundView: CEEntryDetailBackgroundView!
+    @IBOutlet weak var detailBackgroundView: CEDynamicBackgroundView!
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var balanceControl: UIStepper!
     @IBAction func balanceChanged(sender: AnyObject) {

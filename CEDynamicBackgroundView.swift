@@ -9,7 +9,7 @@
 import UIKit
 import CoreGraphics
 
-class CEEntryDetailBackgroundView: UIView {
+class CEDynamicBackgroundView: UIView {
 
     var animator: UIDynamicAnimator!
     var dynamicBehavior: CEThrowBehavior!
@@ -64,17 +64,12 @@ class CEEntryDetailBackgroundView: UIView {
     }
 
     func addView() {
-        let randomFloat = CGFloat.random()
-//        let maxRadius = sqrt(pow(CEEntryDynamicItem.size.height, 2) + pow(CEEntryDynamicItem.size.width, 2))
-        let maxRadius = CGFloat(100.0)
-        let xSpawn = (frame.width - maxRadius) * randomFloat
-        let ySpawn = self.frame.minY - maxRadius
-
-        let origin = CGPoint(x: xSpawn, y: ySpawn)
-        let dynamicItem = CEEntryDynamicItem(origin: origin)
+        let dynamicItem = CEEntryDynamicItem()
+//        let randomX = CGFloat.random()*bounds.width
+        NSLog("center: \(dynamicItem.center)")
 
         while (itemsIntersectWithItem(dynamicItem)) {
-            dynamicItem.center.y -= maxRadius
+            dynamicItem.center.y -= dynamicItem.radius
         }
 
         dynamicItems.append(dynamicItem)
