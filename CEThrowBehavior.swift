@@ -46,6 +46,7 @@ class CEThrowBehavior: UIDynamicBehavior {
         initialBehavior.addAngularVelocity(CGFloat.srandom()*CGFloat(M_PI), forItem: dynamicItem)
         initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000, y: CGFloat.random()*1000), forItem: dynamicItem)
         initialBehavior.elasticity = 0.25
+        dynamicItem.transform = CGAffineTransformRotate(dynamicItem.transform, CGFloat.random()*2*CGFloat(M_PI))
     }
 
     func removeItem(dynamicItem: UIDynamicItem) {

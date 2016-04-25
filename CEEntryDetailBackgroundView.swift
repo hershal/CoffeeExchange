@@ -66,7 +66,8 @@ class CEEntryDetailBackgroundView: UIView {
 
     func addView() {
         let randomFloat = CGFloat.random()
-        let maxRadius = sqrt(pow(CEEntryDynamicItem.size.height, 2) + pow(CEEntryDynamicItem.size.width, 2))
+//        let maxRadius = sqrt(pow(CEEntryDynamicItem.size.height, 2) + pow(CEEntryDynamicItem.size.width, 2))
+        let maxRadius = CGFloat(100.0)
         let xSpawn = (frame.width - maxRadius) * randomFloat
         let ySpawn = self.frame.minY - maxRadius
 
