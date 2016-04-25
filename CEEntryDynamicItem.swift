@@ -73,8 +73,12 @@ class CEEntryDynamicItemCupSide: CEEntryDynamicItemComponent {
 
     override func drawRect(rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
-            UIColor.brownColor().setFill()
-            CGContextFillEllipseInRect(context, bounds)
+            UIColor.brownColor().set()
+            let handleWidth = CGFloat(12.5)
+            CGContextBeginPath(context)
+            CGContextAddArc(context, bounds.width/2, bounds.height/2, bounds.width/2-handleWidth/2, 0, CGFloat(2*M_PI), 1)
+            CGContextSetLineWidth(context, handleWidth)
+            CGContextStrokePath(context)
         }
     }
 }

@@ -30,7 +30,6 @@ class CEEntryDetailBackgroundView: UIView {
         super.init(coder: aDecoder)
         dynamicBehavior = CEThrowBehavior()
         animator = UIDynamicAnimator(referenceView: self)
-        animator.setValue(true, forKey: "debugEnabled")
         animator.addBehavior(dynamicBehavior)
     }
 
