@@ -10,7 +10,6 @@ import Foundation
 import Contacts
 
 class CECollection {
-
     static let archiveName = "CoffeeCollectionArchive.bin"
 
     var entries: [CEEntry]

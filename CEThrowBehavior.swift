@@ -39,19 +39,19 @@ class CEThrowBehavior: UIDynamicBehavior {
         boundsCollision.addBoundaryWithIdentifier("right", fromPoint: tr, toPoint: br)
     }
 
-    func addSubview(view: UIView) {
-        gravity.addItem(view)
-        boundsCollision.addItem(view)
-        initialBehavior.addItem(view)
-        initialBehavior.addAngularVelocity(CGFloat.srandom()*CGFloat(M_PI), forItem: view)
-        initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000, y: CGFloat.random()*1000), forItem: view)
+    func addItem(dynamicItem: UIDynamicItem) {
+        gravity.addItem(dynamicItem)
+        boundsCollision.addItem(dynamicItem)
+        initialBehavior.addItem(dynamicItem)
+        initialBehavior.addAngularVelocity(CGFloat.srandom()*CGFloat(M_PI), forItem: dynamicItem)
+        initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000, y: CGFloat.random()*1000), forItem: dynamicItem)
         initialBehavior.elasticity = 0.25
     }
 
-    func removeSubview(view: UIView) {
-        gravity.removeItem(view)
-        boundsCollision.removeItem(view)
-        initialBehavior.removeItem(view)
+    func removeItem(dynamicItem: UIDynamicItem) {
+        gravity.removeItem(dynamicItem)
+        boundsCollision.removeItem(dynamicItem)
+        initialBehavior.removeItem(dynamicItem)
     }
 
     func printCenters() {
