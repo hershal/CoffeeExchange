@@ -51,9 +51,17 @@ class CEDynamicBackgroundView: UIView {
         }
     }
 
+    private func distanceFrom(point: CGPoint, to: CGPoint) -> CGFloat {
+        let dx = point.x - to.x
+        let dy = point.y - to.y
+        return sqrt(dx*dx + dy*dy)
+    }
+
     private func itemsIntersectWithItem(dynamicItem: CEEntryDynamicItem) -> Bool {
         let doesIntersect = dynamicItems
-            .map { (item) -> Bool in CGRectIntersectsRect(item.frame, dynamicItem.frame) }
+            .map { (item) -> Bool in
+                distanceFrom(dynamicItem.center, to: item.center) < (item.bounds.radius)
+            }
             .filter { (element) -> Bool in element == true }
             .first
         if let doesIntersect = doesIntersect {
@@ -69,7 +77,7 @@ class CEDynamicBackgroundView: UIView {
         dynamicItem.center.x = randomX
 
         while (itemsIntersectWithItem(dynamicItem)) {
-            dynamicItem.center.y -= dynamicItem.radius
+            dynamicItem.center.y -= dynamicItem.view.bounds.radius
         }
 
         dynamicItems.append(dynamicItem)
@@ -81,7 +89,7 @@ class CEDynamicBackgroundView: UIView {
         if let frontView = dynamicItems.first {
             dynamicItems.removeFirst()
             UIView.animateWithDuration(0.5, animations: { 
-                frontView.alpha = 0.0
+                frontView.view.alpha = 0.0
                 }, completion: { (finished) in
                     frontView.removeFromSuperview()
                     self.dynamicBehavior.removeItem(frontView)

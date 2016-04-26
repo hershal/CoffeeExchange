@@ -10,28 +10,8 @@ import UIKit
 import CoreGraphics
 
 class CEEntryDynamicItem: UIDynamicItemGroup {
-    var alpha: CGFloat {
-        get {
-            let item = items.filter { $0 as? UIView != nil }.first as? UIView
-            if let item = item { return item.alpha } else { return -1.0 }
-        }
-        set {
-            items.forEach { item in
-                if let item = item as? UIView {
-                    item.alpha = alpha
-                }
-            }
-        }
-    }
 
-    var radius: CGFloat {
-        return frame.radius
-    }
-
-    var frame: CGRect {
-        return CGRect(x: center.x - bounds.width/2, y: center.y - bounds.height/2,
-                      width: bounds.width, height: bounds.height)
-    }
+    var view: UIView
 
     func removeFromSuperview() {
         items.forEach { item in
@@ -50,6 +30,7 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
     }
 
     override init() {
+        view = UIView(frame: CGRect(x: 0, y: 0, width: 125, height: 100))
         let cupTopFrame = CGRect(x: 0, y: 0, width: 100, height: 50)
         let cupBottomFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
         let cupSideFrame = CGRect(x: 75, y: 0, width: 50, height: 50)
@@ -57,6 +38,7 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         let cupBottom = CEEntryDynamicItemCupBottom(frame: cupBottomFrame)
         let cupSide = CEEntryDynamicItemCupSide(frame: cupSideFrame)
         super.init(items: [cupTop, cupBottom, cupSide])
+        [cupTop, cupBottom, cupSide].forEach { view.addSubview($0) }
     }
 }
 
