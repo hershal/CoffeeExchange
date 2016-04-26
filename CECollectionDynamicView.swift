@@ -9,24 +9,16 @@
 import UIKit
 import CoreGraphics
 
-class CEDynamicBackgroundView: UIView {
+class CECollectionDynamicView: UIView {
 
     var animator: UIDynamicAnimator!
     var dynamicBehavior: CEThrowBehavior!
     var dynamicItems: [CEEntryDynamicItem]
 
-    var didLayoutSubviews: Bool
-
-    var viewCount: Int {
-        didSet {
-            updateViewCount()
-        }
-    }
+    var dataSource: CECollectionDynamicViewDataSource?
 
     required init?(coder aDecoder: NSCoder) {
         dynamicItems = [CEEntryDynamicItem]()
-        viewCount = 0
-        didLayoutSubviews = false
         super.init(coder: aDecoder)
         dynamicBehavior = CEThrowBehavior()
         animator = UIDynamicAnimator(referenceView: self)
@@ -36,19 +28,6 @@ class CEDynamicBackgroundView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         dynamicBehavior.layoutCollisions(frame)
-        didLayoutSubviews = true
-        updateViewCount()
-    }
-
-    private func updateViewCount() {
-        if (didLayoutSubviews) {
-            while viewCount > dynamicItems.count {
-                addView()
-            }
-            while viewCount < dynamicItems.count {
-                removeView()
-            }
-        }
     }
 
     private func distanceFrom(point: CGPoint, to: CGPoint) -> CGFloat {
@@ -71,8 +50,7 @@ class CEDynamicBackgroundView: UIView {
         return false
     }
 
-    func addView() {
-        let dynamicItem = CEEntryDynamicItem()
+    func addView(dynamicItem: CEEntryDynamicItem) {
         let randomX = CGFloat.random() * (bounds.width - dynamicItem.bounds.width)
         dynamicItem.center.x = randomX
 
@@ -85,17 +63,45 @@ class CEDynamicBackgroundView: UIView {
         dynamicBehavior.addItem(dynamicItem)
     }
 
-    func removeView() {
-        if let frontView = dynamicItems.first {
-            dynamicItems.removeFirst()
-            UIView.animateWithDuration(0.5, animations: { 
-                frontView.view.alpha = 0.0
-                }, completion: { (finished) in
-                    frontView.removeFromSuperview()
-                    self.dynamicBehavior.removeItem(frontView)
-            })
+    func removeView(dynamicItem: CEEntryDynamicItem) {
+        guard let index = dynamicItems.indexOf(dynamicItem) else {
+            NSLog("CECollectionDynamicView::RemoveView::ViewNotFound: \(dynamicItem)")
+            return
+        }
+        dynamicItems.removeAtIndex(index)
+        UIView.animateWithDuration(0.5, animations: {
+            dynamicItem.view.alpha = 0.0
+            }, completion: { (finished) in
+                dynamicItem.removeFromSuperview()
+                self.dynamicBehavior.removeItem(dynamicItem)
+        })
+    }
+
+    func reloadData() {
+        guard let dataSource = dataSource else {
+            NSLog("CECollectionDynamicView:ReloadData::NoDataSource!")
+            return
+        }
+
+        // Clear items
+        while dynamicItems.count > 0 {
+            removeView(dynamicItems.first!)
+        }
+
+        // Ask for new items from the dataSource and add them to the view
+        let count = dataSource.dynamicViewNumberOfItems(self)
+        for var i in 0..<count {
+            // To suppress (incorrect) compiler warning
+            i = i+0
+            let cell = dataSource.dynamicView(cellForItemAtIndex: i)
+            addView(cell)
         }
     }
+}
+
+protocol CECollectionDynamicViewDataSource {
+    func dynamicViewNumberOfItems(dynamicView: CECollectionDynamicView) -> Int
+    func dynamicView(cellForItemAtIndex index: Int) -> CEEntryDynamicItem
 }
 
 extension CGFloat {

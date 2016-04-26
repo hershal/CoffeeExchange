@@ -9,10 +9,10 @@
 import UIKit
 import ContactsUI
 
-class ViewController: UIViewController, CNContactPickerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, CEEntryDetailDelegate {
+class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDelegate, CECollectionDelegate, CECollectionDynamicViewDataSource {
 
-    @IBOutlet weak var collectionView: UICollectionView!
     private var collection: CECollection!
+    @IBOutlet var dynamicView: CECollectionDynamicView!
 
     @IBAction func addEntry(sender: AnyObject) {
         let picker = CNContactPickerViewController()
@@ -32,22 +32,17 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
     }
 
     private func updateCollectionData() {
-        self.collectionView.reloadData()
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            self.collection.save()
+            self.collection.archive()
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        collection = CECollection(shouldUnarchive: true)
-        collectionView.collectionViewLayout = CEDynamicCollectionViewFlowLayout()
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.scrollEnabled = false
-        let nib = UINib(nibName: "CEEntryView", bundle: nil)
-        collectionView.registerNib(nib, forCellWithReuseIdentifier: "CEEntryView")
-        collectionView.backgroundColor = UIColor.whiteColor()
+        dynamicView.dataSource = self
+        collection = CECollection()
+        collection.delegate = self
+        collection.unarchive()
     }
 
     override func didReceiveMemoryWarning() {
@@ -64,9 +59,28 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
         self.navigationController?.pushViewController(detailView, animated: true)
     }
 
+    // MARK: - CECollectionDelegate Methods
+    func collectionDidFinishLoading(collection: CECollection) {
+        dynamicView.reloadData()
+    }
+
+    func collectionDidAddEntry(collection: CECollection, entry: CEEntry) {
+        // TODO: find a better way, maybe reload that specific entry?
+        dynamicView.reloadData()
+    }
+
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
         updateCollectionData()
+    }
+
+    func dynamicViewNumberOfItems(dynamicView: CECollectionDynamicView) -> Int {
+        return collection.entries.count
+    }
+
+    func dynamicView(cellForItemAtIndex index: Int) -> CEEntryDynamicItem {
+        let item = CEEntryDynamicItem()
+        return item
     }
 
     // MARK: - CollectionViewDataSource Methods

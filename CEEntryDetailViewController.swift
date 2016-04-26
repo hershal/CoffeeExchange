@@ -11,7 +11,7 @@ import Darwin
 
 class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
 
-    @IBOutlet weak var detailBackgroundView: CEDynamicBackgroundView!
+    @IBOutlet weak var detailBackgroundView: CECollectionDynamicView!
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var balanceControl: UIStepper!
     @IBAction func balanceChanged(sender: AnyObject) {
@@ -57,7 +57,7 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
         switch keyPath {
         case CEEntry.balanceKey:
             balanceLabel.text = viewModel.balanceText
-            detailBackgroundView.viewCount = max(viewModel.balance, 0)
+//            detailBackgroundView.viewCount = max(viewModel.balance, 0)
         default:
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
