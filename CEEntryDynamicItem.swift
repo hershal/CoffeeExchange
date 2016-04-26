@@ -19,9 +19,10 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
                 item.removeFromSuperview()
             }
         }
+        view.removeFromSuperview()
     }
 
-    func addSubviewsToView(view: UIView) {
+    private func addSubviews() {
         items.forEach { item in
             if let item = item as? UIView {
                 view.addSubview(item)
@@ -38,7 +39,7 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         let cupBottom = CEEntryDynamicItemCupBottom(frame: cupBottomFrame)
         let cupSide = CEEntryDynamicItemCupSide(frame: cupSideFrame)
         super.init(items: [cupTop, cupBottom, cupSide])
-        [cupTop, cupBottom, cupSide].forEach { view.addSubview($0) }
+        addSubviews()
     }
 }
 

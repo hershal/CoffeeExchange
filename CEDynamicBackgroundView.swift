@@ -81,7 +81,7 @@ class CEDynamicBackgroundView: UIView {
         }
 
         dynamicItems.append(dynamicItem)
-        dynamicItem.addSubviewsToView(self)
+        addSubview(dynamicItem.view)
         dynamicBehavior.addItem(dynamicItem)
     }
 
