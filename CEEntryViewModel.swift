@@ -21,11 +21,11 @@ class CEEntryDetailViewModel: NSObject {
     }
 
     private var balanceDirectionPast: String {
-        return balance > 0 ? "owed" : "lent"
+        return balance < 0 ? "lent" : "owed"
     }
 
     private var balanceDirectionPresent: String {
-        return balance > 0 ? "owe" : "lent"
+        return balance < 0 ? "lent" : "owe"
     }
 
     private var absBalance: Int {
@@ -41,7 +41,11 @@ class CEEntryDetailViewModel: NSObject {
     }
 
     var balanceSubtext: String {
-        return "You \(balanceDirectionPresent) \(truth.contact.givenName) \(balance) \(noun)"
+        if balance == 0 {
+            return "Balance has been restored."
+        } else {
+            return "You \(balanceDirectionPresent) \(truth.contact.givenName) \(balance) \(noun)."
+        }
     }
 
     init(truth: CEEntry) {

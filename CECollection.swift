@@ -29,16 +29,14 @@ class CECollection {
         return saveLocation.absoluteString
     }()
 
-    func addEntry(contact: CNContact) -> CEEntry? {
-        if (identifiers.contains(contact.identifier)) {
+    func addEntry(entry: CEEntry) {
+        if (identifiers.contains(entry.contact.identifier)) {
             NSLog("CECollection:: Trying to add contact which already exists in store!")
-            return nil
+            return
         }
-        let entry = CEEntry(contact: contact)
         entries.append(entry)
-        NSLog("CECollection:: Added entry: \(contact.identifier)")
+        NSLog("CECollection:: Added entry: \(entry.contact.identifier)")
         delegate?.collectionDidAddEntry(self, entry: entry)
-        return entry
     }
 
     func unarchive() {
@@ -54,6 +52,10 @@ class CECollection {
     func archive() {
         NSKeyedArchiver.archiveRootObject(entries, toFile: archiveLocation)
         NSLog("CECollection::DidArchiveTo: \(archiveLocation)")
+    }
+
+    func contains(entry: CEEntry) -> Bool {
+        return entries.contains(entry)
     }
 }
 

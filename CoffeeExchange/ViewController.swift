@@ -25,12 +25,8 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         NSLog("selected \(contact.identifier)")
-        if let entry = collection.addEntry(contact) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1.5*Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                self.showEntryDetail(entry)
-                self.saveCollectionData()
-            }
-        }
+        let entry = CEEntry(contact: contact)
+        self.showEntryDetail(entry)
     }
 
     private func saveCollectionData() {
@@ -68,14 +64,21 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     func collectionDidAddEntry(collection: CECollection, entry: CEEntry) {
         // TODO: find a better way, maybe reload that specific entry?
-        dynamicView.reloadData()
+//        dynamicView.reloadData()
     }
 
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
+        if !collection.contains(entry) {
+            collection.addEntry(entry)
+        }
         saveCollectionData()
+
+        // TODO: investigate uicollectionview's invalidation context to reload only new data
+        dynamicView.reloadData()
     }
 
+    // MARK: - CEDynamicVIew Methods
     func dynamicViewNumberOfItems(dynamicView: CECollectionDynamicView) -> Int {
         return collection.entries.count
     }
@@ -83,33 +86,6 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     func dynamicView(cellForItemAtIndex index: Int) -> CEEntryDynamicItem {
         let item = CEEntryDynamicItem()
         return item
-    }
-
-    // MARK: - CollectionViewDataSource Methods
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collection.entries.count
-    }
-
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CEEntryView", forIndexPath: indexPath) as! CEEntryView
-        let entry = collection.entries[indexPath.item]
-        let contact = entry.contact
-        let upperDisplayString = "\(contact.givenName) \(contact.familyName)"
-        cell.upperLabel.text = upperDisplayString
-
-        var cupString = "cup"
-        if entry.balance != 1 {
-            cupString = "cups"
-        }
-
-        cell.lowerLabel.text = "\(entry.balance) \(cupString)";
-        cell.lowerLabel.textColor = UIColor.brownColor()
-        return cell
-    }
-
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let selectedEntry = collection.entries[indexPath.item]
-        showEntryDetail(selectedEntry)
     }
 }
 
