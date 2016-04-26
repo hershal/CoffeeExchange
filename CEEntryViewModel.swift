@@ -20,10 +20,28 @@ class CEEntryDetailViewModel: NSObject {
         }
     }
 
+    private var balanceDirectionPast: String {
+        return balance > 0 ? "owed" : "lent"
+    }
+
+    private var balanceDirectionPresent: String {
+        return balance > 0 ? "owe" : "lent"
+    }
+
+    private var absBalance: Int {
+        return abs(balance)
+    }
+
+    private var noun: String {
+        return absBalance == 1 ? "cup" : "cups"
+    }
+
     var balanceText: String {
-        get {
-            return "\(self.balance)"
-        }
+        return "\(absBalance) \(noun) \(balanceDirectionPast)"
+    }
+
+    var balanceSubtext: String {
+        return "You \(balanceDirectionPresent) \(truth.contact.givenName) \(balance) \(noun)"
     }
 
     init(truth: CEEntry) {

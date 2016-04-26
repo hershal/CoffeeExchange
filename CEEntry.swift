@@ -23,6 +23,10 @@ class CEEntry: NSObject, NSCoding {
         self.balance = 0
     }
 
+    var fullName: String {
+        return "\(contact.givenName) \(contact.familyName)"
+    }
+
     required init?(coder aDecoder: NSCoder) {
         contact = aDecoder.decodeObjectForKey(CEEntry.contactKey) as! CNContact
         balance = aDecoder.decodeIntegerForKey(CEEntry.balanceKey)

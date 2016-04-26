@@ -18,7 +18,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         let picker = CNContactPickerViewController()
         picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey]
 
-        picker.predicateForEnablingContact = NSPredicate(format: "NOT (identifier IN %@)",collection.identifiers)
+        picker.predicateForEnablingContact = NSPredicate(format: "NOT (identifier IN %@)", collection.identifiers)
         picker.delegate = self
         self.presentViewController(picker, animated: true, completion: nil)
     }
@@ -26,12 +26,14 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         NSLog("selected \(contact.identifier)")
         if let entry = collection.addEntry(contact) {
-            showEntryDetail(entry)
-            updateCollectionData()
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1.5*Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                self.showEntryDetail(entry)
+                self.saveCollectionData()
+            }
         }
     }
 
-    private func updateCollectionData() {
+    private func saveCollectionData() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.collection.archive()
         }
@@ -71,7 +73,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
-        updateCollectionData()
+        saveCollectionData()
     }
 
     func dynamicViewNumberOfItems(dynamicView: CECollectionDynamicView) -> Int {

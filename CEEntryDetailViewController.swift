@@ -10,14 +10,14 @@ import UIKit
 import Darwin
 
 class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
-
-    @IBOutlet weak var detailBackgroundView: CECollectionDynamicView!
-    @IBOutlet weak var balanceLabel: UILabel!
-    @IBOutlet weak var balanceControl: UIStepper!
-    @IBAction func balanceChanged(sender: AnyObject) {
-        let value = balanceControl.value
-        let intValue = value < 0 ? Int(value - 0.5) : Int(value + 0.5)
-        viewModel.balance = intValue
+    @IBOutlet weak var picture: UIView!
+    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var stepperLabel: UILabel!
+    @IBOutlet weak var stepperSublabel: UILabel!
+    @IBOutlet weak var stepper: UIStepper!
+    @IBAction func stepperChanged(sender: AnyObject) {
+        let value = stepper.value
+        viewModel.balance = Int(value)
     }
 
     var viewModel: CEEntryDetailViewModel!
@@ -27,24 +27,20 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
     // i.e. before we're ready to display to the screen
     override func viewDidLoad() {
         super.viewDidLoad()
-        commonInit()
+        stepper.value = Double(viewModel.balance)
+        name.text = viewModel.truth.fullName
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.addObserver(self, forKeyPath: CEEntry.balanceKey, options: [.New, .Initial], context: nil)
+        stepper.value = Double(viewModel.balance)
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         viewModel.removeObserver(self, forKeyPath: CEEntry.balanceKey)
         delegate?.detailWillDisappear(self, withEntry: viewModel.truth)
-    }
-
-    private func commonInit() {
-        balanceControl.stepValue = 1.0
-        balanceControl.minimumValue = -1.0 * (balanceControl.maximumValue)
-        balanceControl.value = Double(viewModel.balance)
     }
 
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -56,8 +52,8 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
 
         switch keyPath {
         case CEEntry.balanceKey:
-            balanceLabel.text = viewModel.balanceText
-//            detailBackgroundView.viewCount = max(viewModel.balance, 0)
+            stepperLabel.text = viewModel.balanceText
+            stepperSublabel.text = viewModel.balanceSubtext
         default:
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
