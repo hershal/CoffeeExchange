@@ -40,10 +40,11 @@ class ViewController: UIViewController, CNContactPickerDelegate, UICollectionVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         collection = CECollection(shouldUnarchive: true)
+        collectionView.collectionViewLayout = CEDynamicCollectionViewFlowLayout()
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.scrollEnabled = false
         let nib = UINib(nibName: "CEEntryView", bundle: nil)
         collectionView.registerNib(nib, forCellWithReuseIdentifier: "CEEntryView")
         collectionView.backgroundColor = UIColor.whiteColor()

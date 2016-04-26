@@ -10,6 +10,7 @@
 		7880D8201CCCC0D800403730 /* CEDynamicBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880D81F1CCCC0D800403730 /* CEDynamicBackgroundView.swift */; };
 		7880D8221CCCC63900403730 /* CEThrowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880D8211CCCC63900403730 /* CEThrowBehavior.swift */; };
 		7887259C1CCDEA8800DACC8E /* CEEntryDynamicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */; };
+		78A4CF081CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */; };
 		78BDBD4E1CCADAAA00718798 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */; };
 		78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4F1CCADAAA00718798 /* ViewController.swift */; };
 		78BDBD531CCADAAA00718798 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78BDBD511CCADAAA00718798 /* Main.storyboard */; };
@@ -47,6 +48,7 @@
 		7880D81F1CCCC0D800403730 /* CEDynamicBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEDynamicBackgroundView.swift; sourceTree = "<group>"; };
 		7880D8211CCCC63900403730 /* CEThrowBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEThrowBehavior.swift; sourceTree = "<group>"; };
 		7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDynamicItem.swift; sourceTree = "<group>"; };
+		78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEDynamicCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		78BDBD4A1CCADAAA00718798 /* CoffeeExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78BDBD4F1CCADAAA00718798 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		78BDBD411CCADAAA00718798 = {
 			isa = PBXGroup;
 			children = (
+				78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */,
 				7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */,
 				7880D8211CCCC63900403730 /* CEThrowBehavior.swift */,
 				7880D81F1CCCC0D800403730 /* CEDynamicBackgroundView.swift */,
@@ -287,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78A4CF081CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift in Sources */,
 				78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */,
 				78BDBD871CCB580C00718798 /* CEEntryDetailViewController.swift in Sources */,
 				7880D8221CCCC63900403730 /* CEThrowBehavior.swift in Sources */,

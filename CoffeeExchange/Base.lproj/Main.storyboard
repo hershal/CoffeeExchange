@@ -96,8 +96,8 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="qEh-0L-U99">
-                                <rect key="frame" x="253" y="275" width="94" height="50"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="qEh-0L-U99">
+                                <rect key="frame" x="253" y="186" width="94" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9qD-EG-XtR">
                                         <rect key="frame" x="26" y="0.0" width="42" height="21"/>
@@ -105,7 +105,7 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="GOd-FH-UsE">
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="GOd-FH-UsE">
                                         <rect key="frame" x="0.0" y="21" width="94" height="29"/>
                                         <connections>
                                             <action selector="balanceChanged:" destination="f6W-ys-7bx" eventType="valueChanged" id="KG1-w1-2t0"/>
@@ -118,7 +118,7 @@
                         <constraints>
                             <constraint firstItem="iqu-KH-jl6" firstAttribute="top" secondItem="APf-VS-Q5d" secondAttribute="bottom" id="1sz-2l-zzb"/>
                             <constraint firstItem="APf-VS-Q5d" firstAttribute="centerY" secondItem="8kT-uV-FXP" secondAttribute="centerY" id="2Zq-If-ix9"/>
-                            <constraint firstItem="qEh-0L-U99" firstAttribute="centerY" secondItem="8kT-uV-FXP" secondAttribute="centerY" id="BSb-ee-wq9"/>
+                            <constraint firstItem="qEh-0L-U99" firstAttribute="centerY" secondItem="8kT-uV-FXP" secondAttribute="centerY" id="tbb-Kc-ZoS"/>
                             <constraint firstItem="APf-VS-Q5d" firstAttribute="width" secondItem="8kT-uV-FXP" secondAttribute="width" id="uO3-nr-ehh"/>
                             <constraint firstItem="qEh-0L-U99" firstAttribute="centerX" secondItem="8kT-uV-FXP" secondAttribute="centerX" id="ukE-ZP-CE5"/>
                             <constraint firstItem="APf-VS-Q5d" firstAttribute="centerX" secondItem="8kT-uV-FXP" secondAttribute="centerX" id="xfg-Lv-ipN"/>
