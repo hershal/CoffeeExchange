@@ -50,7 +50,7 @@ class CECollectionDynamicView: UIView {
         return false
     }
 
-    func addView(dynamicItem: CEEntryDynamicItem) {
+    private func addView(dynamicItem: CEEntryDynamicItem) {
         let randomX = CGFloat.random() * (bounds.width - dynamicItem.bounds.width)
         dynamicItem.center.x = randomX
 
@@ -63,7 +63,7 @@ class CECollectionDynamicView: UIView {
         dynamicBehavior.addItem(dynamicItem)
     }
 
-    func removeView(dynamicItem: CEEntryDynamicItem) {
+    private func removeView(dynamicItem: CEEntryDynamicItem) {
         guard let index = dynamicItems.indexOf(dynamicItem) else {
             NSLog("CECollectionDynamicView::RemoveView::ViewNotFound: \(dynamicItem)")
             return
