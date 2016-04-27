@@ -76,7 +76,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u2A-U7-d23">
-                                        <rect key="frame" x="100" y="39" width="460" height="23"/>
+                                        <rect key="frame" x="100" y="38.5" width="460" height="23"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -90,13 +90,13 @@
                                         <rect key="frame" x="0.0" y="0.0" width="466" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RyB-Ln-w2s">
-                                                <rect key="frame" x="0.0" y="0.0" width="466" height="24"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="466" height="23.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kWN-xM-tCA">
-                                                <rect key="frame" x="0.0" y="24" width="466" height="17"/>
+                                                <rect key="frame" x="0.0" y="23.5" width="466" height="16.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -108,7 +108,7 @@
                                         </constraints>
                                     </stackView>
                                     <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-100" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="CB4-DN-XbS">
-                                        <rect key="frame" x="466" y="6" width="94" height="29"/>
+                                        <rect key="frame" x="466" y="5.5" width="94" height="29"/>
                                         <connections>
                                             <action selector="stepperChanged:" destination="f6W-ys-7bx" eventType="valueChanged" id="bbv-gB-jDf"/>
                                         </connections>
@@ -119,21 +119,28 @@
                                     <constraint firstItem="CQk-y9-Gf2" firstAttribute="height" secondItem="Nqo-P1-amV" secondAttribute="height" id="aHg-XJ-GGy"/>
                                     <constraint firstItem="CB4-DN-XbS" firstAttribute="leading" secondItem="CQk-y9-Gf2" secondAttribute="trailing" id="bCt-4d-tYA"/>
                                     <constraint firstItem="CQk-y9-Gf2" firstAttribute="leading" secondItem="Nqo-P1-amV" secondAttribute="leading" id="t38-i5-Kno"/>
-                                    <constraint firstItem="CB4-DN-XbS" firstAttribute="centerY" secondItem="Nqo-P1-amV" secondAttribute="centerY" id="tCx-X3-xx1"/>
+                                    <constraint firstItem="CB4-DN-XbS" firstAttribute="centerY" secondItem="Nqo-P1-amV" secondAttribute="centerY" priority="100" id="tCx-X3-xx1"/>
                                     <constraint firstAttribute="trailing" secondItem="CB4-DN-XbS" secondAttribute="trailing" id="wyb-KT-8k0"/>
                                 </constraints>
                             </stackView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YMV-ch-9zM">
-                                <rect key="frame" x="20" y="279" width="560" height="312"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YMV-ch-9zM">
+                                <rect key="frame" x="20" y="176" width="560" height="200"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="Lkc-ej-cae"/>
+                                </constraints>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="YMV-ch-9zM" secondAttribute="trailing" id="0YW-lY-GeU"/>
                             <constraint firstItem="KJh-5W-L42" firstAttribute="centerX" secondItem="8kT-uV-FXP" secondAttribute="centerX" id="9ZJ-Iq-uLK"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="YMV-ch-9zM" secondAttribute="leading" id="KZj-2S-8eA"/>
                             <constraint firstAttribute="leadingMargin" secondItem="KJh-5W-L42" secondAttribute="leading" id="M9D-3O-cXz"/>
+                            <constraint firstItem="YMV-ch-9zM" firstAttribute="centerX" secondItem="8kT-uV-FXP" secondAttribute="centerX" id="PIS-O7-JZT"/>
                             <constraint firstItem="Nqo-P1-amV" firstAttribute="top" secondItem="KJh-5W-L42" secondAttribute="bottom" constant="8" id="S2J-y7-3FV"/>
                             <constraint firstItem="Nqo-P1-amV" firstAttribute="width" secondItem="KJh-5W-L42" secondAttribute="width" id="UGs-7A-Wv8"/>
+                            <constraint firstItem="YMV-ch-9zM" firstAttribute="top" secondItem="Nqo-P1-amV" secondAttribute="bottom" constant="8" id="YzP-sI-c2p"/>
                             <constraint firstItem="Nqo-P1-amV" firstAttribute="leading" secondItem="KJh-5W-L42" secondAttribute="leading" id="gED-Aw-fPp"/>
                             <constraint firstItem="KJh-5W-L42" firstAttribute="top" secondItem="y6z-HU-VSE" secondAttribute="bottom" id="pNJ-QO-ORV"/>
                             <constraint firstItem="Nqo-P1-amV" firstAttribute="top" secondItem="KJh-5W-L42" secondAttribute="top" id="uY8-l0-yit"/>
@@ -145,6 +152,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="detailTable" destination="YMV-ch-9zM" id="W3k-9M-J8J"/>
                         <outlet property="name" destination="u2A-U7-d23" id="iQG-Mq-kp0"/>
                         <outlet property="picture" destination="niK-WV-PFo" id="Y1G-JM-vLs"/>
                         <outlet property="stepper" destination="CB4-DN-XbS" id="Bog-bf-Sq9"/>

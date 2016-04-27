@@ -19,6 +19,7 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
         let value = stepper.value
         viewModel.balance = Int(value)
     }
+    @IBOutlet weak var detailTable: UITableView!
 
     var viewModel: CEEntryDetailViewModel!
     var delegate: CEEntryDetailDelegate?
