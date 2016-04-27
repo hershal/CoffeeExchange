@@ -30,6 +30,8 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
     }
 
     init(entry: CEEntry) {
+        self.entry = entry
+
         view = CEEntryDynamicItemContainerView(frame: CGRect(x: 0, y: 0, width: 125, height: 100))
         let cupTopFrame = CGRect(x: 0, y: 0, width: 100, height: 50)
         let cupBottomFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
@@ -37,7 +39,13 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         let cupTop = CEEntryDynamicItemCupTop(frame: cupTopFrame)
         let cupBottom = CEEntryDynamicItemCupBottom(frame: cupBottomFrame)
         let cupSide = CEEntryDynamicItemCupSide(frame: cupSideFrame)
-        self.entry = entry
+
+        let viewModel = CEEntryDetailViewModel(truth: entry)
+        cupTop.text = viewModel.truth.fullName
+        cupTop.subText = viewModel.balanceText
+        cupBottom.text = viewModel.truth.fullName
+        cupBottom.subText = viewModel.balanceText
+
         super.init(items: [cupTop, cupBottom, cupSide])
         view.dynamicItem = self
         addSubviews()
@@ -46,6 +54,7 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
 
 class CEEntryDynamicItemContainerView: UIView {
     weak var dynamicItem: CEEntryDynamicItem?
+
     override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
         let subviewHitTests = subviews.map { $0.hitTest(point, withEvent: event) }
         let subviewHits = subviewHitTests.filter{ $0 != nil }
@@ -62,6 +71,17 @@ class CEEntryDynamicItemComponent: UIView {
         self.backgroundColor = UIColor.clearColor()
     }
 
+    var textFontAttributes: [String: NSObject] {
+        let textStyle = NSMutableParagraphStyle()
+        textStyle.alignment = .Center
+
+        let textFontAttributes = [NSFontAttributeName: UIFont.systemFontOfSize(UIFont.labelFontSize()), NSForegroundColorAttributeName: UIColor.whiteColor(), NSParagraphStyleAttributeName: textStyle]
+        return textFontAttributes
+    }
+
+    var text: NSString?
+    var subText: NSString?
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -69,6 +89,19 @@ class CEEntryDynamicItemComponent: UIView {
     override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
         let isInside = frame.contains(point)
         return isInside
+    }
+
+    // HACK: I can't guarantee which view is on top (cupTop or cupBottom),
+    // so this is a hack to guarantee that both are visible
+    func drawTextInRect(rect: CGRect) {
+        if let text = text {
+            text.drawInRect(CGRectInset(rect, 3, 3), withAttributes: textFontAttributes)
+        }
+
+        if let subText = subText {
+            let textRect = CGRectOffset(rect, 0, 40)
+            subText.drawInRect(CGRectInset(textRect, 3, 3), withAttributes: textFontAttributes)
+        }
     }
 }
 
@@ -83,6 +116,7 @@ class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
         if let context = UIGraphicsGetCurrentContext() {
             UIColor.brownColor().setFill()
             CGContextFillRect(context, rect)
+            drawTextInRect(rect)
         }
     }
 }
@@ -105,6 +139,7 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
         if let context = UIGraphicsGetCurrentContext() {
             UIColor.brownColor().setFill()
             CGContextFillEllipseInRect(context, rect)
+            drawTextInRect(rect)
         }
     }
 }
@@ -128,7 +163,8 @@ class CEEntryDynamicItemCupSide: CEEntryDynamicItemComponent {
             UIColor.brownColor().set()
             let handleWidth = CGFloat(12.5)
             CGContextBeginPath(context)
-            CGContextAddArc(context, bounds.width/2, bounds.height/2, bounds.width/2-handleWidth/2, 0, CGFloat(2*M_PI), 1)
+            CGContextAddArc(context, bounds.width/2, bounds.height/2, bounds.width/2-handleWidth/2,
+                            CGFloat(M_PI / 2 + 0.1), CGFloat(3 * M_PI / 2 - 0.1), 1)
             CGContextSetLineWidth(context, handleWidth)
             CGContextStrokePath(context)
         }
