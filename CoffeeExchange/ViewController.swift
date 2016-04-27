@@ -9,7 +9,7 @@
 import UIKit
 import ContactsUI
 
-class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDelegate, CECollectionDelegate, CECollectionDynamicViewDataSource {
+class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDelegate, CECollectionDelegate, CECollectionDynamicViewDataSource, CECollectionDynamicViewDelegate {
 
     private var collection: CECollection!
     @IBOutlet var dynamicView: CECollectionDynamicView!
@@ -39,9 +39,19 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     override func viewDidLoad() {
         super.viewDidLoad()
         dynamicView.dataSource = self
+        dynamicView.delegate = self
         collection = CECollection()
         collection.delegate = self
         collection.unarchive()
+    }
+
+    func dynamicView(dynamicView: CECollectionDynamicView, didSelectItemAtIndex index: Int) {
+        if index > collection.entries.count {
+            NSLog("ViewController::DynamicViewDidSelectItemAtIndex::CouldNotFindModelForIndex: \(index)")
+        }
+
+        let entry = collection.entries[index]
+        showEntryDetail(entry)
     }
 
     override func didReceiveMemoryWarning() {

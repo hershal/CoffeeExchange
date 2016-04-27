@@ -38,11 +38,13 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         let cupBottom = CEEntryDynamicItemCupBottom(frame: cupBottomFrame)
         let cupSide = CEEntryDynamicItemCupSide(frame: cupSideFrame)
         super.init(items: [cupTop, cupBottom, cupSide])
+        view.dynamicItem = self
         addSubviews()
     }
 }
 
 class CEEntryDynamicItemContainerView: UIView {
+    weak var dynamicItem: CEEntryDynamicItem?
     override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
         let subviewHitTests = subviews.map { $0.hitTest(point, withEvent: event) }
         let subviewHits = subviewHitTests.filter{ $0 != nil }
@@ -62,6 +64,11 @@ class CEEntryDynamicItemComponent: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
+        let isInside = frame.contains(point)
+        return isInside
+    }
 }
 
 class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
@@ -76,11 +83,6 @@ class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
             UIColor.brownColor().setFill()
             CGContextFillRect(context, rect)
         }
-    }
-
-    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
-        let isInside = frame.contains(point)
-        return isInside
     }
 }
 

@@ -10,12 +10,11 @@ import UIKit
 import CoreGraphics
 
 class CECollectionDynamicView: UIView {
-
     var animator: UIDynamicAnimator!
     var dynamicBehavior: CEThrowBehavior!
     var dynamicItems: [CEEntryDynamicItem]
-
     var dataSource: CECollectionDynamicViewDataSource?
+    var delegate: CECollectionDynamicViewDelegate?
 
     required init?(coder aDecoder: NSCoder) {
         dynamicItems = [CEEntryDynamicItem]()
@@ -61,6 +60,21 @@ class CECollectionDynamicView: UIView {
         dynamicItems.append(dynamicItem)
         addSubview(dynamicItem.view)
         dynamicBehavior.addItem(dynamicItem)
+        dynamicItem.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(CECollectionDynamicView.handleTap(_:))))
+    }
+
+    func handleTap(tapGestureRecognizer: UITapGestureRecognizer) {
+        print("tapped!")
+        if let view = tapGestureRecognizer.view as? CEEntryDynamicItemContainerView,
+            item = view.dynamicItem {
+            if let index = dynamicItems.indexOf(item) {
+                delegate?.dynamicView(self, didSelectItemAtIndex: index)
+            } else {
+                NSLog("CECollectionDynamicView::HandleTap::CouldNotFindIndexForItemInView: \(view)")
+            }
+        } else {
+            NSLog("CECollectionDynamicVIew::HandleTap::CouldNotFindContainerView: \(tapGestureRecognizer)")
+        }
     }
 
     private func removeView(dynamicItem: CEEntryDynamicItem) {
@@ -72,8 +86,8 @@ class CECollectionDynamicView: UIView {
         UIView.animateWithDuration(0.5, animations: {
             dynamicItem.view.alpha = 0.0
             }, completion: { (finished) in
-                dynamicItem.removeFromSuperview()
                 self.dynamicBehavior.removeItem(dynamicItem)
+                dynamicItem.removeFromSuperview()
         })
     }
 
@@ -102,6 +116,10 @@ class CECollectionDynamicView: UIView {
 protocol CECollectionDynamicViewDataSource {
     func dynamicViewNumberOfItems(dynamicView: CECollectionDynamicView) -> Int
     func dynamicView(cellForItemAtIndex index: Int) -> CEEntryDynamicItem
+}
+
+protocol CECollectionDynamicViewDelegate {
+    func dynamicView(dynamicView: CECollectionDynamicView, didSelectItemAtIndex index: Int)
 }
 
 extension CGFloat {
