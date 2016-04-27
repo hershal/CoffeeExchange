@@ -10,8 +10,7 @@ import UIKit
 import CoreGraphics
 
 class CEEntryDynamicItem: UIDynamicItemGroup {
-
-    var view: UIView
+    var view: CEEntryDynamicItemContainerView
 
     func removeFromSuperview() {
         items.forEach { item in
@@ -31,7 +30,7 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
     }
 
     override init() {
-        view = UIView(frame: CGRect(x: 0, y: 0, width: 125, height: 100))
+        view = CEEntryDynamicItemContainerView(frame: CGRect(x: 0, y: 0, width: 125, height: 100))
         let cupTopFrame = CGRect(x: 0, y: 0, width: 100, height: 50)
         let cupBottomFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
         let cupSideFrame = CGRect(x: 75, y: 0, width: 50, height: 50)
@@ -40,6 +39,17 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         let cupSide = CEEntryDynamicItemCupSide(frame: cupSideFrame)
         super.init(items: [cupTop, cupBottom, cupSide])
         addSubviews()
+    }
+}
+
+class CEEntryDynamicItemContainerView: UIView {
+    override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
+        let subviewHitTests = subviews.map { $0.hitTest(point, withEvent: event) }
+        let subviewHits = subviewHitTests.filter{ $0 != nil }
+        if subviewHits.count != 0 {
+            return self
+        }
+        return super.hitTest(point, withEvent: event)
     }
 }
 
@@ -66,6 +76,11 @@ class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
             UIColor.brownColor().setFill()
             CGContextFillRect(context, rect)
         }
+    }
+
+    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
+        let isInside = frame.contains(point)
+        return isInside
     }
 }
 
