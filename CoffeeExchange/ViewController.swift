@@ -14,7 +14,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     private var collection: CECollection!
     @IBOutlet var dynamicView: CECollectionDynamicView!
 
-    @IBAction func addEntry(sender: AnyObject) {
+    @IBAction func pickContact(sender: AnyObject) {
         let picker = CNContactPickerViewController()
         picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey]
 
