@@ -11,7 +11,7 @@ import CoreGraphics
 
 class CEEntryDynamicItem: UIDynamicItemGroup {
     var view: CEEntryDynamicItemContainerView
-
+    var entry: CEEntry
     func removeFromSuperview() {
         items.forEach { item in
             if let item = item as? UIView {
@@ -29,7 +29,7 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         }
     }
 
-    override init() {
+    init(entry: CEEntry) {
         view = CEEntryDynamicItemContainerView(frame: CGRect(x: 0, y: 0, width: 125, height: 100))
         let cupTopFrame = CGRect(x: 0, y: 0, width: 100, height: 50)
         let cupBottomFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
@@ -37,6 +37,7 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         let cupTop = CEEntryDynamicItemCupTop(frame: cupTopFrame)
         let cupBottom = CEEntryDynamicItemCupBottom(frame: cupBottomFrame)
         let cupSide = CEEntryDynamicItemCupSide(frame: cupSideFrame)
+        self.entry = entry
         super.init(items: [cupTop, cupBottom, cupSide])
         view.dynamicItem = self
         addSubviews()

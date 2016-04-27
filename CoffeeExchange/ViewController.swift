@@ -45,12 +45,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         collection.unarchive()
     }
 
-    func dynamicView(dynamicView: CECollectionDynamicView, didSelectItemAtIndex index: Int) {
-        if index > collection.entries.count {
-            NSLog("ViewController::DynamicViewDidSelectItemAtIndex::CouldNotFindModelForIndex: \(index)")
-        }
-
-        let entry = collection.entries[index]
+    func dynamicView(dynamicView: CECollectionDynamicView, didSelectEntry entry: CEEntry) {
         showEntryDetail(entry)
     }
 
@@ -93,7 +88,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     }
 
     func dynamicView(cellForItemAtIndex index: Int) -> CEEntryDynamicItem {
-        let item = CEEntryDynamicItem()
+        let item = CEEntryDynamicItem(entry: collection.entries[index])
         return item
     }
 }

@@ -67,11 +67,7 @@ class CECollectionDynamicView: UIView {
         print("tapped!")
         if let view = tapGestureRecognizer.view as? CEEntryDynamicItemContainerView,
             item = view.dynamicItem {
-            if let index = dynamicItems.indexOf(item) {
-                delegate?.dynamicView(self, didSelectItemAtIndex: index)
-            } else {
-                NSLog("CECollectionDynamicView::HandleTap::CouldNotFindIndexForItemInView: \(view)")
-            }
+            delegate?.dynamicView(self, didSelectEntry: item.entry)
         } else {
             NSLog("CECollectionDynamicVIew::HandleTap::CouldNotFindContainerView: \(tapGestureRecognizer)")
         }
@@ -119,7 +115,7 @@ protocol CECollectionDynamicViewDataSource {
 }
 
 protocol CECollectionDynamicViewDelegate {
-    func dynamicView(dynamicView: CECollectionDynamicView, didSelectItemAtIndex index: Int)
+    func dynamicView(dynamicView: CECollectionDynamicView, didSelectEntry entry: CEEntry)
 }
 
 extension CGFloat {
