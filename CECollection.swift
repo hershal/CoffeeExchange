@@ -54,8 +54,27 @@ class CECollection {
         NSLog("CECollection::DidArchiveTo: \(archiveLocation)")
     }
 
-    func contains(entry: CEEntry) -> Bool {
-        return entries.contains(entry)
+    func contains(entry entry: CEEntry) -> Bool {
+        return contains(contact: entry.contact)
+    }
+
+    func contains(contact contact: CNContact) -> Bool {
+        return contains(identifier: contact.identifier)
+    }
+
+    func contains(identifier identifier: String) -> Bool {
+        return entries.reduce(0, combine: { (accum, iter) -> Int in
+            return iter.contact.identifier == identifier ? 1 : 0
+        }) != 0
+    }
+
+    func getEntryWithIdentifier(identifier: String) -> CEEntry? {
+        for entry in entries {
+            if entry.contact.identifier == identifier {
+                return entry
+            }
+        }
+        return nil
     }
 }
 

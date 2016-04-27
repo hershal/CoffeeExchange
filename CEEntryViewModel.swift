@@ -44,7 +44,7 @@ class CEEntryDetailViewModel: NSObject {
         if balance == 0 {
             return "Balance has been restored."
         } else {
-            return "You \(balanceDirectionPresent) \(truth.contact.givenName) \(balance) \(noun)."
+            return "You \(balanceDirectionPresent) \(truth.contact.givenName) \(absBalance) \(noun)."
         }
     }
 

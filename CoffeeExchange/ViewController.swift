@@ -17,16 +17,17 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     @IBAction func pickContact(sender: AnyObject) {
         let picker = CNContactPickerViewController()
         picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey]
-
-        picker.predicateForEnablingContact = NSPredicate(format: "NOT (identifier IN %@)", collection.identifiers)
         picker.delegate = self
         self.presentViewController(picker, animated: true, completion: nil)
     }
 
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         NSLog("selected \(contact.identifier)")
-        let entry = CEEntry(contact: contact)
-        self.showEntryDetail(entry)
+        if let entry = collection.getEntryWithIdentifier(contact.identifier) {
+            self.showEntryDetail(entry)
+        } else {
+            self.showEntryDetail(CEEntry(contact: contact))
+        }
     }
 
     private func saveCollectionData() {
@@ -64,18 +65,16 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     func collectionDidAddEntry(collection: CECollection, entry: CEEntry) {
         // TODO: find a better way, maybe reload that specific entry?
-//        dynamicView.reloadData()
+        // TODO: investigate uicollectionview's invalidation context to reload only new data
+        dynamicView.reloadData()
     }
 
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
-        if !collection.contains(entry) {
+        if !collection.contains(entry: entry) {
             collection.addEntry(entry)
         }
         saveCollectionData()
-
-        // TODO: investigate uicollectionview's invalidation context to reload only new data
-        dynamicView.reloadData()
     }
 
     // MARK: - CEDynamicVIew Methods
