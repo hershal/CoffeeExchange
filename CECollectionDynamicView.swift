@@ -69,7 +69,15 @@ class CECollectionDynamicView: UIView {
             item = view.dynamicItem {
             delegate?.dynamicView(self, didSelectEntry: item.entry)
         } else {
-            NSLog("CECollectionDynamicVIew::HandleTap::CouldNotFindContainerView: \(tapGestureRecognizer)")
+            NSLog("CECollectionDynamicView::HandleTap::CouldNotFindContainerView: \(tapGestureRecognizer)")
+        }
+    }
+
+    func invalidateItemAtIndex(index: Int) {
+        // HACK: Not sure why I have to go deep within the subviews to setNeedsDisplay
+        // Should be able to just do dynamicItems[index].view.setNeedsDisplay(). What's up with this?
+        dynamicItems[index].view.subviews.forEach {
+            $0.setNeedsDisplay()
         }
     }
 

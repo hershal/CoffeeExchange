@@ -76,7 +76,9 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
-        if !collection.contains(entry: entry) {
+        if let index = collection.entries.indexOf(entry) {
+            dynamicView.invalidateItemAtIndex(index)
+        } else {
             collection.addEntry(entry)
         }
         saveCollectionData()

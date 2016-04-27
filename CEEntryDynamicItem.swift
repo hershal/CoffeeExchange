@@ -41,10 +41,8 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         let cupSide = CEEntryDynamicItemCupSide(frame: cupSideFrame)
 
         let viewModel = CEEntryDetailViewModel(truth: entry)
-        cupTop.text = viewModel.truth.fullName
-        cupTop.subText = viewModel.balanceText
-        cupBottom.text = viewModel.truth.fullName
-        cupBottom.subText = viewModel.balanceText
+        cupTop.viewModel = viewModel
+        cupBottom.viewModel = viewModel
 
         super.init(items: [cupTop, cupBottom, cupSide])
         view.dynamicItem = self
@@ -79,8 +77,7 @@ class CEEntryDynamicItemComponent: UIView {
         return textFontAttributes
     }
 
-    var text: NSString?
-    var subText: NSString?
+    var viewModel: CEEntryDetailViewModel?
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -94,14 +91,10 @@ class CEEntryDynamicItemComponent: UIView {
     // HACK: I can't guarantee which view is on top (cupTop or cupBottom),
     // so this is a hack to guarantee that both are visible
     func drawTextInRect(rect: CGRect) {
-        if let text = text {
-            text.drawInRect(CGRectInset(rect, 3, 3), withAttributes: textFontAttributes)
-        }
+        viewModel?.truth.fullName.drawInRect(CGRectInset(rect, 3, 3), withAttributes: textFontAttributes)
 
-        if let subText = subText {
-            let textRect = CGRectOffset(rect, 0, 40)
-            subText.drawInRect(CGRectInset(textRect, 3, 3), withAttributes: textFontAttributes)
-        }
+        let textRect = CGRectOffset(rect, 0, 40)
+        viewModel?.balanceText.drawInRect(CGRectInset(textRect, 3, 3), withAttributes: textFontAttributes)
     }
 }
 
