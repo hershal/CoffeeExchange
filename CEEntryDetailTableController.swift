@@ -49,17 +49,17 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         switch (viewModel.hasPhoneNumber) {
         case true:
             switch (indexPath.item) {
             case 0: presentCallDialog()
-            case 1: presentRemindMeDialog()
+            case 1: presentMessageDialog()
             default: presentRemindMeDialog()
             }
         default:
             presentRemindMeDialog()
         }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
     func initSheet() -> UIAlertController {
@@ -81,14 +81,34 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
         let sheet = initSheet()
 
         for (label, number) in phoneNumbers {
-            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: nil))
+            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
+                delegate.tableControllerDidSelectCallWithPhoneNumber(number)
+            }))
         }
         sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         delegate.tableControllerPresentViewController(sheet)
     }
 
     func presentMessageDialog() {
+        guard let phoneNumbers = viewModel.textablePhoneNumbers else {
+            NSLog("CEEntryDetailTableController::PresentMessageDialog::CouldNotEnumeratePhoneNumbers")
+            return
+        }
 
+        guard let delegate = delegate else {
+            NSLog("CEEntryDetailTableController::PresentMessageDialog::NoDelegate")
+            return
+        }
+
+        let sheet = initSheet()
+
+        for (label, number) in phoneNumbers {
+            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
+                delegate.tableControllerDidSelectMessageWithPhoneNumber(number)
+            }))
+        }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        delegate.tableControllerPresentViewController(sheet)
     }
 
     func presentRemindMeDialog() {

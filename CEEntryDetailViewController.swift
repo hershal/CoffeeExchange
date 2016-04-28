@@ -9,8 +9,9 @@
 import UIKit
 import CoreLocation
 import Contacts
+import MessageUI
 
-class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate {
+class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate, MFMessageComposeViewControllerDelegate {
     @IBOutlet weak var picture: UIView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var stepperLabel: UILabel!
@@ -50,15 +51,39 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
     }
 
     func tableControllerDidSelectCallWithPhoneNumber(phoneNumber: CNPhoneNumber) {
-        print("call \(phoneNumber)")
+        if let number = phoneNumber.valueForKey("digits") as? String {
+            UIApplication.sharedApplication().openURL(NSURL(string: "tel://\(number)")!)
+        } else {
+            NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CouldNotCallNumber: \(phoneNumber)")
+        }
     }
 
     func tableControllerDidSelectMessageWithPhoneNumber(phoneNumber: CNPhoneNumber) {
-        print("message \(phoneNumber)")
+        if let number = phoneNumber.valueForKey("digits") as? String {
+            if MFMessageComposeViewController.canSendText() {
+                let messageController = MFMessageComposeViewController()
+                messageController.recipients = [number]
+                messageController.body = "Hey, let's get coffee!"
+                messageController.messageComposeDelegate = self
+                presentViewController(messageController, animated: true, completion: nil)
+            } else {
+                NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CantSendTexts")
+                let alert = UIAlertController(title: "Can't Send Messages", message: "Your device is not set up to send messages.", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: nil))
+                presentViewController(alert, animated: true, completion: nil)
+            }
+        } else {
+            NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CouldNotCallNumber: \(phoneNumber)")
+        }
     }
 
     func tableControllerDidSelectRemindMeWithInterval(interval: NSTimeInterval) {
         print("remindMe \(interval)")
+    }
+
+    // MARK: - MessageComposeViewControllerDelegate Methods
+    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
     }
 
     // MARK: - UIView Methods

@@ -82,7 +82,9 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
                 dynamicView.invalidateItemAtIndex(index)
             }
         } else {
-            collection.addEntry(entry)
+            if entry.balance != 0 {
+                collection.addEntry(entry)
+            }
         }
         saveCollectionData()
     }
