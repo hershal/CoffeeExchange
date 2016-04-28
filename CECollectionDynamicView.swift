@@ -16,6 +16,8 @@ class CECollectionDynamicView: UIView {
     var dataSource: CECollectionDynamicViewDataSource?
     var delegate: CECollectionDynamicViewDelegate?
 
+    @IBOutlet weak var backgroundView: UIView!
+
     required init?(coder aDecoder: NSCoder) {
         dynamicItems = [CEEntryDynamicItem]()
         super.init(coder: aDecoder)

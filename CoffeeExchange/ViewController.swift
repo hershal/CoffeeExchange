@@ -96,18 +96,33 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     // MARK: - CECollectionDelegate Methods
     func collectionDidFinishLoading(collection: CECollection) {
+        if collection.count > 0 {
+            dynamicView.backgroundView.alpha = 0
+        }
         dynamicView.reloadData()
     }
 
-    func collectionDidAddEntry(collection: CECollection, entry: CEEntry) {
+    func collection(collection: CECollection, didAddEntry entry: CEEntry) {
         dynamicView.appendItem()
+    }
+
+    func collection(collection: CECollection, didChangeCount count: Int) {
+        if count > 0 {
+            UIView.animateWithDuration(1, animations: {
+                self.dynamicView.backgroundView.alpha = 0
+            })
+        } else {
+            UIView.animateWithDuration(1, animations: {
+                self.dynamicView.backgroundView.alpha = 1
+            })
+        }
     }
 
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
-        if let index = collection.entries.indexOf(entry) {
+        if let index = collection.indexOfEntry(entry) {
             if entry.balance == 0 {
-                collection.entries.removeAtIndex(index)
+                collection.removeAtIndex(index)
                 dynamicView.removeItemAtIndex(index)
             } else {
                 dynamicView.invalidateItemAtIndex(index)
@@ -120,14 +135,15 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         saveCollectionData()
     }
 
-    // MARK: - CEDynamicVIew Methods
+    // MARK: - CEDynamicView Methods
     func dynamicViewNumberOfItems(dynamicView: CECollectionDynamicView) -> Int {
-        return collection.entries.count
+        let count = collection.count
+//        switch (
+        return count
     }
 
     func dynamicView(cellForItemAtIndex index: Int) -> CEEntryDynamicItem {
-        let item = CEEntryDynamicItem(entry: collection.entries[index])
-        return item
+        return CEEntryDynamicItem(entry: collection.entryAtIndex(index)!)
     }
 }
 

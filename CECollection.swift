@@ -13,13 +13,17 @@ class CECollection {
     static let archiveName = "CoffeeCollectionArchive.bin"
 
     var delegate: CECollectionDelegate?
-    var entries: [CEEntry]
+    private var entries: [CEEntry]
     var identifiers: [String] {
         return entries.map({$0.contact.identifier})
     }
 
     init() {
         entries = [CEEntry]()
+    }
+
+    var count: Int {
+        return entries.count
     }
 
     lazy private var archiveLocation: String = {
@@ -36,17 +40,19 @@ class CECollection {
         }
         entries.append(entry)
         NSLog("CECollection:: Added entry: \(entry.contact.identifier)")
-        delegate?.collectionDidAddEntry(self, entry: entry)
+        delegate?.collection(self, didAddEntry: entry)
+        delegate?.collection(self, didChangeCount: count)
     }
 
     func unarchive() {
         entries.removeAll()
         if let unarchivedEntries = NSKeyedUnarchiver.unarchiveObjectWithFile(archiveLocation) as? [CEEntry] {
-            entries = unarchivedEntries
+            entries.appendContentsOf(unarchivedEntries)
         }
         NSLog("CECollection::DidUnarchiveFrom: \(archiveLocation)")
         NSLog("CECollection::Loaded \(entries.count) items")
         delegate?.collectionDidFinishLoading(self)
+        delegate?.collection(self, didChangeCount: count)
     }
 
     func archive() {
@@ -78,12 +84,34 @@ class CECollection {
     }
 
     func removeAll() {
-        entries = [CEEntry]()
+        entries.removeAll()
+        delegate?.collection(self, didChangeCount: count)
         archive()
+    }
+
+    func removeAtIndex(index: Int) {
+        entries.removeAtIndex(index)
+        delegate?.collection(self, didChangeCount: count)
+    }
+
+    func indexOfEntry(entry: CEEntry) -> Int? {
+        let index = entries.indexOf(entry)
+        if index != NSNotFound {
+            return index
+        }
+        return nil
+    }
+
+    func entryAtIndex(index: Int) -> CEEntry? {
+        if index < count {
+            return entries[index]
+        }
+        return nil
     }
 }
 
 protocol CECollectionDelegate {
     func collectionDidFinishLoading(collection: CECollection)
-    func collectionDidAddEntry(collection: CECollection, entry: CEEntry)
+    func collection(collection: CECollection, didAddEntry entry: CEEntry)
+    func collection(collection: CECollection, didChangeCount count: Int)
 }

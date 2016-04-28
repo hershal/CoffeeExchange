@@ -18,7 +18,53 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" userLabel="DynamicView" customClass="CECollectionDynamicView" customModule="CoffeeExchange" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pzq-f5-dry">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="70F-xf-mvG">
+                                        <rect key="frame" x="225" y="265" width="150" height="70"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Items" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eBi-4t-8dQ">
+                                                <rect key="frame" x="0.0" y="0.0" width="150" height="35"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Add some friends!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfe-Rc-mRa">
+                                                <rect key="frame" x="6" y="35" width="140" height="35"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="150" id="2O2-iO-doL"/>
+                                            <constraint firstItem="eBi-4t-8dQ" firstAttribute="width" secondItem="70F-xf-mvG" secondAttribute="width" id="9mv-bV-E9I"/>
+                                            <constraint firstItem="lfe-Rc-mRa" firstAttribute="top" secondItem="eBi-4t-8dQ" secondAttribute="bottom" id="BNN-y5-xVh"/>
+                                            <constraint firstItem="eBi-4t-8dQ" firstAttribute="centerX" secondItem="70F-xf-mvG" secondAttribute="centerX" id="T1c-Lk-s8G"/>
+                                            <constraint firstItem="lfe-Rc-mRa" firstAttribute="centerX" secondItem="70F-xf-mvG" secondAttribute="centerX" id="rQd-Iu-j5e"/>
+                                            <constraint firstAttribute="height" constant="70" id="u9Q-MT-qpm"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="70F-xf-mvG" firstAttribute="centerY" secondItem="pzq-f5-dry" secondAttribute="centerY" id="MGw-bt-dFU"/>
+                                    <constraint firstItem="70F-xf-mvG" firstAttribute="centerX" secondItem="pzq-f5-dry" secondAttribute="centerX" id="rPf-kK-D3W"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="pzq-f5-dry" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Jfe-I9-MAd"/>
+                            <constraint firstItem="pzq-f5-dry" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="fPF-4w-SeJ"/>
+                            <constraint firstItem="pzq-f5-dry" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="kmm-Mk-hx5"/>
+                            <constraint firstItem="pzq-f5-dry" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="zFj-Bf-Uc1"/>
+                        </constraints>
+                        <connections>
+                            <outlet property="backgroundView" destination="pzq-f5-dry" id="kwa-JL-54R"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Coffee Exchange" id="qPc-IK-dGB"/>
                     <connections>
