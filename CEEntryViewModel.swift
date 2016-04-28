@@ -45,6 +45,40 @@ class CEEntryDetailViewModel: NSObject {
         return truth.contact.isKeyAvailable(CNContactPhoneNumbersKey)
     }
 
+    var callablePhoneNumbers: [String: CNPhoneNumber]? {
+        guard hasPhoneNumber else {
+            return nil
+        }
+        let labeledValues = truth.contact.phoneNumbers.filter { (labeledValue) -> Bool in
+            callablePhoneLabels.contains(labeledValue.label)
+        }
+        return zipLabeledPhoneValues(labeledValues)
+    }
+
+    var textablePhoneNumbers: [String: CNPhoneNumber]? {
+        guard hasPhoneNumber else {
+            return nil
+        }
+        let labeledValues = truth.contact.phoneNumbers.filter { (labeledValue) -> Bool in
+            textablePhoneLabels.contains(labeledValue.label)
+        }
+        return zipLabeledPhoneValues(labeledValues)
+    }
+
+    private func zipLabeledPhoneValues(labeledValues: [CNLabeledValue]) -> [String: CNPhoneNumber] {
+        var assoc = [String: CNPhoneNumber]()
+        labeledValues.forEach { (labeledValue) in
+            if let value = labeledValue.value as? CNPhoneNumber {
+                assoc[humanPhoneLabels[labeledValue.label]!] = value
+            }
+        }
+        return assoc
+    }
+
+    let callablePhoneLabels = [CNLabelPhoneNumberiPhone, CNLabelPhoneNumberMobile, CNLabelPhoneNumberMain, CNLabelHome, CNLabelWork, CNLabelOther]
+    let textablePhoneLabels = [CNLabelPhoneNumberiPhone, CNLabelPhoneNumberMobile, CNLabelOther]
+    let humanPhoneLabels = [CNLabelPhoneNumberiPhone: "iPhone", CNLabelPhoneNumberMobile: "mobile", CNLabelPhoneNumberMain: "main", CNLabelHome: "home", CNLabelWork: "work", CNLabelOther: "other"]
+
     var balanceSubtext: String {
         if balance == 0 {
             return "Balance has been restored."

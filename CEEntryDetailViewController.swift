@@ -8,8 +8,9 @@
 
 import UIKit
 import CoreLocation
+import Contacts
 
-class CEEntryDetailViewController: UIViewController {
+class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate {
     @IBOutlet weak var picture: UIView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var stepperLabel: UILabel!
@@ -37,11 +38,30 @@ class CEEntryDetailViewController: UIViewController {
         name.text = viewModel.truth.fullName
         locationManager = CLLocationManager()
         tableController = CEEntryDetailTableController(viewModel: viewModel)
+        tableController.delegate = self
         tableView.delegate = tableController
         tableView.dataSource = tableController
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CEEntryDetailCell")
     }
 
+    // MARK: - CEENtryDetailTableControllerDelegate Methods
+    func tableControllerPresentViewController(viewController: UIViewController) {
+        presentViewController(viewController, animated: true, completion: nil)
+    }
+
+    func tableControllerDidSelectCallWithPhoneNumber(phoneNumber: CNPhoneNumber) {
+        print("call \(phoneNumber)")
+    }
+
+    func tableControllerDidSelectMessageWithPhoneNumber(phoneNumber: CNPhoneNumber) {
+        print("message \(phoneNumber)")
+    }
+
+    func tableControllerDidSelectRemindMeWithInterval(interval: NSTimeInterval) {
+        print("remindMe \(interval)")
+    }
+
+    // MARK: - UIView Methods
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.addObserver(self, forKeyPath: CEEntry.balanceKey, options: [.New, .Initial], context: nil)
@@ -63,6 +83,7 @@ class CEEntryDetailViewController: UIViewController {
         delegate?.detailWillDisappear(self, withEntry: viewModel.truth)
     }
 
+    // MARK: - ObjC methods
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
 
         guard let keyPath = keyPath else {
@@ -83,4 +104,5 @@ class CEEntryDetailViewController: UIViewController {
 protocol CEEntryDetailDelegate {
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry)
 }
+
 
