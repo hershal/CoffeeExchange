@@ -12,8 +12,8 @@ import Contacts
 // Would this be better as a value-type?
 class CEEntry: NSObject, NSCoding {
 
-    static let balanceKey = "balance";
-    static let contactKey = "contact";
+    static let balanceKey = "balance"
+    static let contactKey = "contact"
 
     var contact: CNContact
     var balance: Int
