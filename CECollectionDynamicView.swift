@@ -50,8 +50,7 @@ class CECollectionDynamicView: UIView {
     }
 
     private func addView(dynamicItem: CEEntryDynamicItem) {
-        let randomX = CGFloat.random() * (bounds.width - dynamicItem.bounds.width)
-        dynamicItem.center.x = randomX
+        dynamicItem.center.x = bounds.width/2
 
         while (itemsIntersectWithItem(dynamicItem)) {
             dynamicItem.center.y -= dynamicItem.view.bounds.radius
