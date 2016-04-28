@@ -7,22 +7,27 @@
 //
 
 import UIKit
-import Darwin
+import CoreLocation
 
-class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
+class CEEntryDetailViewController: UIViewController {
     @IBOutlet weak var picture: UIView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var stepperLabel: UILabel!
     @IBOutlet weak var stepperSublabel: UILabel!
     @IBOutlet weak var stepper: UIStepper!
+    @IBOutlet weak var tableView: UITableView!
+
+    @IBOutlet weak var tableHeightConstriant: NSLayoutConstraint!
+
     @IBAction func stepperChanged(sender: AnyObject) {
         let value = stepper.value
         viewModel.balance = Int(value)
     }
-    @IBOutlet weak var detailTable: UITableView!
 
     var viewModel: CEEntryDetailViewModel!
     var delegate: CEEntryDetailDelegate?
+    var locationManager: CLLocationManager!
+    var tableController: CEEntryDetailTableController!
 
     // It's assumed the model is initailized before this method is called,
     // i.e. before we're ready to display to the screen
@@ -30,12 +35,23 @@ class CEEntryDetailViewController: UIViewController, UITableViewDelegate {
         super.viewDidLoad()
         stepper.value = Double(viewModel.balance)
         name.text = viewModel.truth.fullName
+        locationManager = CLLocationManager()
+        tableController = CEEntryDetailTableController(viewModel: viewModel)
+        tableView.delegate = tableController
+        tableView.dataSource = tableController
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CEEntryDetailCell")
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.addObserver(self, forKeyPath: CEEntry.balanceKey, options: [.New, .Initial], context: nil)
         stepper.value = Double(viewModel.balance)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        let numItems = tableController.tableView(tableView, numberOfRowsInSection: 0)
+        tableHeightConstriant.constant = 44.0 * CGFloat(numItems)
     }
 
     override func viewWillDisappear(animated: Bool) {

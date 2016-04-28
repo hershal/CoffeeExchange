@@ -16,7 +16,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     @IBAction func pickContact(sender: AnyObject) {
         let picker = CNContactPickerViewController()
-        picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey]
+        picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey]
         picker.delegate = self
         self.presentViewController(picker, animated: true, completion: nil)
     }

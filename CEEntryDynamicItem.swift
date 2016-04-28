@@ -72,8 +72,12 @@ class CEEntryDynamicItemComponent: UIView {
     var textFontAttributes: [String: NSObject] {
         let textStyle = NSMutableParagraphStyle()
         textStyle.alignment = .Center
+        textStyle.lineBreakMode = .ByWordWrapping
 
-        let textFontAttributes = [NSFontAttributeName: UIFont.systemFontOfSize(UIFont.labelFontSize()), NSForegroundColorAttributeName: UIColor.whiteColor(), NSParagraphStyleAttributeName: textStyle]
+        let textFontAttributes =
+            [NSFontAttributeName: UIFont.systemFontOfSize(UIFont.labelFontSize()),
+             NSForegroundColorAttributeName: UIColor.whiteColor(),
+             NSParagraphStyleAttributeName: textStyle]
         return textFontAttributes
     }
 
@@ -91,10 +95,13 @@ class CEEntryDynamicItemComponent: UIView {
     // HACK: I can't guarantee which view is on top (cupTop or cupBottom),
     // so this is a hack to guarantee that both are visible
     func drawTextInRect(rect: CGRect) {
-        viewModel?.truth.fullName.drawInRect(CGRectInset(rect, 3, 3), withAttributes: textFontAttributes)
+//        viewModel?.truth.fullName.drawInRect(CGRectInset(rect, 3, 3), withAttributes: textFontAttributes)
+        viewModel?.truth.fullName.drawWithRect(CGRectInset(rect, 3, 3), options: [.TruncatesLastVisibleLine, .UsesLineFragmentOrigin], attributes: textFontAttributes, context: nil)
 
         let textRect = CGRectOffset(rect, 0, 40)
         viewModel?.balanceText.drawInRect(CGRectInset(textRect, 3, 3), withAttributes: textFontAttributes)
+//        viewModel?.balanceText.drawWithRect(CGRectInset(textRect, 3, 3), options: (.TruncatesLastVisibleLine), attributes: textFontAttributes, context: nil)
+
     }
 }
 

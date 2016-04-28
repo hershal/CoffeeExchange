@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Contacts
 
 class CEEntryDetailViewModel: NSObject {
 
@@ -38,6 +39,10 @@ class CEEntryDetailViewModel: NSObject {
 
     var balanceText: String {
         return "\(absBalance) \(noun) \(balanceDirectionPast)"
+    }
+
+    var hasPhoneNumber: Bool {
+        return truth.contact.isKeyAvailable(CNContactPhoneNumbersKey)
     }
 
     var balanceSubtext: String {

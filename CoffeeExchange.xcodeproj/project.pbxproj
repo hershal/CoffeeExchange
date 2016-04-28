@@ -10,6 +10,8 @@
 		7880D8201CCCC0D800403730 /* CECollectionDynamicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880D81F1CCCC0D800403730 /* CECollectionDynamicView.swift */; };
 		7880D8221CCCC63900403730 /* CEThrowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880D8211CCCC63900403730 /* CEThrowBehavior.swift */; };
 		7887259C1CCDEA8800DACC8E /* CEEntryDynamicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */; };
+		7891C6D51CD19057003F9202 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7891C6D41CD19057003F9202 /* MapKit.framework */; };
+		7891C6D91CD19B37003F9202 /* CEEntryDetailTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7891C6D81CD19B37003F9202 /* CEEntryDetailTableController.swift */; };
 		78A4CF081CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */; };
 		78BDBD4E1CCADAAA00718798 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */; };
 		78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4F1CCADAAA00718798 /* ViewController.swift */; };
@@ -48,6 +50,8 @@
 		7880D81F1CCCC0D800403730 /* CECollectionDynamicView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CECollectionDynamicView.swift; sourceTree = "<group>"; };
 		7880D8211CCCC63900403730 /* CEThrowBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEThrowBehavior.swift; sourceTree = "<group>"; };
 		7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDynamicItem.swift; sourceTree = "<group>"; };
+		7891C6D41CD19057003F9202 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		7891C6D81CD19B37003F9202 /* CEEntryDetailTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailTableController.swift; sourceTree = "<group>"; };
 		78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEDynamicCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		78BDBD4A1CCADAAA00718798 /* CoffeeExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7891C6D51CD19057003F9202 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +104,8 @@
 		78BDBD411CCADAAA00718798 = {
 			isa = PBXGroup;
 			children = (
+				7891C6D81CD19B37003F9202 /* CEEntryDetailTableController.swift */,
+				7891C6D41CD19057003F9202 /* MapKit.framework */,
 				78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */,
 				7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */,
 				7880D8211CCCC63900403730 /* CEThrowBehavior.swift */,
@@ -226,6 +233,11 @@
 				TargetAttributes = {
 					78BDBD491CCADAAA00718798 = {
 						CreatedOnToolsVersion = 7.3;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					78BDBD601CCADAAA00718798 = {
 						CreatedOnToolsVersion = 7.3;
@@ -293,6 +305,7 @@
 				78A4CF081CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift in Sources */,
 				78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */,
 				78BDBD871CCB580C00718798 /* CEEntryDetailViewController.swift in Sources */,
+				7891C6D91CD19B37003F9202 /* CEEntryDetailTableController.swift in Sources */,
 				7880D8221CCCC63900403730 /* CEThrowBehavior.swift in Sources */,
 				78BDBD561CCADAAA00718798 /* CoffeeExchange.xcdatamodeld in Sources */,
 				78BDBD811CCAE8C300718798 /* CECollection.swift in Sources */,
