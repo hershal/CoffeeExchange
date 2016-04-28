@@ -103,13 +103,62 @@ class CEEntryDynamicItemComponent: UIView {
         let isInside = frame.contains(point)
         return isInside
     }
+}
 
-    // HACK: I can't guarantee which view is on top (cupTop or cupBottom),
-    // so this is a hack to guarantee that both are visible
+class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
+    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
+        get {
+            return .Rectangle
+        }
+    }
+
+    override func drawRect(rect: CGRect) {
+        if let context = UIGraphicsGetCurrentContext() {
+            UIColor.brownColor().setFill()
+            CGContextFillRect(context, rect)
+        }
+    }
+}
+
+class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.zPosition = 100
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
+        get {
+            return .Path
+        }
+    }
+
+    override var collisionBoundingPath: UIBezierPath {
+        let path = UIBezierPath()
+        let physicsCenter = CGPoint(x: -12.5, y: 0)
+        path.addArcWithCenter(physicsCenter, radius: 50, startAngle: 0, endAngle: CGFloat(2*M_PI), clockwise: true)
+        return path
+    }
+
     func drawTextInRect(rect: CGRect) {
-        viewModel?.truth.fullName.drawWithRect(CGRectInset(rect, 3, 3), options: [.TruncatesLastVisibleLine, .UsesLineFragmentOrigin], attributes: textFontAttributes, context: nil)
-        let textRect = CGRectOffset(rect, 0, 40)
-        viewModel?.balanceText.drawInRect(CGRectInset(textRect, 3, 3), withAttributes: textFontAttributes)
+        guard let viewModel = viewModel else {
+            return
+        }
+
+        var topRect = rect
+        topRect.size.height = rect.height/2
+        topRect = CGRectInset(topRect, 3, 3)
+        topRect.offsetInPlace(dx: 0, dy: 3)
+        viewModel.truth.fullName.drawWithRect(topRect, options: [.TruncatesLastVisibleLine, .UsesLineFragmentOrigin], attributes: textFontAttributes, context: nil)
+
+        var bottomRect = CGRectOffset(rect, 0, rect.height/2)
+        bottomRect.size.height = rect.height/2
+        bottomRect = CGRectInset(bottomRect, 3, 3)
+        let str = "\(viewModel.absBalance) \(viewModel.balanceDirectionPast)"
+        str.drawInRect(bottomRect, withAttributes: textFontAttributes)
     }
 
     func drawEditModeInRect(rect: CGRect) {
@@ -133,48 +182,6 @@ class CEEntryDynamicItemComponent: UIView {
             CGContextStrokePath(context)
         }
     }
-}
-
-class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
-    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
-        get {
-            return .Rectangle
-        }
-    }
-
-    override func drawRect(rect: CGRect) {
-        if let context = UIGraphicsGetCurrentContext() {
-            UIColor.brownColor().setFill()
-            CGContextFillRect(context, rect)
-            drawTextInRect(rect)
-        }
-    }
-}
-
-class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        layer.zPosition = 100
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
-        get {
-            return .Path
-        }
-    }
-
-    override var collisionBoundingPath: UIBezierPath {
-        let path = UIBezierPath()
-        let physicsCenter = CGPoint(x: -12.5, y: 0)
-        path.addArcWithCenter(physicsCenter, radius: 50, startAngle: 0, endAngle: CGFloat(2*M_PI), clockwise: true)
-        return path
-    }
-
     override func drawRect(rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
             UIColor.brownColor().setFill()

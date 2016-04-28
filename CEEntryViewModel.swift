@@ -21,19 +21,19 @@ class CEEntryDetailViewModel: NSObject {
         }
     }
 
-    private var balanceDirectionPast: String {
+    var balanceDirectionPast: String {
         return balance < 0 ? "lent" : "owed"
     }
 
-    private var balanceDirectionPresent: String {
+    var balanceDirectionPresent: String {
         return balance < 0 ? "lent" : "owe"
     }
 
-    private var absBalance: Int {
+    var absBalance: Int {
         return abs(balance)
     }
 
-    private var noun: String {
+    var noun: String {
         return absBalance == 1 ? "cup" : "cups"
     }
 
