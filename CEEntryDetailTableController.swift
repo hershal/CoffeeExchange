@@ -12,7 +12,7 @@ import Contacts
 
 class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableViewDelegate {
     var viewModel: CEEntryDetailViewModel
-    var tableActions = [["Call", "Message", "Remind Me"], ["Remind Me"]]
+    let tableActions = [["Call", "Message", "Remind Me"], ["Remind Me"]]
     var delegate: CEEntryDetailTableControllerDelegate?
 
     init(viewModel: CEEntryDetailViewModel) {
@@ -112,7 +112,33 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
     }
 
     func presentRemindMeDialog() {
+        guard let delegate = delegate else {
+            NSLog("CEEntryDetailTableController::PresentMessageDialog::NoDelegate")
+            return
+        }
 
+        let sheet = initSheet()
+        let date = NSDate()
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.setLocalizedDateFormatFromTemplate("EEEE")
+        let dayName = dateFormatter.stringFromDate(date)
+
+        let dayNumber = NSCalendar.currentCalendar().component(.Weekday, fromDate: date)
+        var whichWeek = "This"
+        var enumWeek: CEReminderInterval = .ThisWeekend
+        if dayNumber == 1 || dayNumber == 6 || dayNumber == 7 {
+            whichWeek = "Next"
+            enumWeek = .NextWeekend
+        }
+
+        let intervals = [.Tomorrow: "Tomorrow", enumWeek: "\(whichWeek) Weekend", .NextWeekThisDay: "Next \(dayName)"]
+        for (interval, intervalString) in intervals {
+            sheet.addAction(UIAlertAction(title: intervalString, style: .Default, handler: { (alertAction) in
+                delegate.tableControllerDidSelectRemindMeWithInterval(interval)
+            }))
+        }
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        delegate.tableControllerPresentViewController(sheet)
     }
 }
 
@@ -120,5 +146,12 @@ protocol CEEntryDetailTableControllerDelegate {
     func tableControllerPresentViewController(viewController: UIViewController)
     func tableControllerDidSelectCallWithPhoneNumber(phoneNumber: CNPhoneNumber)
     func tableControllerDidSelectMessageWithPhoneNumber(phoneNumber: CNPhoneNumber)
-    func tableControllerDidSelectRemindMeWithInterval(interval: NSTimeInterval)
+    func tableControllerDidSelectRemindMeWithInterval(interval: CEReminderInterval)
+}
+
+enum CEReminderInterval {
+    case Tomorrow
+    case ThisWeekend
+    case NextWeekend
+    case NextWeekThisDay
 }

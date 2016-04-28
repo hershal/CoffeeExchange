@@ -77,7 +77,7 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
         }
     }
 
-    func tableControllerDidSelectRemindMeWithInterval(interval: NSTimeInterval) {
+    func tableControllerDidSelectRemindMeWithInterval(interval: CEReminderInterval) {
         print("remindMe \(interval)")
     }
 
