@@ -46,12 +46,15 @@ class CEEntryDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         viewModel.addObserver(self, forKeyPath: CEEntry.balanceKey, options: [.New, .Initial], context: nil)
         stepper.value = Double(viewModel.balance)
+        let numItems = tableController.tableView(tableView, numberOfRowsInSection: 0)
+        self.tableHeightConstriant.constant = 44.0 * CGFloat(numItems)
+        UIView.animateWithDuration(0.5) {
+            self.tableView.layoutIfNeeded()
+        }
     }
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        let numItems = tableController.tableView(tableView, numberOfRowsInSection: 0)
-        tableHeightConstriant.constant = 44.0 * CGFloat(numItems)
     }
 
     override func viewWillDisappear(animated: Bool) {
