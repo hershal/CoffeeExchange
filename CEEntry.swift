@@ -20,7 +20,7 @@ class CEEntry: NSObject, NSCoding {
 
     init(contact: CNContact) {
         self.contact = contact
-        self.balance = 0
+        self.balance = 1
     }
 
     var fullName: String {
