@@ -14,20 +14,25 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     private var collection: CECollection!
     @IBOutlet var dynamicView: CECollectionDynamicView!
 
-    var editMode: CEViewControllerEditMode! {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    var editMode: CEViewControllerEditMode = .NormalMode {
         didSet {
-            switch editMode! {
+            switch editMode {
             case .EditMode:
                 let doneButton = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(ViewController.toggleEditMode))
                 let clearButton = UIBarButtonItem(title: "Clear All", style: .Plain, target: self, action: #selector(ViewController.clearAll))
-                navigationItem.setRightBarButtonItem(doneButton, animated: true)
-                navigationItem.setLeftBarButtonItem(clearButton, animated: true)
+                navigationItem.setRightBarButtonItem(clearButton, animated: true)
+                navigationItem.setLeftBarButtonItem(doneButton, animated: true)
             case .NormalMode:
                 let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(ViewController.toggleEditMode))
                 let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(ViewController.openContactPicker))
                 navigationItem.setRightBarButtonItem(addButton, animated: true)
                 navigationItem.setLeftBarButtonItem(editButton, animated: true)
             }
+            dynamicView.setEditMode(editMode)
         }
     }
 
@@ -45,7 +50,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     }
 
     func toggleEditMode() {
-        switch (editMode!) {
+        switch (editMode) {
         case .NormalMode: editMode = .EditMode
         case .EditMode: editMode = .NormalMode
         }
@@ -77,7 +82,13 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     }
 
     func dynamicView(dynamicView: CECollectionDynamicView, didSelectEntry entry: CEEntry) {
-        showEntryDetail(entry)
+        switch (editMode) {
+        case .NormalMode:
+                    showEntryDetail(entry)
+        case .EditMode:
+            removeEntry(entry)
+        }
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -118,19 +129,21 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         }
     }
 
+    func removeEntry(entry: CEEntry) {
+        if let index = collection.indexOfEntry(entry) {
+            collection.removeAtIndex(index)
+            dynamicView.removeItemAtIndex(index)
+        }
+    }
+
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
-        if let index = collection.indexOfEntry(entry) {
-            if entry.balance == 0 {
-                collection.removeAtIndex(index)
-                dynamicView.removeItemAtIndex(index)
-            } else {
-                dynamicView.invalidateItemAtIndex(index)
-            }
+        if entry.balance == 0 {
+            removeEntry(entry)
+        } else if let index = collection.indexOfEntry(entry) {
+            dynamicView.invalidateItemAtIndex(index)
         } else {
-            if entry.balance != 0 {
-                collection.addEntry(entry)
-            }
+            collection.addEntry(entry)
         }
         saveCollectionData()
     }

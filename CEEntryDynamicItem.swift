@@ -12,6 +12,16 @@ import CoreGraphics
 class CEEntryDynamicItem: UIDynamicItemGroup {
     var view: CEEntryDynamicItemContainerView
     var entry: CEEntry
+
+    func setEditMode(editMode: CEViewControllerEditMode) {
+        items.forEach { (item) in
+            if let item = item as? CEEntryDynamicItemComponent {
+                item.editMode = editMode
+                item.setNeedsDisplay()
+            }
+        }
+    }
+
     func removeFromSuperview() {
         items.forEach { item in
             if let item = item as? UIView {
@@ -64,9 +74,17 @@ class CEEntryDynamicItemContainerView: UIView {
 }
 
 class CEEntryDynamicItemComponent: UIView {
+    var editMode: CEViewControllerEditMode
+    var viewModel: CEEntryDetailViewModel?
+
     override init(frame: CGRect) {
+        self.editMode = .NormalMode
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     var textFontAttributes: [String: NSObject] {
@@ -81,12 +99,6 @@ class CEEntryDynamicItemComponent: UIView {
         return textFontAttributes
     }
 
-    var viewModel: CEEntryDetailViewModel?
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
         let isInside = frame.contains(point)
         return isInside
@@ -95,13 +107,31 @@ class CEEntryDynamicItemComponent: UIView {
     // HACK: I can't guarantee which view is on top (cupTop or cupBottom),
     // so this is a hack to guarantee that both are visible
     func drawTextInRect(rect: CGRect) {
-//        viewModel?.truth.fullName.drawInRect(CGRectInset(rect, 3, 3), withAttributes: textFontAttributes)
         viewModel?.truth.fullName.drawWithRect(CGRectInset(rect, 3, 3), options: [.TruncatesLastVisibleLine, .UsesLineFragmentOrigin], attributes: textFontAttributes, context: nil)
-
         let textRect = CGRectOffset(rect, 0, 40)
         viewModel?.balanceText.drawInRect(CGRectInset(textRect, 3, 3), withAttributes: textFontAttributes)
-//        viewModel?.balanceText.drawWithRect(CGRectInset(textRect, 3, 3), options: (.TruncatesLastVisibleLine), attributes: textFontAttributes, context: nil)
+    }
 
+    func drawEditModeInRect(rect: CGRect) {
+        guard editMode == .EditMode else {
+            return
+        }
+
+        if let context = UIGraphicsGetCurrentContext() {
+            let insetRect = rect.insetBy(dx: 10, dy: 10)
+            let tintColor = UIColor.whiteColor()
+            tintColor.colorWithAlphaComponent(0.9).setFill()
+            CGContextFillEllipseInRect(context, insetRect)
+            let xrect = insetRect.insetBy(dx: 20, dy: 20)
+            UIColor.lightGrayColor().setStroke()
+            CGContextSetLineWidth(context, 1)
+            CGContextMoveToPoint(context, xrect.minX, xrect.minY)
+            CGContextAddLineToPoint(context, xrect.maxX, xrect.maxY)
+            CGContextStrokePath(context)
+            CGContextMoveToPoint(context, xrect.maxX, xrect.minY)
+            CGContextAddLineToPoint(context, xrect.minX, xrect.maxY)
+            CGContextStrokePath(context)
+        }
     }
 }
 
@@ -122,6 +152,16 @@ class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
 }
 
 class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.zPosition = 100
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
         get {
             return .Path
@@ -140,6 +180,7 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
             UIColor.brownColor().setFill()
             CGContextFillEllipseInRect(context, rect)
             drawTextInRect(rect)
+            drawEditModeInRect(rect)
         }
     }
 }

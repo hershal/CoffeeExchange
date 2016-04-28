@@ -64,14 +64,24 @@ class CECollectionDynamicView: UIView {
         dynamicItem.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(CECollectionDynamicView.handleTap(_:))))
     }
 
-    func handleTap(tapGestureRecognizer: UITapGestureRecognizer) {
-        print("tapped!")
-        if let view = tapGestureRecognizer.view as? CEEntryDynamicItemContainerView,
-            item = view.dynamicItem {
-            delegate?.dynamicView(self, didSelectEntry: item.entry)
-        } else {
-            NSLog("CECollectionDynamicView::HandleTap::CouldNotFindContainerView: \(tapGestureRecognizer)")
+    func setEditMode(editMode: CEViewControllerEditMode) {
+        dynamicItems.forEach { (item) in
+            item.setEditMode(editMode)
         }
+    }
+
+    func handleTap(tapGestureRecognizer: UITapGestureRecognizer) {
+        guard let view = tapGestureRecognizer.view as? CEEntryDynamicItemContainerView,
+            item = view.dynamicItem else {
+                NSLog("CECollectionDynamicView::HandleTap::CouldNotFindContainerView: \(tapGestureRecognizer)")
+                return
+        }
+
+        guard let delegate = delegate else {
+            NSLog("CECollectionDynamicView:HandleTap::NoDelegate!")
+            return
+        }
+        delegate.dynamicView(self, didSelectEntry: item.entry)
     }
 
     func invalidateItemAtIndex(index: Int) {
