@@ -1,4 +1,4 @@
- //
+//
 //  ViewController.swift
 //  CoffeeExchange
 //
@@ -14,11 +14,41 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     private var collection: CECollection!
     @IBOutlet var dynamicView: CECollectionDynamicView!
 
-    @IBAction func pickContact(sender: AnyObject) {
+    var editMode: CEViewControllerEditMode! {
+        didSet {
+            switch editMode! {
+            case .EditMode:
+                let doneButton = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(ViewController.toggleEditMode))
+                let clearButton = UIBarButtonItem(title: "Clear All", style: .Plain, target: self, action: #selector(ViewController.clearAll))
+                navigationItem.setRightBarButtonItem(doneButton, animated: true)
+                navigationItem.setLeftBarButtonItem(clearButton, animated: true)
+            case .NormalMode:
+                let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(ViewController.toggleEditMode))
+                let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(ViewController.openContactPicker))
+                navigationItem.setRightBarButtonItem(addButton, animated: true)
+                navigationItem.setLeftBarButtonItem(editButton, animated: true)
+            }
+        }
+    }
+
+    func clearAll() {
+        collection.removeAll()
+        dynamicView.reloadData()
+        toggleEditMode()
+    }
+
+    func openContactPicker() {
         let picker = CNContactPickerViewController()
         picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey]
         picker.delegate = self
         self.presentViewController(picker, animated: true, completion: nil)
+    }
+
+    func toggleEditMode() {
+        switch (editMode!) {
+        case .NormalMode: editMode = .EditMode
+        case .EditMode: editMode = .NormalMode
+        }
     }
 
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
@@ -43,6 +73,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         collection = CECollection()
         collection.delegate = self
         collection.unarchive()
+        editMode = .NormalMode
     }
 
     func dynamicView(dynamicView: CECollectionDynamicView, didSelectEntry entry: CEEntry) {
@@ -99,3 +130,8 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         return item
     }
 }
+
+ enum CEViewControllerEditMode {
+    case NormalMode
+    case EditMode
+ }

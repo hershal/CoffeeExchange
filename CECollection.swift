@@ -76,6 +76,11 @@ class CECollection {
         }
         return nil
     }
+
+    func removeAll() {
+        entries = [CEEntry]()
+        archive()
+    }
 }
 
 protocol CECollectionDelegate {
