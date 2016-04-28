@@ -69,15 +69,18 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     }
 
     func collectionDidAddEntry(collection: CECollection, entry: CEEntry) {
-        // TODO: find a better way, maybe reload that specific entry?
-        // TODO: investigate uicollectionview's invalidation context to reload only new data
-        dynamicView.reloadData()
+        dynamicView.appendItem()
     }
 
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
         if let index = collection.entries.indexOf(entry) {
-            dynamicView.invalidateItemAtIndex(index)
+            if entry.balance == 0 {
+                collection.entries.removeAtIndex(index)
+                dynamicView.removeItemAtIndex(index)
+            } else {
+                dynamicView.invalidateItemAtIndex(index)
+            }
         } else {
             collection.addEntry(entry)
         }
@@ -94,4 +97,3 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         return item
     }
 }
-

@@ -80,6 +80,27 @@ class CECollectionDynamicView: UIView {
         }
     }
 
+    func removeItemAtIndex(index: Int) {
+        removeView(dynamicItems[index])
+    }
+
+    func appendItem() {
+        guard let dataSource = dataSource else {
+            NSLog("CECollectionDynamicView:AppendItem::NoDataSource!")
+            return
+        }
+
+        let dataSourceCount = dataSource.dynamicViewNumberOfItems(self)
+        let selfCount = dynamicItems.count
+        if dataSourceCount == (selfCount + 1) {
+            let cell = dataSource.dynamicView(cellForItemAtIndex: selfCount)
+            addView(cell)
+        } else {
+            NSLog("CECollectionDynamicView::AppendItem::DataSourceCountOutOfSync: \(dataSourceCount) != (\(selfCount) + 1)")
+            reloadData()
+        }
+    }
+
     private func removeView(dynamicItem: CEEntryDynamicItem) {
         guard let index = dynamicItems.indexOf(dynamicItem) else {
             NSLog("CECollectionDynamicView::RemoveView::ViewNotFound: \(dynamicItem)")
