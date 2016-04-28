@@ -10,8 +10,9 @@ import UIKit
 import CoreLocation
 import Contacts
 import MessageUI
+import EventKit
 
-class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate, MFMessageComposeViewControllerDelegate {
+class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate, MFMessageComposeViewControllerDelegate, CEReminderControllerDelegate {
     @IBOutlet weak var picture: UIView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var stepperLabel: UILabel!
@@ -45,7 +46,7 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CEEntryDetailCell")
     }
 
-    // MARK: - CEENtryDetailTableControllerDelegate Methods
+    // MARK: - CEEntryDetailTableControllerDelegate Methods
     func tableControllerPresentViewController(viewController: UIViewController) {
         presentViewController(viewController, animated: true, completion: nil)
     }
@@ -79,11 +80,25 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
 
     func tableControllerDidSelectRemindMeWithInterval(interval: CEReminderInterval) {
         print("remindMe \(interval)")
+        let reminderController = CEReminderController(viewModel: viewModel)
+        reminderController.delegate = self
+        reminderController.createReminderWithInterval(interval)
     }
 
     // MARK: - MessageComposeViewControllerDelegate Methods
     func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
         controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    // MARK: - CEReminderControllerDelegate Methods
+    func reminderController(reminderController: CEReminderController, couldNotCreateReminderWithError reminderError: CEReminderError) {
+        let alert = UIAlertController(title: "Can't Create Reminder", message: "You have denied access to create reminders. Please enable access in Settings under Privacy.", preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: nil))
+        presentViewController(alert, animated: true, completion: nil)
+    }
+
+    func reminderController(reminderController: CEReminderController, didCreateReminder reminder: EKReminder, inCalendar calendar: EKCalendar, withInterval interval: CEReminderInterval) {
+        NSLog("created reminder")
     }
 
     // MARK: - UIView Methods

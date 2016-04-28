@@ -118,21 +118,9 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
         }
 
         let sheet = initSheet()
-        let date = NSDate()
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.setLocalizedDateFormatFromTemplate("EEEE")
-        let dayName = dateFormatter.stringFromDate(date)
+        let reminderController = CEReminderController(viewModel: viewModel)
 
-        let dayNumber = NSCalendar.currentCalendar().component(.Weekday, fromDate: date)
-        var whichWeek = "This"
-        var enumWeek: CEReminderInterval = .ThisWeekend
-        if dayNumber == 1 || dayNumber == 6 || dayNumber == 7 {
-            whichWeek = "Next"
-            enumWeek = .NextWeekend
-        }
-
-        let intervals = [.Tomorrow: "Tomorrow", enumWeek: "\(whichWeek) Weekend", .NextWeekThisDay: "Next \(dayName)"]
-        for (interval, intervalString) in intervals {
+        for (interval, intervalString) in reminderController.reminderIntervalSheetInfo() {
             sheet.addAction(UIAlertAction(title: intervalString, style: .Default, handler: { (alertAction) in
                 delegate.tableControllerDidSelectRemindMeWithInterval(interval)
             }))
@@ -147,11 +135,4 @@ protocol CEEntryDetailTableControllerDelegate {
     func tableControllerDidSelectCallWithPhoneNumber(phoneNumber: CNPhoneNumber)
     func tableControllerDidSelectMessageWithPhoneNumber(phoneNumber: CNPhoneNumber)
     func tableControllerDidSelectRemindMeWithInterval(interval: CEReminderInterval)
-}
-
-enum CEReminderInterval {
-    case Tomorrow
-    case ThisWeekend
-    case NextWeekend
-    case NextWeekThisDay
 }
