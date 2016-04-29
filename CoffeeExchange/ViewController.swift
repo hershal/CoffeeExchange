@@ -37,9 +37,14 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     }
 
     func clearAll() {
-        collection.removeAll()
-        dynamicView.reloadData()
-        toggleEditMode()
+        let alertController = UIAlertController(title: "Clear All?", message: "Are you sure you would like to clear all coffee entries? This will permanantly delete all items.", preferredStyle: .ActionSheet)
+        alertController.addAction(UIAlertAction(title: "Clear All", style: .Destructive, handler: { (alertAction) in
+            self.collection.removeAll()
+            self.dynamicView.reloadData()
+            self.toggleEditMode()
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        presentViewController(alertController, animated: true, completion: nil)
     }
 
     func openContactPicker() {
