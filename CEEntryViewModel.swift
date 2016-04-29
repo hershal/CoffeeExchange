@@ -56,7 +56,8 @@ class CEEntryDetailViewModel: NSObject {
     }
 
     var hasPhoneNumber: Bool {
-        return truth.contact.isKeyAvailable(CNContactPhoneNumbersKey)
+        let contact = truth.contact
+        return contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.phoneNumbers.count > 0
     }
 
     var callablePhoneNumbers: [String: CNPhoneNumber]? {
@@ -94,7 +95,8 @@ class CEEntryDetailViewModel: NSObject {
     let humanPhoneLabels = [CNLabelPhoneNumberiPhone: "iPhone", CNLabelPhoneNumberMobile: "mobile", CNLabelPhoneNumberMain: "main", CNLabelHome: "home", CNLabelWork: "work", CNLabelOther: "other"]
 
     var hasAddresses: Bool {
-        return truth.contact.isKeyAvailable(CNContactPostalAddressesKey)
+        let contact = truth.contact
+        return contact.isKeyAvailable(CNContactPostalAddressesKey) && contact.postalAddresses.count > 0
     }
 
     var postalAddresses: [CNPostalAddress]? {
