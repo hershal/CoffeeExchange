@@ -19,19 +19,14 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
     var locationDidInitialize = false
     var operationQueue: NSOperationQueue
 
-    var contactLocations: [CLPlacemark]
-    var closestContactLocation: CLPlacemark?
     var userLocation: CLLocation?
-
-    var geocodeOperations: NSMutableArray
+    var locationsManager: CELocationsManager!
 
     init(mapView: MKMapView, viewModel: CEEntryDetailViewModel) {
         self.mapView = mapView
         self.viewModel = viewModel
         self.locationManager = CLLocationManager()
         self.operationQueue = NSOperationQueue()
-        self.geocodeOperations = NSMutableArray()
-        self.contactLocations = [CLPlacemark]()
         super.init()
 
         if !CLLocationManager.locationServicesEnabled() {
@@ -54,13 +49,12 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         }
 
         // TODO: construct operations front to back so that dependencies can be added
-        let closestAddressComputation = CEComputeClosestAddressOperation(operations: geocodeOperations)
+        let closestAddressComputation = CEComputeClosestAddressOperation(locationsManager: locationsManager)
 
         for address in addresses {
             // TODO: Add dependency on operation which evaluates closest address
-            let operation = CEGeocodeAddressOperation(address: address.stringValue)
+            let operation = CEGeocodeAddressOperation(address: address.stringValue, locationsManager: locationsManager)
             closestAddressComputation.addDependency(operation)
-            geocodeOperations.addObject(operation)
             operationQueue.addOperation(operation)
         }
         operationQueue.addOperation(closestAddressComputation)
@@ -76,6 +70,8 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
             NSLog("CEEntryDetailMapController::LocationManagerDidUpdateLocation::CouldNotObtainLocation")
             return
         }
+
+        locationsManager = CELocationsManager(userLocation: location)
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
 
@@ -98,31 +94,25 @@ extension CNPostalAddress {
 }
 
 class CEComputeClosestAddressOperation: NSOperation {
-    var operations: NSMutableArray
-    init(operations: NSMutableArray) {
-        self.operations = operations
+    var locationsManager: CELocationsManager
+    init(locationsManager: CELocationsManager) {
+        self.locationsManager = locationsManager
         super.init()
     }
 
     override func main() {
-        NSLog("querying operations")
-        for operation in operations {
-            if let operation = operation as? CEGeocodeAddressOperation {
-                NSLog("operation state: \(operation.state)")
-            } else {
-                NSLog("couldn't query state")
-            }
-        }
+        NSLog("closest location to user: \(locationsManager.closestPlacemarkToUser())")
     }
 }
 
 class CEGeocodeAddressOperation: CEOperation {
     let address: String
     var error: NSError?
-    var placemarks: [CLPlacemark]?
+    var locationsManager: CELocationsManager
 
-    init(address: String) {
+    init(address: String, locationsManager: CELocationsManager) {
         self.address = address
+        self.locationsManager = locationsManager
         super.init()
     }
 
@@ -141,7 +131,7 @@ class CEGeocodeAddressOperation: CEOperation {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address) { (placemarks, error) in
             if let placemarks = placemarks {
-                self.placemarks = placemarks
+                self.locationsManager.addPlacemarks(placemarks)
                 NSLog("CEGeocodeAddressOperation::ObtainedPlacemarkForAddress: \(self.address)")
             } else {
                 self.error = error
