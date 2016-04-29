@@ -88,7 +88,6 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         case .EditMode:
             removeEntry(entry)
         }
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -150,9 +149,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     // MARK: - CEDynamicView Methods
     func dynamicViewNumberOfItems(dynamicView: CECollectionDynamicView) -> Int {
-        let count = collection.count
-//        switch (
-        return count
+        return collection.count
     }
 
     func dynamicView(cellForItemAtIndex index: Int) -> CEEntryDynamicItem {
