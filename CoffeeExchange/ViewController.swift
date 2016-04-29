@@ -131,6 +131,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
                 self.dynamicView.backgroundView.alpha = 1
             })
         }
+        saveCollectionData()
     }
 
     func removeEntry(entry: CEEntry) {
