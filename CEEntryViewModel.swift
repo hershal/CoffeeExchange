@@ -12,12 +12,26 @@ import Contacts
 class CEEntryDetailViewModel: NSObject {
 
     var truth: CEEntry
+
+    init(truth: CEEntry) {
+        self.truth = truth
+        super.init()
+    }
+
     dynamic var balance: Int {
         get {
             return truth.balance
         }
         set (newValue) {
             truth.balance = newValue
+        }
+    }
+
+    var balanceSubtext: String {
+        if balance == 0 {
+            return "Balance has been restored."
+        } else {
+            return "You \(balanceDirectionPresent) \(truth.contact.givenName) \(absBalance) \(noun)."
         }
     }
 
@@ -79,16 +93,9 @@ class CEEntryDetailViewModel: NSObject {
     let textablePhoneLabels = [CNLabelPhoneNumberiPhone, CNLabelPhoneNumberMobile, CNLabelOther]
     let humanPhoneLabels = [CNLabelPhoneNumberiPhone: "iPhone", CNLabelPhoneNumberMobile: "mobile", CNLabelPhoneNumberMain: "main", CNLabelHome: "home", CNLabelWork: "work", CNLabelOther: "other"]
 
-    var balanceSubtext: String {
-        if balance == 0 {
-            return "Balance has been restored."
-        } else {
-            return "You \(balanceDirectionPresent) \(truth.contact.givenName) \(absBalance) \(noun)."
-        }
+    var hasAddresses: Bool {
+        return truth.contact.isKeyAvailable(CNContactPostalAddressesKey)
     }
 
-    init(truth: CEEntry) {
-        self.truth = truth
-        super.init()
     }
 }
