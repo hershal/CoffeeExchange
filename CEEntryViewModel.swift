@@ -18,6 +18,19 @@ class CEEntryDetailViewModel: NSObject {
         super.init()
     }
 
+    var initials: String {
+        var initialString = ""
+        let givenName = truth.contact.givenName
+        let familyName = truth.contact.familyName
+        if givenName.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            initialString.append(givenName[givenName.startIndex])
+        }
+        if familyName.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+            initialString.append(familyName[familyName.startIndex])
+        }
+        return initialString.uppercaseString
+    }
+
     dynamic var balance: Int {
         get {
             return truth.balance
@@ -53,6 +66,10 @@ class CEEntryDetailViewModel: NSObject {
 
     var balanceText: String {
         return "\(absBalance) \(noun) \(balanceDirectionPast)"
+    }
+
+    var picture: NSData? {
+        return truth.contact.thumbnailImageData
     }
 
     var hasPhoneNumber: Bool {

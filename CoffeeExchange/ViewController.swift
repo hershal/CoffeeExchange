@@ -49,7 +49,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     func openContactPicker() {
         let picker = CNContactPickerViewController()
-        picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactPostalAddressesKey]
+        picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactPostalAddressesKey, CNContactThumbnailImageDataKey]
         picker.delegate = self
         self.presentViewController(picker, animated: true, completion: nil)
     }

@@ -14,7 +14,7 @@ import EventKit
 import MapKit
 
 class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate, MFMessageComposeViewControllerDelegate, CEReminderControllerDelegate {
-    @IBOutlet weak var picture: UIView!
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var stepperLabel: UILabel!
     @IBOutlet weak var stepperSublabel: UILabel!
@@ -46,6 +46,61 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
         tableView.dataSource = tableController
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CEEntryDetailCell")
         mapController = CEEntryDetailMapController(mapView: mapView)
+
+        if let contactPicture = viewModel.picture, image = UIImage(data: contactPicture) {
+            imageView.image = renderImagePort(image)
+        } else {
+            imageView.image = renderMonogram()
+        }
+    }
+
+    func setupImageContext(rect: CGRect) {
+        UIGraphicsBeginImageContextWithOptions(rect.size, true, 0)
+        if let context = UIGraphicsGetCurrentContext() {
+            UIColor.whiteColor().setFill()
+            CGContextFillRect(context, rect)
+        }
+    }
+
+    func teardownImageContext() -> UIImage {
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+
+    func renderImagePort(image: UIImage) -> UIImage {
+        let rect = CGRect(origin: CGPoint.zero, size: imageView.bounds.size)
+
+        setupImageContext(rect)
+        if let context = UIGraphicsGetCurrentContext() {
+            let path = CGPathCreateMutable()
+            CGPathAddEllipseInRect(path, nil, rect)
+            CGContextAddPath(context, path)
+            CGContextClip(context)
+            image.drawInRect(rect)
+        }
+        return teardownImageContext()
+    }
+
+    func renderMonogram() -> UIImage {
+        let rect = CGRect(origin: CGPoint.zero, size: imageView.bounds.size)
+
+        setupImageContext(rect)
+        if let context = UIGraphicsGetCurrentContext() {
+            UIColor.lightGrayColor().colorWithAlphaComponent(0.65).setFill()
+            CGContextFillEllipseInRect(context, rect)
+            let textStyle = NSMutableParagraphStyle()
+            textStyle.alignment = .Center
+            textStyle.lineBreakMode = .ByWordWrapping
+            let textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),
+                                  NSFontAttributeName: UIFont.systemFontOfSize(22),
+                                  NSParagraphStyleAttributeName: textStyle]
+            let string = NSString(string: viewModel.initials)
+            let stringSize = string.sizeWithAttributes(textAttributes)
+            let textRect = CGRect(x: rect.origin.x, y: rect.origin.y + (rect.size.height - stringSize.height)/2, width: rect.width, height: rect.size.height)
+            string.drawInRect(textRect, withAttributes: textAttributes)
+        }
+        return teardownImageContext()
     }
 
     // MARK: - CEEntryDetailTableControllerDelegate Methods
