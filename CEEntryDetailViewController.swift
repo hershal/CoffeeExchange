@@ -11,6 +11,7 @@ import CoreLocation
 import Contacts
 import MessageUI
 import EventKit
+import MapKit
 
 class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate, MFMessageComposeViewControllerDelegate, CEReminderControllerDelegate {
     @IBOutlet weak var picture: UIView!
@@ -19,8 +20,8 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
     @IBOutlet weak var stepperSublabel: UILabel!
     @IBOutlet weak var stepper: UIStepper!
     @IBOutlet weak var tableView: UITableView!
-
     @IBOutlet weak var tableHeightConstriant: NSLayoutConstraint!
+    @IBOutlet weak var mapView: MKMapView!
 
     @IBAction func stepperChanged(sender: AnyObject) {
         let value = stepper.value
@@ -31,6 +32,7 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
     var delegate: CEEntryDetailDelegate?
     var locationManager: CLLocationManager!
     var tableController: CEEntryDetailTableController!
+    var mapController: CEEntryDetailMapController!
 
     // It's assumed the model is initailized before this method is called,
     // i.e. before we're ready to display to the screen
@@ -38,12 +40,12 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
         super.viewDidLoad()
         stepper.value = Double(viewModel.balance)
         name.text = viewModel.truth.fullName
-        locationManager = CLLocationManager()
         tableController = CEEntryDetailTableController(viewModel: viewModel)
         tableController.delegate = self
         tableView.delegate = tableController
         tableView.dataSource = tableController
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CEEntryDetailCell")
+        mapController = CEEntryDetailMapController(mapView: mapView)
     }
 
     // MARK: - CEEntryDetailTableControllerDelegate Methods

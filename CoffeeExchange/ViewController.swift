@@ -44,7 +44,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     func openContactPicker() {
         let picker = CNContactPickerViewController()
-        picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey]
+        picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactPostalAddressesKey]
         picker.delegate = self
         self.presentViewController(picker, animated: true, completion: nil)
     }
@@ -84,7 +84,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     func dynamicView(dynamicView: CECollectionDynamicView, didSelectEntry entry: CEEntry) {
         switch (editMode) {
         case .NormalMode:
-                    showEntryDetail(entry)
+            showEntryDetail(entry)
         case .EditMode:
             removeEntry(entry)
         }

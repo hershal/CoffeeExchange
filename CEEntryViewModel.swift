@@ -97,5 +97,14 @@ class CEEntryDetailViewModel: NSObject {
         return truth.contact.isKeyAvailable(CNContactPostalAddressesKey)
     }
 
+    var postalAddresses: [CNPostalAddress]? {
+        guard hasAddresses else {
+            return nil
+        }
+        let labeledValues = truth.contact.postalAddresses
+        return labeledValues.map { (labeledValue) -> CNPostalAddress in
+            labeledValue.value as! CNPostalAddress
+        }
     }
+
 }

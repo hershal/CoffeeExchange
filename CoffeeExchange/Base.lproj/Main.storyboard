@@ -216,12 +216,14 @@
                             <constraint firstItem="cPr-Vb-Ex9" firstAttribute="width" secondItem="8kT-uV-FXP" secondAttribute="width" id="RM2-cd-BJa"/>
                             <constraint firstItem="sWR-ie-dZw" firstAttribute="leading" secondItem="8kT-uV-FXP" secondAttribute="leadingMargin" id="Sxh-2H-vq3"/>
                             <constraint firstItem="cPr-Vb-Ex9" firstAttribute="height" secondItem="8kT-uV-FXP" secondAttribute="height" id="Ti3-C1-kMZ"/>
+                            <constraint firstItem="sWR-ie-dZw" firstAttribute="height" secondItem="8kT-uV-FXP" secondAttribute="height" id="UEK-tB-wbm"/>
                             <constraint firstItem="cPr-Vb-Ex9" firstAttribute="centerY" secondItem="8kT-uV-FXP" secondAttribute="centerY" id="iWC-cN-aVg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="sWR-ie-dZw" secondAttribute="trailing" id="tK3-Px-VnA"/>
                             <constraint firstItem="cPr-Vb-Ex9" firstAttribute="centerX" secondItem="8kT-uV-FXP" secondAttribute="centerX" id="tKm-k9-hdM"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="mapView" destination="7jN-eF-RKG" id="PDt-OL-L1G"/>
                         <outlet property="name" destination="u2A-U7-d23" id="iQG-Mq-kp0"/>
                         <outlet property="picture" destination="niK-WV-PFo" id="Y1G-JM-vLs"/>
                         <outlet property="stepper" destination="CB4-DN-XbS" id="Bog-bf-Sq9"/>
