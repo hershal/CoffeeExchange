@@ -45,7 +45,7 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
         tableView.delegate = tableController
         tableView.dataSource = tableController
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CEEntryDetailCell")
-        mapController = CEEntryDetailMapController(mapView: mapView)
+        mapController = CEEntryDetailMapController(mapView: mapView, viewModel: viewModel)
 
         if let contactPicture = viewModel.picture, image = UIImage(data: contactPicture) {
             imageView.image = renderImagePort(image)

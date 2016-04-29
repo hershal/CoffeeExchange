@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		784F929F1CD2F1D800DE839D /* CEEntryDetailMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784F929E1CD2F1D800DE839D /* CEEntryDetailMapController.swift */; };
+		784F92A11CD40A3900DE839D /* CEOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784F92A01CD40A3900DE839D /* CEOperation.swift */; };
 		7880D8201CCCC0D800403730 /* CECollectionDynamicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880D81F1CCCC0D800403730 /* CECollectionDynamicView.swift */; };
 		7880D8221CCCC63900403730 /* CEThrowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7880D8211CCCC63900403730 /* CEThrowBehavior.swift */; };
 		7887259C1CCDEA8800DACC8E /* CEEntryDynamicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		784F929E1CD2F1D800DE839D /* CEEntryDetailMapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailMapController.swift; sourceTree = "<group>"; };
+		784F92A01CD40A3900DE839D /* CEOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEOperation.swift; sourceTree = "<group>"; };
 		7880D81F1CCCC0D800403730 /* CECollectionDynamicView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CECollectionDynamicView.swift; sourceTree = "<group>"; };
 		7880D8211CCCC63900403730 /* CEThrowBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEThrowBehavior.swift; sourceTree = "<group>"; };
 		7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDynamicItem.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 		78BDBD411CCADAAA00718798 = {
 			isa = PBXGroup;
 			children = (
+				784F92A01CD40A3900DE839D /* CEOperation.swift */,
 				784F929E1CD2F1D800DE839D /* CEEntryDetailMapController.swift */,
 				7891C6DA1CD1FE42003F9202 /* CEReminderController.swift */,
 				7891C6D81CD19B37003F9202 /* CEEntryDetailTableController.swift */,
@@ -313,6 +316,7 @@
 				78BDBD871CCB580C00718798 /* CEEntryDetailViewController.swift in Sources */,
 				784F929F1CD2F1D800DE839D /* CEEntryDetailMapController.swift in Sources */,
 				7891C6DB1CD1FE42003F9202 /* CEReminderController.swift in Sources */,
+				784F92A11CD40A3900DE839D /* CEOperation.swift in Sources */,
 				7891C6D91CD19B37003F9202 /* CEEntryDetailTableController.swift in Sources */,
 				7880D8221CCCC63900403730 /* CEThrowBehavior.swift in Sources */,
 				78BDBD561CCADAAA00718798 /* CoffeeExchange.xcdatamodeld in Sources */,
