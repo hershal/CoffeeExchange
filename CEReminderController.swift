@@ -78,9 +78,11 @@ class CEReminderController: NSObject {
             let reminder = EKReminder.init(eventStore: eventStore)
             reminder.title = "Coffee with \(viewModel.truth.fullName)"
             reminder.calendar = calendar
-            let reminderDate = dateComponentsFromInterval(interval)
-            let alarm = EKAlarm(absoluteDate: reminderDate)
+            let reminderDateComponents = dateComponentsFromInterval(interval)
+            let reminderDate = NSCalendar.currentCalendar().dateFromComponents(reminderDateComponents)
+            let alarm = EKAlarm(absoluteDate: reminderDate!)
             reminder.alarms = [alarm]
+            reminder.dueDateComponents = reminderDateComponents
             do {
                 try eventStore.saveReminder(reminder, commit: true)
                 delegate?.reminderController(self, didCreateReminder: reminder, inCalendar: calendar, withInterval: interval)
@@ -92,10 +94,10 @@ class CEReminderController: NSObject {
         }
     }
 
-    private func dateComponentsFromInterval(interval: CEReminderInterval) -> NSDate {
+    private func dateComponentsFromInterval(interval: CEReminderInterval) -> NSDateComponents {
         let calendar = NSCalendar.currentCalendar()
         var date = NSDate()
-        let components = NSDateComponents()
+        var components = NSDateComponents()
 
         switch interval {
         case .NextWeekend:
@@ -106,12 +108,14 @@ class CEReminderController: NSObject {
             date = calendar.dateBySettingUnit(.Day, value: 7, ofDate: date, options: [])!
         case .NextWeekThisDay:
             components.weekOfYear = 1
+            date = calendar.dateByAddingComponents(components, toDate: date, options: [])!
         case .Tomorrow:
             components.weekday = 1
             date = calendar.dateByAddingComponents(components, toDate: date, options: [])!
         }
         date = calendar.dateBySettingHour(9, minute: 0, second: 0, ofDate: date, options: [])!
-        return date
+        components = calendar.components([.Era, .Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
+        return components
     }
 
     func errorFromError(error: CEReminderError) -> NSError {
