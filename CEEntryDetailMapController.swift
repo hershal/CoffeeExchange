@@ -101,6 +101,8 @@ class CESetRegionToClosestAddressOperation: CEOperation {
     let mapView: MKMapView
     let locationsManager: CELocationsManager
     let viewModel: CEEntryDetailViewModel
+    static let mileInMeters = 1609.344
+
     init(mapView: MKMapView, locationsManager: CELocationsManager, viewModel: CEEntryDetailViewModel) {
         self.viewModel = viewModel
         self.mapView = mapView
@@ -113,7 +115,8 @@ class CESetRegionToClosestAddressOperation: CEOperation {
         NSLog("Executing CESetRegionToClosestAddressOperation")
         let user = locationsManager.userLocation.coordinate
         if let closestPlacemark = locationsManager.closestPlacemarkToUser(),
-            closest = closestPlacemark.placemark.location?.coordinate {
+            closest = closestPlacemark.placemark.location?.coordinate
+            where closestPlacemark.distance < (10 * CESetRegionToClosestAddressOperation.mileInMeters) {
             let maxLat = max(closest.latitude, user.latitude)
             let minLat = min(closest.latitude, user.latitude)
             let maxLon = max(closest.longitude, user.longitude)
