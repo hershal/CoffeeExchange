@@ -116,14 +116,23 @@ class CEEntryDetailViewModel: NSObject {
         return contact.isKeyAvailable(CNContactPostalAddressesKey) && contact.postalAddresses.count > 0
     }
 
-    var postalAddresses: [CNPostalAddress]? {
+    var postalAddresses: [String: CNPostalAddress]? {
         guard hasAddresses else {
             return nil
         }
         let labeledValues = truth.contact.postalAddresses
-        return labeledValues.map { (labeledValue) -> CNPostalAddress in
-            labeledValue.value as! CNPostalAddress
-        }
+        return zipLabeledPostalValues(labeledValues)
     }
 
+    private func zipLabeledPostalValues(labeledValues: [CNLabeledValue]) -> [String: CNPostalAddress] {
+        var assoc = [String: CNPostalAddress]()
+        labeledValues.forEach { (labeledValue) in
+            if let value = labeledValue.value as? CNPostalAddress {
+                assoc[humanPostalAddressLabels[labeledValue.label]!] = value
+            }
+        }
+        return assoc
+    }
+
+    let humanPostalAddressLabels = [CNLabelHome: "Home", CNLabelWork: "Work", CNLabelOther: ""]
 }

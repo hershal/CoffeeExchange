@@ -11,34 +11,34 @@ import CoreLocation
 
 class CELocationsManager: NSObject {
     var userLocation: CLLocation
-    private var _placemarks: [CLPlacemark]
+    private var _placemarks: [String: CLPlacemark]
     private let lock = NSLock()
 
     init(userLocation: CLLocation) {
         self.userLocation = userLocation
-        self._placemarks = [CLPlacemark]()
+        self._placemarks = [String: CLPlacemark]()
         super.init()
     }
 
-    func addPlacemarks(placemarks: [CLPlacemark]) {
+    func addPlacemark(placemark: CLPlacemark, withLabel label: String) {
         lock.withCriticalScope {
-            self._placemarks.appendContentsOf(placemarks)
+            self._placemarks[label] = placemark
         }
     }
 
-    func placemarks() -> [CLPlacemark] {
+    func placemarks() -> [String: CLPlacemark] {
         return lock.withCriticalScope { _placemarks }
     }
 
-    func closestPlacemarkToUser() -> CLPlacemark? {
-        var minAssoc: (CLLocationDistance, CLPlacemark)?
-        placemarks().map { (placemark) -> (CLLocationDistance, CLPlacemark) in
-            (userLocation.distanceFromLocation(placemark.location!), placemark)
+    func closestPlacemarkToUser() -> (distance: CLLocationDistance, label: String, placemark: CLPlacemark)? {
+        var minAssoc: (distance: CLLocationDistance, label: String, placemark: CLPlacemark)?
+        placemarks().map { (label, placemark) -> (distance: CLLocationDistance, label: String, placemark: CLPlacemark) in
+            (userLocation.distanceFromLocation(placemark.location!), label, placemark)
         }.forEach { (assoc) in
-            if minAssoc == nil || minAssoc!.0 > assoc.0  {
+            if minAssoc == nil || minAssoc!.distance > assoc.distance  {
                 minAssoc = assoc
             }
         }
-        return minAssoc?.1
+        return minAssoc
     }
 }

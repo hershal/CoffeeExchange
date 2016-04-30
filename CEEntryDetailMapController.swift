@@ -52,9 +52,9 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         let searchOperation = CESearchForCoffeeOperation(mapView: mapView, locationsManager: locationsManager)
         let setRegionOperation = CESetRegionToClosestAddressOperation(mapView: mapView, locationsManager: locationsManager)
 
-        for address in addresses {
+        for (addressLabel, address) in addresses {
             // TODO: Add dependency on operation which evaluates closest address
-            let operation = CEGeocodeAddressOperation(address: address.stringValue, locationsManager: locationsManager)
+            let operation = CEGeocodeAddressOperation(label: addressLabel, address: address.stringValue, locationsManager: locationsManager)
             setRegionOperation.addDependency(operation)
             operationQueue.addOperation(operation)
         }
@@ -111,7 +111,7 @@ class CESetRegionToClosestAddressOperation: CEOperation {
         NSLog("Executing CESetRegionToClosestAddressOperation")
         let user = locationsManager.userLocation.coordinate
         if let closestPlacemark = locationsManager.closestPlacemarkToUser(),
-            closest = closestPlacemark.location?.coordinate {
+            closest = closestPlacemark.placemark.location?.coordinate {
 //            NSLog("closest location to user: \(locationsManager.closestPlacemarkToUser())")
             let maxLat = max(closest.latitude, user.latitude)
             let minLat = min(closest.latitude, user.latitude)
@@ -134,7 +134,7 @@ class CESetRegionToClosestAddressOperation: CEOperation {
                 self.mapView.setRegion(region, animated: false)
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = closest
-                annotation.title = closestPlacemark.name
+                annotation.title = closestPlacemark.label
                 self.mapView.addAnnotation(annotation)
             })
         }
@@ -146,10 +146,12 @@ class CESetRegionToClosestAddressOperation: CEOperation {
 
 class CEGeocodeAddressOperation: CEOperation {
     let address: String
+    let label: String
     var error: NSError?
     var locationsManager: CELocationsManager
 
-    init(address: String, locationsManager: CELocationsManager) {
+    init(label: String, address: String, locationsManager: CELocationsManager) {
+        self.label = label
         self.address = address
         self.locationsManager = locationsManager
         super.init()
@@ -170,7 +172,9 @@ class CEGeocodeAddressOperation: CEOperation {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address) { (placemarks, error) in
             if let placemarks = placemarks {
-                self.locationsManager.addPlacemarks(placemarks)
+                for placemark in placemarks {
+                    self.locationsManager.addPlacemark(placemark, withLabel: self.label)
+                }
                 NSLog("CEGeocodeAddressOperation::ObtainedPlacemarkForAddress: \(self.address)")
             } else {
                 self.error = error
