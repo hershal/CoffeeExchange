@@ -8,14 +8,21 @@
 
 import Foundation
 
-enum CEOperationState {
+enum CEOperationState: Int {
     case Ready
     case Executing
     case Finished
 }
 
-class CEOperation: NSOperation {
+func <(lhs: CEOperationState, rhs: CEOperationState) -> Bool {
+    return lhs.rawValue < rhs.rawValue
+}
 
+func ==(lhs: CEOperationState, rhs: CEOperationState) -> Bool {
+    return lhs.rawValue == rhs.rawValue
+}
+
+class CEOperation: NSOperation {
     class func keyPathsForValuesAffectingIsReady() -> Set<NSObject> {
         return ["state"]
     }
@@ -31,12 +38,15 @@ class CEOperation: NSOperation {
     override var finished: Bool {
         return state == .Finished
     }
+
     override var executing: Bool {
         return state == .Executing
     }
+
     override var ready: Bool {
-        return state == .Ready
+        return (state == .Ready && super.ready) || cancelled
     }
+
     private let stateLock = NSLock()
     var _state: CEOperationState
     var state: CEOperationState {
@@ -58,10 +68,14 @@ class CEOperation: NSOperation {
         }
     }
 
-
     override init() {
         _state = .Ready
         super.init()
+    }
+
+    override func addDependency(operation: NSOperation) {
+        assert(state < .Executing, "Dependencies cannot be modified after execution has begun.")
+        super.addDependency(operation)
     }
 }
 
