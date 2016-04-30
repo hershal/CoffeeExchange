@@ -18,10 +18,10 @@ class CEEntryDetailViewModel: NSObject {
         super.init()
     }
 
-    var initials: String {
+    lazy var initials: String = {
         var initialString = ""
-        let givenName = truth.contact.givenName
-        let familyName = truth.contact.familyName
+        let givenName = self.truth.contact.givenName
+        let familyName = self.truth.contact.familyName
         if givenName.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
             initialString.append(givenName[givenName.startIndex])
         }
@@ -29,7 +29,7 @@ class CEEntryDetailViewModel: NSObject {
             initialString.append(familyName[familyName.startIndex])
         }
         return initialString.uppercaseString
-    }
+    }()
 
     dynamic var balance: Int {
         get {
@@ -72,30 +72,30 @@ class CEEntryDetailViewModel: NSObject {
         return truth.contact.thumbnailImageData
     }
 
-    var hasPhoneNumber: Bool {
-        let contact = truth.contact
+    lazy var hasPhoneNumber: Bool = {
+        let contact = self.truth.contact
         return contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.phoneNumbers.count > 0
-    }
+    }()
 
-    var callablePhoneNumbers: [String: CNPhoneNumber]? {
-        guard hasPhoneNumber else {
+    lazy var callablePhoneNumbers: [String: CNPhoneNumber]? = {
+        guard self.hasPhoneNumber else {
             return nil
         }
-        let labeledValues = truth.contact.phoneNumbers.filter { (labeledValue) -> Bool in
-            callablePhoneLabels.contains(labeledValue.label)
+        let labeledValues = self.truth.contact.phoneNumbers.filter { (labeledValue) -> Bool in
+            self.callablePhoneLabels.contains(labeledValue.label)
         }
-        return zipLabeledPhoneValues(labeledValues)
-    }
+        return self.zipLabeledPhoneValues(labeledValues)
+    }()
 
-    var textablePhoneNumbers: [String: CNPhoneNumber]? {
-        guard hasPhoneNumber else {
+    lazy var textablePhoneNumbers: [String: CNPhoneNumber]? = {
+        guard self.hasPhoneNumber else {
             return nil
         }
-        let labeledValues = truth.contact.phoneNumbers.filter { (labeledValue) -> Bool in
-            textablePhoneLabels.contains(labeledValue.label)
+        let labeledValues = self.truth.contact.phoneNumbers.filter { (labeledValue) -> Bool in
+            self.textablePhoneLabels.contains(labeledValue.label)
         }
-        return zipLabeledPhoneValues(labeledValues)
-    }
+        return self.zipLabeledPhoneValues(labeledValues)
+    }()
 
     private func zipLabeledPhoneValues(labeledValues: [CNLabeledValue]) -> [String: CNPhoneNumber] {
         var assoc = [String: CNPhoneNumber]()
@@ -111,18 +111,18 @@ class CEEntryDetailViewModel: NSObject {
     let textablePhoneLabels = [CNLabelPhoneNumberiPhone, CNLabelPhoneNumberMobile, CNLabelOther]
     let humanPhoneLabels = [CNLabelPhoneNumberiPhone: "iPhone", CNLabelPhoneNumberMobile: "mobile", CNLabelPhoneNumberMain: "main", CNLabelHome: "home", CNLabelWork: "work", CNLabelOther: "other"]
 
-    var hasAddresses: Bool {
-        let contact = truth.contact
+    lazy var hasAddresses: Bool = {
+        let contact = self.truth.contact
         return contact.isKeyAvailable(CNContactPostalAddressesKey) && contact.postalAddresses.count > 0
-    }
+    }()
 
-    var postalAddresses: [String: CNPostalAddress]? {
-        guard hasAddresses else {
+    lazy var postalAddresses: [String: CNPostalAddress]? = {
+        guard self.hasAddresses else {
             return nil
         }
-        let labeledValues = truth.contact.postalAddresses
-        return zipLabeledPostalValues(labeledValues)
-    }
+        let labeledValues = self.truth.contact.postalAddresses
+        return self.zipLabeledPostalValues(labeledValues)
+    }()
 
     private func zipLabeledPostalValues(labeledValues: [CNLabeledValue]) -> [String: CNPostalAddress] {
         var assoc = [String: CNPostalAddress]()
