@@ -47,17 +47,21 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
             NSLog("CEEntryDetailMapController::BeginOperationsWithCurrentAddress::NoAddressesForEntry")
             return
         }
-
+        operationQueue.suspended = true
         // TODO: construct operations front to back so that dependencies can be added
-        let closestAddressComputation = CEComputeClosestAddressOperation(locationsManager: locationsManager)
+        let searchOperation = CESearchForCoffeeOperation(mapView: mapView, locationsManager: locationsManager)
+        let setRegionOperation = CESetRegionToClosestAddressOperation(mapView: mapView, locationsManager: locationsManager)
 
         for address in addresses {
             // TODO: Add dependency on operation which evaluates closest address
             let operation = CEGeocodeAddressOperation(address: address.stringValue, locationsManager: locationsManager)
-            closestAddressComputation.addDependency(operation)
+            setRegionOperation.addDependency(operation)
             operationQueue.addOperation(operation)
         }
-        operationQueue.addOperation(closestAddressComputation)
+        searchOperation.addDependency(setRegionOperation)
+        operationQueue.addOperation(setRegionOperation)
+        operationQueue.addOperation(searchOperation)
+        operationQueue.suspended = false
     }
 
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -93,15 +97,50 @@ extension CNPostalAddress {
     }
 }
 
-class CEComputeClosestAddressOperation: NSOperation {
-    var locationsManager: CELocationsManager
-    init(locationsManager: CELocationsManager) {
+class CESetRegionToClosestAddressOperation: CEOperation {
+    let mapView: MKMapView
+    let locationsManager: CELocationsManager
+    init(mapView: MKMapView, locationsManager: CELocationsManager) {
+        self.mapView = mapView
         self.locationsManager = locationsManager
         super.init()
     }
 
     override func main() {
-        NSLog("closest location to user: \(locationsManager.closestPlacemarkToUser())")
+        state = .Executing
+        NSLog("Executing CESetRegionToClosestAddressOperation")
+        let user = locationsManager.userLocation.coordinate
+        if let closestPlacemark = locationsManager.closestPlacemarkToUser(),
+            closest = closestPlacemark.location?.coordinate {
+//            NSLog("closest location to user: \(locationsManager.closestPlacemarkToUser())")
+            let maxLat = max(closest.latitude, user.latitude)
+            let minLat = min(closest.latitude, user.latitude)
+            let maxLon = max(closest.longitude, user.longitude)
+            let minLon = min(closest.longitude, user.longitude)
+
+            let latDelta = (maxLat - minLat)
+            let lonDelta = (maxLon - minLon)
+
+            let centerlat = latDelta/2 + minLat
+            let centerlon = lonDelta/2 + minLon
+
+            let center = CLLocationCoordinate2D(latitude: centerlat, longitude: centerlon)
+
+            let span = MKCoordinateSpanMake(latDelta*2, lonDelta*2)
+
+            let region = MKCoordinateRegion(center: center, span: span)
+
+            dispatch_async(dispatch_get_main_queue(), { 
+                self.mapView.setRegion(region, animated: false)
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = closest
+                annotation.title = closestPlacemark.name
+                self.mapView.addAnnotation(annotation)
+            })
+        }
+        NSLog("Finished CESetRegionToClosestAddressOperation")
+
+        state = .Finished
     }
 }
 
@@ -127,7 +166,7 @@ class CEGeocodeAddressOperation: CEOperation {
         }
 
         state = .Executing
-        NSLog("Executing operation: \(address)")
+        NSLog("Executing CEGeocodeAddressOperation: \(address)")
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address) { (placemarks, error) in
             if let placemarks = placemarks {
@@ -142,17 +181,27 @@ class CEGeocodeAddressOperation: CEOperation {
     }
 }
 
-class CESearchForCoffeeOperation: NSOperation {
+class CESearchForCoffeeOperation: CEOperation {
     let mapView: MKMapView
+    let locationsManager: CELocationsManager
 
-    init(mapView: MKMapView) {
+    init(mapView: MKMapView, locationsManager: CELocationsManager) {
         self.mapView = mapView
+        self.locationsManager = locationsManager
     }
 
     func searchForCoffee() {
+        if cancelled {
+            state = .Finished
+            return
+        }
+        state = .Executing
+        NSLog("Executing CESearchForCoffeeOperation")
+
         let request = MKLocalSearchRequest()
-        request.naturalLanguageQuery = "coffee"
+        request.naturalLanguageQuery = "coffee shop"
         request.region = mapView.region
+        NSLog("mapview region: \(mapView.region)")
         let search = MKLocalSearch(request: request)
         search.startWithCompletionHandler { (response, error) in
             if let response = response {
@@ -162,8 +211,17 @@ class CESearchForCoffeeOperation: NSOperation {
                     annotation.title = mapItem.name
                     return annotation
                 }
-                self.mapView.addAnnotations(annotations)
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.mapView.addAnnotations(annotations)
+                }
             }
+            NSLog("Finished CESearchForCoffeeOperation")
+            self.state = .Finished
         }
     }
+
+    override func main() {
+        searchForCoffee()
+    }
 }
+
