@@ -50,7 +50,7 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         operationQueue.suspended = true
         // TODO: construct operations front to back so that dependencies can be added
         let searchOperation = CESearchForCoffeeOperation(mapView: mapView, locationsManager: locationsManager)
-        let setRegionOperation = CESetRegionToClosestAddressOperation(mapView: mapView, locationsManager: locationsManager)
+        let setRegionOperation = CESetRegionToClosestAddressOperation(mapView: mapView, locationsManager: locationsManager, viewModel: viewModel)
 
         for (addressLabel, address) in addresses {
             // TODO: Add dependency on operation which evaluates closest address
@@ -100,7 +100,9 @@ extension CNPostalAddress {
 class CESetRegionToClosestAddressOperation: CEOperation {
     let mapView: MKMapView
     let locationsManager: CELocationsManager
-    init(mapView: MKMapView, locationsManager: CELocationsManager) {
+    let viewModel: CEEntryDetailViewModel
+    init(mapView: MKMapView, locationsManager: CELocationsManager, viewModel: CEEntryDetailViewModel) {
+        self.viewModel = viewModel
         self.mapView = mapView
         self.locationsManager = locationsManager
         super.init()
@@ -112,7 +114,6 @@ class CESetRegionToClosestAddressOperation: CEOperation {
         let user = locationsManager.userLocation.coordinate
         if let closestPlacemark = locationsManager.closestPlacemarkToUser(),
             closest = closestPlacemark.placemark.location?.coordinate {
-//            NSLog("closest location to user: \(locationsManager.closestPlacemarkToUser())")
             let maxLat = max(closest.latitude, user.latitude)
             let minLat = min(closest.latitude, user.latitude)
             let maxLon = max(closest.longitude, user.longitude)
@@ -134,7 +135,12 @@ class CESetRegionToClosestAddressOperation: CEOperation {
                 self.mapView.setRegion(region, animated: false)
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = closest
-                annotation.title = closestPlacemark.label
+                if closestPlacemark.label != "" {
+                    annotation.title = "\(self.viewModel.truth.contact.givenName)'s \(closestPlacemark.label)"
+                } else {
+                    annotation.title = "\(self.viewModel.truth.contact.givenName)"
+                }
+                annotation.subtitle = closestPlacemark.placemark.name
                 self.mapView.addAnnotation(annotation)
             })
         }
