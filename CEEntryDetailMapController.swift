@@ -27,6 +27,7 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         self.locationManager = CLLocationManager()
         self.operationQueue = NSOperationQueue()
         super.init()
+        mapView.delegate = self
 
         if !CLLocationManager.locationServicesEnabled() {
             NSLog("CEEntryDetailViewController::ViewDidLoad::LocationServicesDisabled!")
@@ -63,8 +64,30 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         operationQueue.suspended = false
     }
 
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        NSLog("keypath: \(keyPath): \(change)")
+    // MARK: - MKMapViewDelegate Methods
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        if let annotation = annotation as? CEPointAnnotation {
+            var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier("CEPointAnnotationView") as? MKPinAnnotationView
+            if annotationView == nil {
+                annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "CEPointAnnotationView")
+            }
+
+            let button = CEOpenMapsButton(type: .DetailDisclosure)
+            button.mapItem = annotation.mapItem
+            button.addTarget(self, action: #selector(CEEntryDetailMapController.showMapItemDetail(_:)), forControlEvents: .TouchUpInside)
+            annotationView!.rightCalloutAccessoryView = button
+            annotationView!.pinTintColor = UIColor.brownColor()
+            annotationView!.animatesDrop = true
+            annotationView?.canShowCallout = true
+            return annotationView
+        }
+        return nil
+    }
+
+    func showMapItemDetail(sender: AnyObject) {
+        if let sender = sender as? CEOpenMapsButton {
+            sender.mapItem.openInMapsWithLaunchOptions(nil)
+        }
     }
 
     // MARK: - CLLocationManagerDelegate Methods

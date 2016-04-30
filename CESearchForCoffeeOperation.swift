@@ -34,11 +34,9 @@ class CESearchForCoffeeOperation: CEOperation {
         let search = MKLocalSearch(request: request)
         search.startWithCompletionHandler { (response, error) in
             if let response = response {
-                let annotations = response.mapItems.map { (mapItem) -> MKAnnotation in
-                    let annotation = MKPointAnnotation()
-                    annotation.coordinate = mapItem.placemark.coordinate
-                    annotation.title = mapItem.name
-                    return annotation
+                self.locationsManager.mapItems = response.mapItems
+                let annotations = response.mapItems.map { (mapItem) -> CEPointAnnotation in
+                    return CEPointAnnotation(mapItem: mapItem)
                 }
                 dispatch_async(dispatch_get_main_queue()) {
                     self.mapView.addAnnotations(annotations)
@@ -48,4 +46,19 @@ class CESearchForCoffeeOperation: CEOperation {
             self.state = .Finished
         }
     }
+}
+
+class CEPointAnnotation: MKPointAnnotation {
+    var mapItem: MKMapItem
+
+    init(mapItem: MKMapItem) {
+        self.mapItem = mapItem
+        super.init()
+        coordinate = mapItem.placemark.coordinate
+        title = mapItem.name
+    }
+}
+
+class CEOpenMapsButton: UIButton {
+    var mapItem: MKMapItem!
 }

@@ -13,12 +13,14 @@ import MapKit
 class CELocationsManager: NSObject {
     var userLocation: CLLocation
     var region: MKCoordinateRegion?
+    var mapItems: [MKMapItem]
     private var _placemarks: [String: CLPlacemark]
     private let lock = NSLock()
 
     init(userLocation: CLLocation) {
         self.userLocation = userLocation
         self._placemarks = [String: CLPlacemark]()
+        self.mapItems = [MKMapItem]()
         super.init()
     }
 
