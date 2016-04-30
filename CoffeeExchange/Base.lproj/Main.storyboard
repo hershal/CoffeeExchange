@@ -176,7 +176,7 @@
                                                 </constraints>
                                                 <sections/>
                                             </tableView>
-                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="7jN-eF-RKG">
+                                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7jN-eF-RKG">
                                                 <rect key="frame" x="0.0" y="176" width="560" height="400"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="400" id="j7m-8t-Usu"/>
