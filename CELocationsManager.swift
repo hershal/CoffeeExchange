@@ -8,9 +8,11 @@
 
 import Foundation
 import CoreLocation
+import MapKit
 
 class CELocationsManager: NSObject {
     var userLocation: CLLocation
+    var region: MKCoordinateRegion?
     private var _placemarks: [String: CLPlacemark]
     private let lock = NSLock()
 

@@ -133,6 +133,7 @@ class CESetRegionToClosestAddressOperation: CEOperation {
             let span = MKCoordinateSpanMake(latDelta*2, lonDelta*2)
 
             let region = MKCoordinateRegion(center: center, span: span)
+            locationsManager.region = region
 
             dispatch_async(dispatch_get_main_queue(), { 
                 self.mapView.setRegion(region, animated: false)
@@ -212,9 +213,9 @@ class CESearchForCoffeeOperation: CEOperation {
         NSLog("Executing CESearchForCoffeeOperation")
 
         let request = MKLocalSearchRequest()
-        request.naturalLanguageQuery = "coffee shop"
-        request.region = mapView.region
-        NSLog("mapview region: \(mapView.region)")
+        request.naturalLanguageQuery = "coffee"
+
+        request.region = locationsManager.region != nil ? locationsManager.region! : mapView.region
         let search = MKLocalSearch(request: request)
         search.startWithCompletionHandler { (response, error) in
             if let response = response {
