@@ -97,11 +97,11 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
             return
         }
 
-        locationsManager = CELocationsManager(userLocation: location)
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
 
         if !locationDidInitialize {
+            locationsManager = CELocationsManager(userLocation: location)
             mapView.setRegion(region, animated: false)
             beginOperationsWithCurrentLocation(location)
         }
