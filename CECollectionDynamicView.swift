@@ -10,13 +10,13 @@ import UIKit
 import CoreGraphics
 
 class CECollectionDynamicView: UIView {
+    @IBOutlet weak var backgroundView: UIView!
+
     var animator: UIDynamicAnimator!
     var dynamicBehavior: CEThrowBehavior!
     var dynamicItems: [CEEntryDynamicItem]
     var dataSource: CECollectionDynamicViewDataSource?
     var delegate: CECollectionDynamicViewDelegate?
-
-    @IBOutlet weak var backgroundView: UIView!
 
     required init?(coder aDecoder: NSCoder) {
         dynamicItems = [CEEntryDynamicItem]()

@@ -10,7 +10,6 @@ import Foundation
 import EventKit
 
 class CEReminderController: NSObject {
-
     static let reminderTitle = "Coffee"
     static let userInfoTitle = "title"
     static let userInfoDescription = "description"
@@ -97,6 +96,7 @@ class CEReminderController: NSObject {
         let calendar = NSCalendar.currentCalendar()
         var date = NSDate()
         let components = NSDateComponents()
+
         switch interval {
         case .NextWeekend:
             components.weekOfYear = 1
@@ -115,7 +115,6 @@ class CEReminderController: NSObject {
     }
 
     func errorFromError(error: CEReminderError) -> NSError {
-
         var userInfo = [NSObject: AnyObject]()
 
         switch(error) {

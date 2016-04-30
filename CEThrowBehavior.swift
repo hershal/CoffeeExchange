@@ -9,7 +9,6 @@
 import UIKit
 
 class CEThrowBehavior: UIDynamicBehavior {
-
     var gravity: UIGravityBehavior
     var initialBehavior: UIDynamicItemBehavior
     var boundsCollision: UICollisionBehavior
