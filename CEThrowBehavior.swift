@@ -22,6 +22,15 @@ class CEThrowBehavior: UIDynamicBehavior {
         [gravity, initialBehavior, boundsCollision].forEach { (behavior) in
             addChildBehavior(behavior)
         }
+        action = unrotateTextView
+    }
+
+    func unrotateTextView() {
+        for item in gravity.items {
+            if let item = item as? CEEntryDynamicItem {
+                item.textView.transform = CGAffineTransformIdentity
+            }
+        }
     }
 
     func layoutCollisions(frame: CGRect) {

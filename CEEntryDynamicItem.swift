@@ -11,6 +11,7 @@ import CoreGraphics
 
 class CEEntryDynamicItem: UIDynamicItemGroup {
     var view: CEEntryDynamicItemContainerView
+    var textView: CEEntryDynamicItemTextView
     var entry: CEEntry
 
     func setEditMode(editMode: CEViewControllerEditMode) {
@@ -37,12 +38,14 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
                 view.addSubview(item)
             }
         }
+        view.addSubview(textView)
     }
 
     init(entry: CEEntry) {
         self.entry = entry
 
         view = CEEntryDynamicItemContainerView(frame: CGRect(x: 0, y: 0, width: 125, height: 100))
+        textView = CEEntryDynamicItemTextView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         let cupTopFrame = CGRect(x: 0, y: 0, width: 100, height: 50)
         let cupBottomFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
         let cupSideFrame = CGRect(x: 75, y: 0, width: 50, height: 50)
@@ -53,10 +56,72 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
         let viewModel = CEEntryDetailViewModel(truth: entry)
         cupTop.viewModel = viewModel
         cupBottom.viewModel = viewModel
+        textView.viewModel = viewModel
 
-        super.init(items: [cupTop, cupBottom, cupSide])
+        super.init(items: [cupTop, cupBottom, cupSide, textView])
         view.dynamicItem = self
         addSubviews()
+    }
+}
+
+class CEEntryDynamicItemTextView: CEEntryDynamicItemComponent {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layer.zPosition = 200
+    }
+
+    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
+        return .Path
+    }
+
+    override var collisionBoundingPath: UIBezierPath {
+        let path = UIBezierPath(rect: CGRect(origin: CGPointZero, size: CGSize(width: 1, height: 1)))
+        return path
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    var textFontAttributes: [String: NSObject] {
+        let textStyle = NSMutableParagraphStyle()
+        textStyle.alignment = .Center
+        textStyle.lineBreakMode = .ByWordWrapping
+
+        let textFontAttributes =
+            [NSFontAttributeName: UIFont.systemFontOfSize(UIFont.smallSystemFontSize()),
+             NSForegroundColorAttributeName: UIColor.whiteColor(),
+             NSParagraphStyleAttributeName: textStyle]
+        return textFontAttributes
+    }
+
+    func drawTextInRect(rect: CGRect) {
+        guard let viewModel = viewModel else {
+            return
+        }
+
+        var topRect = rect
+        topRect.size.height = rect.height/2
+        topRect = CGRectOffset(topRect, 0, 5)
+        topRect = CGRectInset(topRect, 3, 3)
+        topRect.offsetInPlace(dx: 0, dy: 3)
+        viewModel.truth.fullName.drawWithRect(topRect, options: [.TruncatesLastVisibleLine, .UsesLineFragmentOrigin], attributes: textFontAttributes, context: nil)
+
+        var bottomRect = CGRectOffset(rect, 0, rect.height/2 + 5)
+        bottomRect.size.height = rect.height/2
+        bottomRect = CGRectInset(bottomRect, 3, 3)
+        let str = "\(viewModel.absBalance) \(viewModel.balanceDirectionPast)"
+        str.drawInRect(bottomRect, withAttributes: textFontAttributes)
+    }
+
+    override func drawRect(rect: CGRect) {
+        if let context = UIGraphicsGetCurrentContext() {
+            UIColor.whiteColor().set()
+            let circleRect = rect.insetBy(dx: 10, dy: 10)
+            let textRect = rect.insetBy(dx: 15, dy: 15)
+            CGContextStrokeEllipseInRect(context, circleRect)
+            drawTextInRect(textRect)
+        }
     }
 }
 
@@ -85,18 +150,6 @@ class CEEntryDynamicItemComponent: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    var textFontAttributes: [String: NSObject] {
-        let textStyle = NSMutableParagraphStyle()
-        textStyle.alignment = .Center
-        textStyle.lineBreakMode = .ByWordWrapping
-
-        let textFontAttributes =
-            [NSFontAttributeName: UIFont.systemFontOfSize(UIFont.labelFontSize()),
-             NSForegroundColorAttributeName: UIColor.whiteColor(),
-             NSParagraphStyleAttributeName: textStyle]
-        return textFontAttributes
     }
 
     override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
@@ -143,24 +196,6 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
         return path
     }
 
-    func drawTextInRect(rect: CGRect) {
-        guard let viewModel = viewModel else {
-            return
-        }
-
-        var topRect = rect
-        topRect.size.height = rect.height/2
-        topRect = CGRectInset(topRect, 3, 3)
-        topRect.offsetInPlace(dx: 0, dy: 3)
-        viewModel.truth.fullName.drawWithRect(topRect, options: [.TruncatesLastVisibleLine, .UsesLineFragmentOrigin], attributes: textFontAttributes, context: nil)
-
-        var bottomRect = CGRectOffset(rect, 0, rect.height/2)
-        bottomRect.size.height = rect.height/2
-        bottomRect = CGRectInset(bottomRect, 3, 3)
-        let str = "\(viewModel.absBalance) \(viewModel.balanceDirectionPast)"
-        str.drawInRect(bottomRect, withAttributes: textFontAttributes)
-    }
-
     func drawEditModeInRect(rect: CGRect) {
         guard editMode == .EditMode else {
             return
@@ -186,7 +221,7 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
         if let context = UIGraphicsGetCurrentContext() {
             UIColor.brownColor().setFill()
             CGContextFillEllipseInRect(context, rect)
-            drawTextInRect(rect)
+//            drawTextInRect(rect)
             drawEditModeInRect(rect)
         }
     }
