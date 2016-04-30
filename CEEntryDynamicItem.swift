@@ -167,11 +167,11 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
         }
 
         if let context = UIGraphicsGetCurrentContext() {
-            let insetRect = rect.insetBy(dx: 10, dy: 10)
+            let insetRect = rect.insetBy(dx: rect.height/2-22, dy: rect.width/2-22)
             let tintColor = UIColor.whiteColor()
             tintColor.colorWithAlphaComponent(0.9).setFill()
             CGContextFillEllipseInRect(context, insetRect)
-            let xrect = insetRect.insetBy(dx: 20, dy: 20)
+            let xrect = insetRect.insetBy(dx: 15, dy: 15)
             UIColor.lightGrayColor().setStroke()
             CGContextSetLineWidth(context, 1)
             CGContextMoveToPoint(context, xrect.minX, xrect.minY)
