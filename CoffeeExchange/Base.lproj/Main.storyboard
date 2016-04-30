@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -102,14 +101,14 @@
                         <viewControllerLayoutGuide type="bottom" id="iqu-KH-jl6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8kT-uV-FXP">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="1000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cPr-Vb-Ex9">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="1000"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sWR-ie-dZw">
-                                        <rect key="frame" x="20" y="0.0" width="560" height="600"/>
+                                        <rect key="frame" x="20" y="0.0" width="560" height="596"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KJh-5W-L42">
                                                 <rect key="frame" x="0.0" y="8" width="560" height="60"/>
@@ -178,9 +177,9 @@
                                                 <sections/>
                                             </tableView>
                                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="7jN-eF-RKG">
-                                                <rect key="frame" x="0.0" y="176" width="560" height="420"/>
+                                                <rect key="frame" x="0.0" y="176" width="560" height="400"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" secondItem="7jN-eF-RKG" secondAttribute="height" multiplier="4:3" id="02X-LX-EKE"/>
+                                                    <constraint firstAttribute="height" constant="400" id="j7m-8t-Usu"/>
                                                 </constraints>
                                             </mapView>
                                         </subviews>
@@ -192,6 +191,7 @@
                                             <constraint firstAttribute="trailing" secondItem="KJh-5W-L42" secondAttribute="trailing" id="O2u-VT-haP"/>
                                             <constraint firstItem="7jN-eF-RKG" firstAttribute="top" secondItem="YMV-ch-9zM" secondAttribute="bottom" constant="8" symbolic="YES" id="P4P-QG-2Nu"/>
                                             <constraint firstItem="7jN-eF-RKG" firstAttribute="leading" secondItem="sWR-ie-dZw" secondAttribute="leading" id="QKl-Oe-EKS"/>
+                                            <constraint firstAttribute="bottom" secondItem="7jN-eF-RKG" secondAttribute="bottom" constant="20" id="VAG-pR-8fY"/>
                                             <constraint firstItem="YMV-ch-9zM" firstAttribute="leading" secondItem="sWR-ie-dZw" secondAttribute="leading" id="WrP-sD-km7"/>
                                             <constraint firstItem="KJh-5W-L42" firstAttribute="leading" secondItem="sWR-ie-dZw" secondAttribute="leading" id="d2M-ze-uH9"/>
                                             <constraint firstAttribute="trailing" secondItem="YMV-ch-9zM" secondAttribute="trailing" id="iBK-p3-CXO"/>
@@ -207,6 +207,11 @@
                                     <constraint firstItem="sWR-ie-dZw" firstAttribute="top" secondItem="cPr-Vb-Ex9" secondAttribute="top" id="ZvT-Yv-f4N"/>
                                     <constraint firstAttribute="trailing" secondItem="sWR-ie-dZw" secondAttribute="trailing" id="crQ-gl-ku4"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="W5V-2d-dob"/>
+                                    </mask>
+                                </variation>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -215,12 +220,13 @@
                             <constraint firstItem="cPr-Vb-Ex9" firstAttribute="width" secondItem="8kT-uV-FXP" secondAttribute="width" id="RM2-cd-BJa"/>
                             <constraint firstItem="sWR-ie-dZw" firstAttribute="leading" secondItem="8kT-uV-FXP" secondAttribute="leadingMargin" id="Sxh-2H-vq3"/>
                             <constraint firstItem="cPr-Vb-Ex9" firstAttribute="height" secondItem="8kT-uV-FXP" secondAttribute="height" id="Ti3-C1-kMZ"/>
-                            <constraint firstItem="sWR-ie-dZw" firstAttribute="height" secondItem="8kT-uV-FXP" secondAttribute="height" id="UEK-tB-wbm"/>
                             <constraint firstItem="cPr-Vb-Ex9" firstAttribute="centerY" secondItem="8kT-uV-FXP" secondAttribute="centerY" id="iWC-cN-aVg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="sWR-ie-dZw" secondAttribute="trailing" id="tK3-Px-VnA"/>
                             <constraint firstItem="cPr-Vb-Ex9" firstAttribute="centerX" secondItem="8kT-uV-FXP" secondAttribute="centerX" id="tKm-k9-hdM"/>
                         </constraints>
                     </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="1000"/>
                     <connections>
                         <outlet property="imageView" destination="G2j-pc-suz" id="caw-Z4-4K4"/>
                         <outlet property="mapView" destination="7jN-eF-RKG" id="PDt-OL-L1G"/>
