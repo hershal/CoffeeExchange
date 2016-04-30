@@ -34,11 +34,11 @@ class CESearchForCoffeeOperation: CEOperation {
         let search = MKLocalSearch(request: request)
         search.startWithCompletionHandler { (response, error) in
             if let response = response {
-                self.locationsManager.mapItems = response.mapItems
                 let annotations = response.mapItems.map { (mapItem) -> CEPointAnnotation in
                     return CEPointAnnotation(mapItem: mapItem)
                 }
                 dispatch_async(dispatch_get_main_queue()) {
+                    self.locationsManager.addMapItems(response.mapItems)
                     self.mapView.addAnnotations(annotations)
                     var newRegion = self.mapView.regionThatFits(response.boundingRegion)
                     newRegion.span.latitudeDelta *= 1.1

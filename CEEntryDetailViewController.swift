@@ -23,6 +23,10 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
     @IBOutlet weak var tableHeightConstriant: NSLayoutConstraint!
     @IBOutlet weak var mapView: MKMapView!
 
+    @IBAction func openInMapsButton(sender: AnyObject) {
+        mapController.openItemsInMaps()
+    }
+
     @IBAction func stepperChanged(sender: AnyObject) {
         let value = stepper.value
         viewModel.balance = Int(value)

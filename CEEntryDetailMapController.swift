@@ -90,6 +90,17 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         }
     }
 
+    func openItemsInMaps() {
+        let mapItems = locationsManager.mapItems()
+        if mapItems.count > 0 {
+            MKMapItem.openMapsWithItems(mapItems, launchOptions: nil)
+        } else {
+            let userLocation = locationsManager.userLocation
+            let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: userLocation.coordinate, addressDictionary: nil))
+            mapItem.openInMapsWithLaunchOptions(nil)
+        }
+    }
+
     // MARK: - CLLocationManagerDelegate Methods
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {

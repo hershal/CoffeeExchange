@@ -13,14 +13,14 @@ import MapKit
 class CELocationsManager: NSObject {
     var userLocation: CLLocation
     var region: MKCoordinateRegion?
-    var mapItems: [MKMapItem]
+    private var _mapItems: [MKMapItem]
     private var _placemarks: [String: CLPlacemark]
     private let lock = NSLock()
 
     init(userLocation: CLLocation) {
         self.userLocation = userLocation
         self._placemarks = [String: CLPlacemark]()
-        self.mapItems = [MKMapItem]()
+        self._mapItems = [MKMapItem]()
         super.init()
     }
 
@@ -28,6 +28,16 @@ class CELocationsManager: NSObject {
         lock.withCriticalScope {
             self._placemarks[label] = placemark
         }
+    }
+
+    func addMapItems(mapItems: [MKMapItem]) {
+        lock.withCriticalScope {
+            self._mapItems.appendContentsOf(mapItems)
+        }
+    }
+
+    func mapItems() -> [MKMapItem] {
+        return lock.withCriticalScope { _mapItems }
     }
 
     func placemarks() -> [String: CLPlacemark] {

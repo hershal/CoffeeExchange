@@ -108,7 +108,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="1000"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sWR-ie-dZw">
-                                        <rect key="frame" x="20" y="0.0" width="560" height="596"/>
+                                        <rect key="frame" x="20" y="0.0" width="560" height="636"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KJh-5W-L42">
                                                 <rect key="frame" x="0.0" y="8" width="560" height="60"/>
@@ -191,7 +191,6 @@
                                             <constraint firstAttribute="trailing" secondItem="KJh-5W-L42" secondAttribute="trailing" id="O2u-VT-haP"/>
                                             <constraint firstItem="7jN-eF-RKG" firstAttribute="top" secondItem="YMV-ch-9zM" secondAttribute="bottom" constant="8" symbolic="YES" id="P4P-QG-2Nu"/>
                                             <constraint firstItem="7jN-eF-RKG" firstAttribute="leading" secondItem="sWR-ie-dZw" secondAttribute="leading" id="QKl-Oe-EKS"/>
-                                            <constraint firstAttribute="bottom" secondItem="7jN-eF-RKG" secondAttribute="bottom" constant="20" id="VAG-pR-8fY"/>
                                             <constraint firstItem="YMV-ch-9zM" firstAttribute="leading" secondItem="sWR-ie-dZw" secondAttribute="leading" id="WrP-sD-km7"/>
                                             <constraint firstItem="KJh-5W-L42" firstAttribute="leading" secondItem="sWR-ie-dZw" secondAttribute="leading" id="d2M-ze-uH9"/>
                                             <constraint firstAttribute="trailing" secondItem="YMV-ch-9zM" secondAttribute="trailing" id="iBK-p3-CXO"/>
@@ -200,12 +199,23 @@
                                             <constraint firstItem="Nqo-P1-amV" firstAttribute="top" secondItem="KJh-5W-L42" secondAttribute="bottom" constant="8" symbolic="YES" id="yt3-E9-pwX"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="65g-96-Qqq">
+                                        <rect key="frame" x="249" y="584" width="101" height="32"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Open in Maps"/>
+                                        <connections>
+                                            <action selector="openInMapsButton:" destination="f6W-ys-7bx" eventType="touchUpInside" id="5aC-1c-pFV"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="65g-96-Qqq" firstAttribute="top" secondItem="7jN-eF-RKG" secondAttribute="bottom" constant="8" id="28X-Zw-jmN"/>
                                     <constraint firstAttribute="bottom" secondItem="sWR-ie-dZw" secondAttribute="bottom" id="LkT-xd-QtE"/>
                                     <constraint firstItem="sWR-ie-dZw" firstAttribute="height" secondItem="cPr-Vb-Ex9" secondAttribute="height" id="W5V-2d-dob"/>
+                                    <constraint firstItem="65g-96-Qqq" firstAttribute="centerX" secondItem="sWR-ie-dZw" secondAttribute="centerX" id="ZJ5-ry-PKX"/>
                                     <constraint firstItem="sWR-ie-dZw" firstAttribute="top" secondItem="cPr-Vb-Ex9" secondAttribute="top" id="ZvT-Yv-f4N"/>
                                     <constraint firstAttribute="trailing" secondItem="sWR-ie-dZw" secondAttribute="trailing" id="crQ-gl-ku4"/>
+                                    <constraint firstItem="sWR-ie-dZw" firstAttribute="bottom" secondItem="65g-96-Qqq" secondAttribute="bottom" constant="20" id="lS4-Fp-M1V"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
