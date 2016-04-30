@@ -135,7 +135,7 @@ class CESetRegionToClosestAddressOperation: CEOperation {
             let region = MKCoordinateRegion(center: center, span: span)
             locationsManager.region = region
 
-            dispatch_async(dispatch_get_main_queue(), { 
+            dispatch_async(dispatch_get_main_queue(), {
                 self.mapView.setRegion(region, animated: false)
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = closest
@@ -204,7 +204,7 @@ class CESearchForCoffeeOperation: CEOperation {
         self.locationsManager = locationsManager
     }
 
-    func searchForCoffee() {
+    override func main() {
         if cancelled {
             state = .Finished
             return
@@ -233,9 +233,4 @@ class CESearchForCoffeeOperation: CEOperation {
             self.state = .Finished
         }
     }
-
-    override func main() {
-        searchForCoffee()
-    }
 }
-
