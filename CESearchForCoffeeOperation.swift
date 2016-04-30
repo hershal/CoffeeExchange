@@ -40,6 +40,10 @@ class CESearchForCoffeeOperation: CEOperation {
                 }
                 dispatch_async(dispatch_get_main_queue()) {
                     self.mapView.addAnnotations(annotations)
+                    var newRegion = self.mapView.regionThatFits(response.boundingRegion)
+                    newRegion.span.latitudeDelta *= 1.1
+                    newRegion.span.longitudeDelta *= 1.1
+                    self.mapView.setRegion(newRegion, animated: true)
                 }
             }
             NSLog("Finished CESearchForCoffeeOperation")
