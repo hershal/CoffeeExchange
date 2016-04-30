@@ -43,20 +43,18 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
     }
 
     func beginOperationsWithCurrentLocation(location: CLLocation) {
-        guard let addresses = viewModel.postalAddresses else {
-            NSLog("CEEntryDetailMapController::BeginOperationsWithCurrentAddress::NoAddressesForEntry")
-            return
-        }
+
         operationQueue.suspended = true
         // TODO: construct operations front to back so that dependencies can be added
         let searchOperation = CESearchForCoffeeOperation(mapView: mapView, locationsManager: locationsManager)
         let setRegionOperation = CESetRegionToClosestAddressOperation(mapView: mapView, locationsManager: locationsManager, viewModel: viewModel)
-
-        for (addressLabel, address) in addresses {
-            // TODO: Add dependency on operation which evaluates closest address
-            let operation = CEGeocodeAddressOperation(label: addressLabel, address: address.stringValue, locationsManager: locationsManager)
-            setRegionOperation.addDependency(operation)
-            operationQueue.addOperation(operation)
+        if let addresses = viewModel.postalAddresses {
+            for (addressLabel, address) in addresses {
+                // TODO: Add dependency on operation which evaluates closest address
+                let operation = CEGeocodeAddressOperation(label: addressLabel, address: address.stringValue, locationsManager: locationsManager)
+                setRegionOperation.addDependency(operation)
+                operationQueue.addOperation(operation)
+            }
         }
         searchOperation.addDependency(setRegionOperation)
         operationQueue.addOperation(setRegionOperation)
