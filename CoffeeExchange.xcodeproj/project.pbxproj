@@ -19,7 +19,6 @@
 		7891C6D51CD19057003F9202 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7891C6D41CD19057003F9202 /* MapKit.framework */; };
 		7891C6D91CD19B37003F9202 /* CEEntryDetailTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7891C6D81CD19B37003F9202 /* CEEntryDetailTableController.swift */; };
 		7891C6DB1CD1FE42003F9202 /* CEReminderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7891C6DA1CD1FE42003F9202 /* CEReminderController.swift */; };
-		78A4CF081CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */; };
 		78BDBD4E1CCADAAA00718798 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */; };
 		78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4F1CCADAAA00718798 /* ViewController.swift */; };
 		78BDBD531CCADAAA00718798 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78BDBD511CCADAAA00718798 /* Main.storyboard */; };
@@ -30,7 +29,6 @@
 		78BDBD711CCADAAA00718798 /* CoffeeExchangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD701CCADAAA00718798 /* CoffeeExchangeUITests.swift */; };
 		78BDBD7F1CCADB1D00718798 /* CEEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD7E1CCADB1D00718798 /* CEEntry.swift */; };
 		78BDBD811CCAE8C300718798 /* CECollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD801CCAE8C300718798 /* CECollection.swift */; };
-		78BDBD831CCB0F2100718798 /* CEEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD821CCB0F2100718798 /* CEEntryView.swift */; };
 		78BDBD851CCB445E00718798 /* CEEntryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78BDBD841CCB445E00718798 /* CEEntryView.xib */; };
 		78BDBD871CCB580C00718798 /* CEEntryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD861CCB580C00718798 /* CEEntryDetailViewController.swift */; };
 		78BDBD921CCCB65000718798 /* CEEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD911CCCB65000718798 /* CEEntryViewModel.swift */; };
@@ -66,7 +64,6 @@
 		7891C6D41CD19057003F9202 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7891C6D81CD19B37003F9202 /* CEEntryDetailTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailTableController.swift; sourceTree = "<group>"; };
 		7891C6DA1CD1FE42003F9202 /* CEReminderController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEReminderController.swift; sourceTree = "<group>"; };
-		78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEDynamicCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		78BDBD4A1CCADAAA00718798 /* CoffeeExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78BDBD4F1CCADAAA00718798 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -83,7 +80,6 @@
 		78BDBD721CCADAAA00718798 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		78BDBD7E1CCADB1D00718798 /* CEEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntry.swift; sourceTree = "<group>"; };
 		78BDBD801CCAE8C300718798 /* CECollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CECollection.swift; sourceTree = "<group>"; };
-		78BDBD821CCB0F2100718798 /* CEEntryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryView.swift; sourceTree = "<group>"; };
 		78BDBD841CCB445E00718798 /* CEEntryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CEEntryView.xib; sourceTree = "<group>"; };
 		78BDBD861CCB580C00718798 /* CEEntryDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailViewController.swift; sourceTree = "<group>"; };
 		78BDBD911CCCB65000718798 /* CEEntryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryViewModel.swift; sourceTree = "<group>"; };
@@ -127,12 +123,10 @@
 				7891C6DA1CD1FE42003F9202 /* CEReminderController.swift */,
 				7891C6D81CD19B37003F9202 /* CEEntryDetailTableController.swift */,
 				7891C6D41CD19057003F9202 /* MapKit.framework */,
-				78A4CF071CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift */,
 				7887259B1CCDEA8800DACC8E /* CEEntryDynamicItem.swift */,
 				7880D8211CCCC63900403730 /* CEThrowBehavior.swift */,
 				7880D81F1CCCC0D800403730 /* CECollectionDynamicView.swift */,
 				78BDBD911CCCB65000718798 /* CEEntryViewModel.swift */,
-				78BDBD821CCB0F2100718798 /* CEEntryView.swift */,
 				78BDBD7E1CCADB1D00718798 /* CEEntry.swift */,
 				78BDBD861CCB580C00718798 /* CEEntryDetailViewController.swift */,
 				78BDBD801CCAE8C300718798 /* CECollection.swift */,
@@ -323,7 +317,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78A4CF081CCEE65D00EB483D /* CEDynamicCollectionViewFlowLayout.swift in Sources */,
 				78BDBD501CCADAAA00718798 /* ViewController.swift in Sources */,
 				78BDBD871CCB580C00718798 /* CEEntryDetailViewController.swift in Sources */,
 				784F929F1CD2F1D800DE839D /* CEEntryDetailMapController.swift in Sources */,
@@ -337,7 +330,6 @@
 				784F92A51CD44EF800DE839D /* CESetRegionToClosestAddressOperation.swift in Sources */,
 				78BDBD811CCAE8C300718798 /* CECollection.swift in Sources */,
 				7880D8201CCCC0D800403730 /* CECollectionDynamicView.swift in Sources */,
-				78BDBD831CCB0F2100718798 /* CEEntryView.swift in Sources */,
 				78BDBD7F1CCADB1D00718798 /* CEEntry.swift in Sources */,
 				784F92A71CD44F1C00DE839D /* CEGeocodeAddressOperation.swift in Sources */,
 				7887259C1CCDEA8800DACC8E /* CEEntryDynamicItem.swift in Sources */,
