@@ -77,7 +77,7 @@ class CEEntryDetailViewModel: NSObject {
         return contact.isKeyAvailable(CNContactPhoneNumbersKey) && contact.phoneNumbers.count > 0
     }()
 
-    lazy var callablePhoneNumbers: [String: CNPhoneNumber]? = {
+    lazy var callablePhoneNumbers: [(String, CNPhoneNumber)]? = {
         guard self.hasPhoneNumber else {
             return nil
         }
@@ -87,7 +87,7 @@ class CEEntryDetailViewModel: NSObject {
         return self.zipLabeledPhoneValues(labeledValues)
     }()
 
-    lazy var textablePhoneNumbers: [String: CNPhoneNumber]? = {
+    lazy var textablePhoneNumbers: [(String, CNPhoneNumber)]? = {
         guard self.hasPhoneNumber else {
             return nil
         }
@@ -97,14 +97,21 @@ class CEEntryDetailViewModel: NSObject {
         return self.zipLabeledPhoneValues(labeledValues)
     }()
 
-    private func zipLabeledPhoneValues(labeledValues: [CNLabeledValue]) -> [String: CNPhoneNumber] {
-        var assoc = [String: CNPhoneNumber]()
-        labeledValues.forEach { (labeledValue) in
+    private func zipLabeledPhoneValues(labeledValues: [CNLabeledValue]) -> [(String, CNPhoneNumber)] {
+        var phoneLabels = [String]()
+        var phoneNumbers = [CNPhoneNumber]()
+
+        for labeledValue in labeledValues {
             if let value = labeledValue.value as? CNPhoneNumber {
-                assoc[humanPhoneLabels[labeledValue.label]!] = value
+                phoneNumbers.append(value)
+                if let label = humanPhoneLabels[labeledValue.label] {
+                    phoneLabels.append(label)
+                } else {
+                    phoneLabels.append("")
+                }
             }
         }
-        return assoc
+        return Array(Zip2Sequence(phoneLabels, phoneNumbers))
     }
 
     let callablePhoneLabels = [CNLabelPhoneNumberiPhone, CNLabelPhoneNumberMobile, CNLabelPhoneNumberMain, CNLabelHome, CNLabelWork, CNLabelOther]
@@ -116,7 +123,7 @@ class CEEntryDetailViewModel: NSObject {
         return contact.isKeyAvailable(CNContactPostalAddressesKey) && contact.postalAddresses.count > 0
     }()
 
-    lazy var postalAddresses: [String: CNPostalAddress]? = {
+    lazy var postalAddresses: [(String, CNPostalAddress)]? = {
         guard self.hasAddresses else {
             return nil
         }
@@ -124,14 +131,21 @@ class CEEntryDetailViewModel: NSObject {
         return self.zipLabeledPostalValues(labeledValues)
     }()
 
-    private func zipLabeledPostalValues(labeledValues: [CNLabeledValue]) -> [String: CNPostalAddress] {
-        var assoc = [String: CNPostalAddress]()
-        labeledValues.forEach { (labeledValue) in
+    private func zipLabeledPostalValues(labeledValues: [CNLabeledValue]) -> [(String, CNPostalAddress)] {
+        var addressLabels = [String]()
+        var addresses = [CNPostalAddress]()
+
+        for labeledValue in labeledValues {
             if let value = labeledValue.value as? CNPostalAddress {
-                assoc[humanPostalAddressLabels[labeledValue.label]!] = value
+                addresses.append(value)
+                if let label = humanPostalAddressLabels[labeledValue.label] {
+                    addressLabels.append(label)
+                } else {
+                    addressLabels.append("")
+                }
             }
         }
-        return assoc
+        return Array(Zip2Sequence(addressLabels, addresses))
     }
 
     let humanPostalAddressLabels = [CNLabelHome: "Home", CNLabelWork: "Work", CNLabelOther: ""]
