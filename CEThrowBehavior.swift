@@ -12,17 +12,22 @@ import CoreMotion
 class CEThrowBehavior: UIDynamicBehavior {
     var gravity: UIGravityBehavior
     var initialBehavior: UIDynamicItemBehavior
+    var topBoundsCollision: UICollisionBehavior
     var boundsCollision: UICollisionBehavior
     var motionManager: CMMotionManager
     var motionQueue: NSOperationQueue
+
+    var itemsInView: Set<CEEntryDynamicItem>
 
     override init() {
         gravity = UIGravityBehavior()
         initialBehavior = UIDynamicItemBehavior()
         boundsCollision = UICollisionBehavior()
+        topBoundsCollision = UICollisionBehavior()
         motionManager = CMMotionManager()
         motionQueue = NSOperationQueue()
         motionQueue.suspended = false
+        itemsInView = Set<CEEntryDynamicItem>()
         super.init()
 
         motionManager.startDeviceMotionUpdatesToQueue(motionQueue) { (motion, error) in
@@ -37,7 +42,7 @@ class CEThrowBehavior: UIDynamicBehavior {
                 })
             }
         }
-        [gravity, initialBehavior, boundsCollision].forEach { (behavior) in
+        [gravity, initialBehavior, boundsCollision, topBoundsCollision].forEach { (behavior) in
             addChildBehavior(behavior)
         }
         action = updateAction
@@ -47,6 +52,10 @@ class CEThrowBehavior: UIDynamicBehavior {
         for item in gravity.items {
             if let item = item as? CEEntryDynamicItem {
                 item.textView.transform = CGAffineTransformIdentity
+                if !itemsInView.contains(item) && item.center.y > (64 + item.bounds.height/2) {
+                    self.itemsInView.insert(item)
+                    self.topBoundsCollision.addItem(item)
+                }
             }
         }
     }
@@ -57,10 +66,17 @@ class CEThrowBehavior: UIDynamicBehavior {
         let bl = CGPoint(x: frame.minX, y: frame.maxY)
         let br = CGPoint(x: frame.maxX, y: frame.maxY)
 
+        let frameTl = CGPoint(x: frame.minX, y: frame.minY+64)
+        let frameTr = CGPoint(x: frame.maxX, y: frame.minY+64)
+
         boundsCollision.removeAllBoundaries()
+        boundsCollision.addBoundaryWithIdentifier("top", fromPoint: tl, toPoint: tr)
         boundsCollision.addBoundaryWithIdentifier("bottom", fromPoint: bl, toPoint: br)
         boundsCollision.addBoundaryWithIdentifier("left", fromPoint: tl, toPoint: bl)
         boundsCollision.addBoundaryWithIdentifier("right", fromPoint: tr, toPoint: br)
+
+        topBoundsCollision.removeAllBoundaries()
+        topBoundsCollision.addBoundaryWithIdentifier("top", fromPoint: frameTl, toPoint: frameTr)
     }
 
     func addItem(dynamicItem: UIDynamicItem) {
@@ -77,6 +93,13 @@ class CEThrowBehavior: UIDynamicBehavior {
         gravity.removeItem(dynamicItem)
         boundsCollision.removeItem(dynamicItem)
         initialBehavior.removeItem(dynamicItem)
+
+        if let dynamicItem = dynamicItem as? CEEntryDynamicItem {
+            if itemsInView.contains(dynamicItem) {
+                itemsInView.remove(dynamicItem)
+                topBoundsCollision.removeItem(dynamicItem)
+            }
+        }
     }
 
     func printCenters() {
