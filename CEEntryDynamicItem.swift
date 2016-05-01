@@ -64,9 +64,77 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
     }
 }
 
-class CEEntryDynamicItemTextView: CEEntryDynamicItemComponent {
+class CEEntryDynamicItemComponent: UIView {
+    var editMode: CEViewControllerEditMode
+    var viewModel: CEEntryDetailViewModel?
+
     override init(frame: CGRect) {
+        self.editMode = .NormalMode
         super.init(frame: frame)
+        self.backgroundColor = UIColor.clearColor()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
+        let isInside = frame.contains(point)
+        return isInside
+    }
+}
+
+class CEEntryDynamicItemEditOverlayView: CEEntryDynamicItemComponent {
+    func drawEditModeInRect(rect: CGRect) {
+        if let context = UIGraphicsGetCurrentContext() {
+            let insetRect = rect.insetBy(dx: rect.height/2-22, dy: rect.width/2-22)
+            let tintColor = UIColor.whiteColor()
+            tintColor.colorWithAlphaComponent(0.9).setFill()
+            CGContextFillEllipseInRect(context, insetRect)
+            let xrect = insetRect.insetBy(dx: 15, dy: 15)
+            UIColor.lightGrayColor().setStroke()
+            CGContextSetLineWidth(context, 1)
+            CGContextMoveToPoint(context, xrect.minX, xrect.minY)
+            CGContextAddLineToPoint(context, xrect.maxX, xrect.maxY)
+            CGContextStrokePath(context)
+            CGContextMoveToPoint(context, xrect.maxX, xrect.minY)
+            CGContextAddLineToPoint(context, xrect.minX, xrect.maxY)
+            CGContextStrokePath(context)
+        }
+    }
+
+    override func drawRect(rect: CGRect) {
+        drawEditModeInRect(rect)
+    }
+}
+
+class CEEntryDynamicItemTextView: CEEntryDynamicItemComponent {
+    var editOverlayView: CEEntryDynamicItemEditOverlayView
+    let defaultTransform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5)
+
+    override var editMode: CEViewControllerEditMode {
+        didSet {
+            dispatch_async(dispatch_get_main_queue(), {
+                UIView.animateWithDuration(0.25, animations: {
+                    switch (self.editMode) {
+                    case .EditMode:
+                        self.editOverlayView.alpha = 1
+                        self.editOverlayView.transform = CGAffineTransformIdentity
+                    case .NormalMode:
+                        self.editOverlayView.alpha = 0
+                        self.editOverlayView.transform = self.defaultTransform
+                    }
+                })
+            })
+        }
+    }
+
+    override init(frame: CGRect) {
+        self.editOverlayView = CEEntryDynamicItemEditOverlayView(frame: frame)
+        super.init(frame: frame)
+        editOverlayView.alpha = 0
+        editOverlayView.transform = defaultTransform
+        self.addSubview(editOverlayView)
         layer.zPosition = 200
     }
 
@@ -138,26 +206,6 @@ class CEEntryDynamicItemContainerView: UIView {
     }
 }
 
-class CEEntryDynamicItemComponent: UIView {
-    var editMode: CEViewControllerEditMode
-    var viewModel: CEEntryDetailViewModel?
-
-    override init(frame: CGRect) {
-        self.editMode = .NormalMode
-        super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
-        let isInside = frame.contains(point)
-        return isInside
-    }
-}
-
 class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
         get {
@@ -196,33 +244,10 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
         return path
     }
 
-    func drawEditModeInRect(rect: CGRect) {
-        guard editMode == .EditMode else {
-            return
-        }
-
-        if let context = UIGraphicsGetCurrentContext() {
-            let insetRect = rect.insetBy(dx: rect.height/2-22, dy: rect.width/2-22)
-            let tintColor = UIColor.whiteColor()
-            tintColor.colorWithAlphaComponent(0.9).setFill()
-            CGContextFillEllipseInRect(context, insetRect)
-            let xrect = insetRect.insetBy(dx: 15, dy: 15)
-            UIColor.lightGrayColor().setStroke()
-            CGContextSetLineWidth(context, 1)
-            CGContextMoveToPoint(context, xrect.minX, xrect.minY)
-            CGContextAddLineToPoint(context, xrect.maxX, xrect.maxY)
-            CGContextStrokePath(context)
-            CGContextMoveToPoint(context, xrect.maxX, xrect.minY)
-            CGContextAddLineToPoint(context, xrect.minX, xrect.maxY)
-            CGContextStrokePath(context)
-        }
-    }
     override func drawRect(rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
             UIColor.brownColor().setFill()
             CGContextFillEllipseInRect(context, rect)
-//            drawTextInRect(rect)
-            drawEditModeInRect(rect)
         }
     }
 }
