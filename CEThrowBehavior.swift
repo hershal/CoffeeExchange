@@ -7,25 +7,43 @@
 //
 
 import UIKit
+import CoreMotion
 
 class CEThrowBehavior: UIDynamicBehavior {
     var gravity: UIGravityBehavior
     var initialBehavior: UIDynamicItemBehavior
     var boundsCollision: UICollisionBehavior
+    var motionManager: CMMotionManager
+    var motionQueue: NSOperationQueue
 
     override init() {
         gravity = UIGravityBehavior()
         initialBehavior = UIDynamicItemBehavior()
         boundsCollision = UICollisionBehavior()
+        motionManager = CMMotionManager()
+        motionQueue = NSOperationQueue()
+        motionQueue.suspended = false
         super.init()
 
+        motionManager.startDeviceMotionUpdatesToQueue(motionQueue) { (motion, error) in
+            if let motion = motion {
+                dispatch_async(dispatch_get_main_queue(), {
+                    let gravityMotion = motion.gravity
+                    let x = gravityMotion.x
+                    let y = -gravityMotion.y + 0.2
+                    let vector = CGVector(dx: x, dy: y)
+                    self.gravity.gravityDirection = vector
+                    self.gravity.magnitude = 2.0
+                })
+            }
+        }
         [gravity, initialBehavior, boundsCollision].forEach { (behavior) in
             addChildBehavior(behavior)
         }
-        action = unrotateTextView
+        action = updateAction
     }
 
-    func unrotateTextView() {
+    func updateAction() {
         for item in gravity.items {
             if let item = item as? CEEntryDynamicItem {
                 item.textView.transform = CGAffineTransformIdentity
@@ -50,7 +68,7 @@ class CEThrowBehavior: UIDynamicBehavior {
         boundsCollision.addItem(dynamicItem)
         initialBehavior.addItem(dynamicItem)
         initialBehavior.addAngularVelocity(CGFloat.srandom()*CGFloat(M_PI), forItem: dynamicItem)
-        initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000, y: CGFloat.random()*1000), forItem: dynamicItem)
+        initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000+500, y: CGFloat.random()*1000+500), forItem: dynamicItem)
         initialBehavior.elasticity = 0.25
         dynamicItem.transform = CGAffineTransformRotate(dynamicItem.transform, CGFloat.random()*2*CGFloat(M_PI))
     }
