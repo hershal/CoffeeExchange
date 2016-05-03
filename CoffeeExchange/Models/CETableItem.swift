@@ -7,10 +7,10 @@
 //
 
 import Foundation
+import UIKit
 
 protocol CETableItem {
     var visible: Bool { get }
     var cellText: String { get }
     func action()
 }
-

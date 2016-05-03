@@ -10,24 +10,23 @@ import Foundation
 import UIKit
 import Contacts
 
-class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableViewDelegate {
+class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableViewDelegate, CETableItemDelegate {
     var viewModel: CEEntryDetailViewModel
-    let tableActions = [["Call", "Message", "Remind Me"], ["Remind Me"]]
     var delegate: CEEntryDetailTableControllerDelegate?
-
+    var tableItems: [CETableItemBase]
     init(viewModel: CEEntryDetailViewModel) {
         self.viewModel = viewModel
+        tableItems = [CETableItemBase]()
+        super.init()
+        tableItems = [CERemindMeTableItem(viewModel: viewModel, delegate: self),
+                      CEMessageTableItem(viewModel: viewModel, delegate: self),
+                      CECallTableItem(viewModel: viewModel, delegate: self)]
+        tableItems = tableItems.filter({ (item) -> Bool in
+            item.visible
+        })
     }
 
-    func cellTextAtIndexPath(indexPath: NSIndexPath) -> String {
-        switch (viewModel.hasPhoneNumber) {
-        case true:
-            return tableActions[0][indexPath.item]
-        default:
-            return tableActions[1][indexPath.item]
-        }
-    }
-
+    // MARK: - UITableViewDataSource
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         if let dequeuedCell = tableView.dequeueReusableCellWithIdentifier("CEEntryDetailCell") {
@@ -35,104 +34,25 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
         } else {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "CEEntryDetailCell")
         }
-        cell.textLabel?.text = cellTextAtIndexPath(indexPath)
+        cell.textLabel?.text = tableItems[indexPath.item].cellText
         return cell
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch (viewModel.hasPhoneNumber) {
-        case true:
-            return tableActions[0].count
-        default:
-            return tableActions[1].count
-        }
+        return tableItems.count
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch (viewModel.hasPhoneNumber) {
-        case true:
-            switch (indexPath.item) {
-            case 0: presentCallDialog()
-            case 1: presentMessageDialog()
-            default: presentRemindMeDialog()
-            }
-        default:
-            presentRemindMeDialog()
-        }
+        tableItems[indexPath.item].action()
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
-    func sheetWithTitle(title: String?, message: String?) -> UIAlertController {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .ActionSheet)
-        return alertController
-    }
-
-    func presentCallDialog() {
-        guard let phoneNumbers = viewModel.callablePhoneNumbers else {
-            NSLog("CEEntryDetailTableController::PresentCallDialog::CouldNotEnumeratePhoneNumbers")
-            return
-        }
-
-        guard let delegate = delegate else {
-            NSLog("CEEntryDetailTableController::PresentCallDialog::NoDelegate")
-            return
-        }
-
-        let sheet = sheetWithTitle("Call", message: nil)
-
-        for (label, number) in phoneNumbers {
-            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
-                delegate.tableControllerDidSelectCallWithPhoneNumber(number)
-            }))
-        }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        delegate.tableControllerPresentViewController(sheet)
-    }
-
-    func presentMessageDialog() {
-        guard let phoneNumbers = viewModel.textablePhoneNumbers else {
-            NSLog("CEEntryDetailTableController::PresentMessageDialog::CouldNotEnumeratePhoneNumbers")
-            return
-        }
-
-        guard let delegate = delegate else {
-            NSLog("CEEntryDetailTableController::PresentMessageDialog::NoDelegate")
-            return
-        }
-
-        let sheet = sheetWithTitle("Message", message: nil)
-
-        for (label, number) in phoneNumbers {
-            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
-                delegate.tableControllerDidSelectMessageWithPhoneNumber(number)
-            }))
-        }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        delegate.tableControllerPresentViewController(sheet)
-    }
-
-    func presentRemindMeDialog() {
-        guard let delegate = delegate else {
-            NSLog("CEEntryDetailTableController::PresentMessageDialog::NoDelegate")
-            return
-        }
-
-        let sheet = sheetWithTitle("Remind Me", message: nil)
-        let reminderController = CEReminderController(viewModel: viewModel)
-
-        for (interval, intervalString) in reminderController.reminderIntervalSheetInfo() {
-            sheet.addAction(UIAlertAction(title: intervalString, style: .Default, handler: { (alertAction) in
-                delegate.tableControllerDidSelectRemindMeWithInterval(interval)
-            }))
-        }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        delegate.tableControllerPresentViewController(sheet)
+    // MARK: - CETableItemDelegate
+    func tableItemPresentViewController(viewController: UIViewController) {
+        delegate?.tableControllerPresentViewController(viewController)
     }
 }
 
 protocol CEEntryDetailTableControllerDelegate {
     func tableControllerPresentViewController(viewController: UIViewController)
-    func tableControllerDidSelectCallWithPhoneNumber(phoneNumber: CNPhoneNumber)
-    func tableControllerDidSelectMessageWithPhoneNumber(phoneNumber: CNPhoneNumber)
-    func tableControllerDidSelectRemindMeWithInterval(interval: CEReminderInterval)
 }

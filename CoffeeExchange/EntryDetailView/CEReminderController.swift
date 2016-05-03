@@ -72,7 +72,7 @@ class CEReminderController: NSObject {
         }
     }
 
-    private func _createReminderWithInterval(interval: CEReminderInterval) {
+    private func _createReminderWithInterval(interval: CEReminderInterval) -> NSError? {
         if let calendar = getCoffeeCalendar() {
             // add the reminder
             let reminder = EKReminder.init(eventStore: eventStore)
@@ -86,11 +86,14 @@ class CEReminderController: NSObject {
             do {
                 try eventStore.saveReminder(reminder, commit: true)
                 delegate?.reminderController(self, didCreateReminder: reminder, inCalendar: calendar, withInterval: interval)
+                return nil
             } catch {
                 delegate?.reminderController(self, couldNotCreateReminderWithError: .CouldNotCreateReminder)
+                return errorFromError(.CouldNotCreateReminder)
             }
         } else {
             delegate?.reminderController(self, couldNotCreateReminderWithError: .CouldNotCreateReminderList)
+            return errorFromError(.CouldNotCreateReminderList)
         }
     }
 

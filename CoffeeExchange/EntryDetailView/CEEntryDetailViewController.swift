@@ -13,7 +13,7 @@ import MessageUI
 import EventKit
 import MapKit
 
-class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate, MFMessageComposeViewControllerDelegate, CEReminderControllerDelegate {
+class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControllerDelegate {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var stepperLabel: UILabel!
@@ -133,57 +133,6 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
         presentViewController(viewController, animated: true, completion: nil)
     }
 
-    func tableControllerDidSelectCallWithPhoneNumber(phoneNumber: CNPhoneNumber) {
-        if let number = phoneNumber.valueForKey("digits") as? String {
-            UIApplication.sharedApplication().openURL(NSURL(string: "tel://\(number)")!)
-        } else {
-            NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CouldNotCallNumber: \(phoneNumber)")
-        }
-    }
-
-    func tableControllerDidSelectMessageWithPhoneNumber(phoneNumber: CNPhoneNumber) {
-        if let number = phoneNumber.valueForKey("digits") as? String {
-            if MFMessageComposeViewController.canSendText() {
-                let messageController = MFMessageComposeViewController()
-                messageController.recipients = [number]
-                messageController.body = "Hey, let's get coffee!"
-                messageController.messageComposeDelegate = self
-                presentViewController(messageController, animated: true, completion: nil)
-            } else {
-                NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CantSendTexts")
-                let alert = UIAlertController(title: "Can't Send Messages", message: "Your device is not set up to send messages.", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: nil))
-                presentViewController(alert, animated: true, completion: nil)
-            }
-        } else {
-            NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CouldNotCallNumber: \(phoneNumber)")
-        }
-    }
-
-    func tableControllerDidSelectRemindMeWithInterval(interval: CEReminderInterval) {
-        print("remindMe \(interval)")
-        let reminderController = CEReminderController(viewModel: viewModel)
-        reminderController.delegate = self
-        reminderController.createReminderWithInterval(interval)
-    }
-
-    // MARK: - MFMessageComposeViewControllerDelegate Methods
-    func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
-        controller.dismissViewControllerAnimated(true, completion: nil)
-    }
-
-    // MARK: - CEReminderControllerDelegate Methods
-    func reminderController(reminderController: CEReminderController, couldNotCreateReminderWithError reminderError: CEReminderError) {
-        let alert = UIAlertController(title: "Can't Create Reminder", message: "You have denied access to create reminders. Please enable access in Settings under Privacy.", preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: nil))
-        dispatch_async(dispatch_get_main_queue()) {
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-    }
-
-    func reminderController(reminderController: CEReminderController, didCreateReminder reminder: EKReminder, inCalendar calendar: EKCalendar, withInterval interval: CEReminderInterval) {
-        NSLog("created reminder")
-    }
 
     // MARK: - ObjC methods
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
