@@ -62,8 +62,8 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
-    func initSheet() -> UIAlertController {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+    func sheetWithTitle(title: String?, message: String?) -> UIAlertController {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .ActionSheet)
         return alertController
     }
 
@@ -78,7 +78,7 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
             return
         }
 
-        let sheet = initSheet()
+        let sheet = sheetWithTitle("Call", message: nil)
 
         for (label, number) in phoneNumbers {
             sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
@@ -100,7 +100,7 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
             return
         }
 
-        let sheet = initSheet()
+        let sheet = sheetWithTitle("Message", message: nil)
 
         for (label, number) in phoneNumbers {
             sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
@@ -117,7 +117,7 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
             return
         }
 
-        let sheet = initSheet()
+        let sheet = sheetWithTitle("Remind Me", message: nil)
         let reminderController = CEReminderController(viewModel: viewModel)
 
         for (interval, intervalString) in reminderController.reminderIntervalSheetInfo() {
