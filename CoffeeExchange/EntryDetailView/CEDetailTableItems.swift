@@ -92,6 +92,12 @@ class CEMessageTableItem: CETableItemBase, MFMessageComposeViewControllerDelegat
             return
         }
 
+        // short-circuit
+        if phoneNumbers.count == 1 {
+            didSelectMessageWithPhoneNumber(phoneNumbers.first!.1)
+            return
+        }
+
         let sheet = UIAlertController(title: "Message", message: nil, preferredStyle: .ActionSheet)
         for (label, number) in phoneNumbers {
             sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
@@ -144,8 +150,13 @@ class CECallTableItem: CETableItemBase {
             return
         }
 
-        let sheet = UIAlertController(title: "Call", message: nil, preferredStyle: .ActionSheet)
+        // short-circuit
+        if phoneNumbers.count == 1 {
+            didSelectCallWithPhoneNumber(phoneNumbers.first!.1)
+            return
+        }
 
+        let sheet = UIAlertController(title: "Call", message: nil, preferredStyle: .ActionSheet)
         for (label, number) in phoneNumbers {
             sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
                 self.didSelectCallWithPhoneNumber(number)
