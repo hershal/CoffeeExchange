@@ -7,22 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		787822A61CD84CC000F6CC74 /* CECollectionDynamicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822931CD84CC000F6CC74 /* CECollectionDynamicView.swift */; };
-		787822A71CD84CC000F6CC74 /* CEEntryDetailMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822941CD84CC000F6CC74 /* CEEntryDetailMapController.swift */; };
-		787822A81CD84CC000F6CC74 /* CEEntryDetailTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822951CD84CC000F6CC74 /* CEEntryDetailTableController.swift */; };
-		787822A91CD84CC000F6CC74 /* CEEntryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822961CD84CC000F6CC74 /* CEEntryDetailViewController.swift */; };
-		787822AA1CD84CC000F6CC74 /* CELocationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822971CD84CC000F6CC74 /* CELocationsManager.swift */; };
-		787822AB1CD84CC000F6CC74 /* CEReminderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822981CD84CC000F6CC74 /* CEReminderController.swift */; };
-		787822AC1CD84CC000F6CC74 /* CECollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7878229A1CD84CC000F6CC74 /* CECollection.swift */; };
-		787822AD1CD84CC000F6CC74 /* CEEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7878229B1CD84CC000F6CC74 /* CEEntry.swift */; };
-		787822AE1CD84CC000F6CC74 /* CEEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7878229C1CD84CC000F6CC74 /* CEEntryViewModel.swift */; };
-		787822AF1CD84CC000F6CC74 /* CEGeocodeAddressOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7878229E1CD84CC000F6CC74 /* CEGeocodeAddressOperation.swift */; };
-		787822B01CD84CC000F6CC74 /* CEOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7878229F1CD84CC000F6CC74 /* CEOperation.swift */; };
-		787822B11CD84CC000F6CC74 /* CESearchForCoffeeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822A01CD84CC000F6CC74 /* CESearchForCoffeeOperation.swift */; };
-		787822B21CD84CC000F6CC74 /* CESetRegionToClosestAddressOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822A11CD84CC000F6CC74 /* CESetRegionToClosestAddressOperation.swift */; };
-		787822B31CD84CC000F6CC74 /* CEEntryDynamicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822A31CD84CC000F6CC74 /* CEEntryDynamicItem.swift */; };
-		787822B41CD84CC000F6CC74 /* CEThrowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822A41CD84CC000F6CC74 /* CEThrowBehavior.swift */; };
-		787822B51CD84CC000F6CC74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787822A51CD84CC000F6CC74 /* ViewController.swift */; };
 		7891C6D51CD19057003F9202 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7891C6D41CD19057003F9202 /* MapKit.framework */; };
 		78BDBD4E1CCADAAA00718798 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */; };
 		78BDBD531CCADAAA00718798 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78BDBD511CCADAAA00718798 /* Main.storyboard */; };
@@ -32,8 +16,24 @@
 		78BDBD661CCADAAA00718798 /* CoffeeExchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD651CCADAAA00718798 /* CoffeeExchangeTests.swift */; };
 		78BDBD711CCADAAA00718798 /* CoffeeExchangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BDBD701CCADAAA00718798 /* CoffeeExchangeUITests.swift */; };
 		78BDBD851CCB445E00718798 /* CEEntryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78BDBD841CCB445E00718798 /* CEEntryView.xib */; };
-		78DF663A1CD84D6700963B59 /* CETableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66391CD84D6700963B59 /* CETableItem.swift */; };
-		78DF663C1CD84DFD00963B59 /* CEDetailTableItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF663B1CD84DFD00963B59 /* CEDetailTableItems.swift */; };
+		78DF66531CD9422D00963B59 /* CEEntryDetailMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF663E1CD9422D00963B59 /* CEEntryDetailMapController.swift */; };
+		78DF66541CD9422D00963B59 /* CEEntryDetailTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF663F1CD9422D00963B59 /* CEEntryDetailTableController.swift */; };
+		78DF66551CD9422D00963B59 /* CEEntryDetailTableItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66401CD9422D00963B59 /* CEEntryDetailTableItems.swift */; };
+		78DF66561CD9422D00963B59 /* CEEntryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66411CD9422D00963B59 /* CEEntryDetailViewController.swift */; };
+		78DF66571CD9422D00963B59 /* CECollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66431CD9422D00963B59 /* CECollection.swift */; };
+		78DF66581CD9422D00963B59 /* CEEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66441CD9422D00963B59 /* CEEntry.swift */; };
+		78DF66591CD9422D00963B59 /* CEEntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66451CD9422D00963B59 /* CEEntryViewModel.swift */; };
+		78DF665A1CD9422D00963B59 /* CELocationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66461CD9422D00963B59 /* CELocationsManager.swift */; };
+		78DF665B1CD9422D00963B59 /* CEReminderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66471CD9422D00963B59 /* CEReminderController.swift */; };
+		78DF665C1CD9422D00963B59 /* CETableItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66481CD9422D00963B59 /* CETableItem.swift */; };
+		78DF665D1CD9422D00963B59 /* CEGeocodeAddressOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF664A1CD9422D00963B59 /* CEGeocodeAddressOperation.swift */; };
+		78DF665E1CD9422D00963B59 /* CEOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF664B1CD9422D00963B59 /* CEOperation.swift */; };
+		78DF665F1CD9422D00963B59 /* CESearchForCoffeeOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF664C1CD9422D00963B59 /* CESearchForCoffeeOperation.swift */; };
+		78DF66601CD9422D00963B59 /* CESetRegionToClosestAddressOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF664D1CD9422D00963B59 /* CESetRegionToClosestAddressOperation.swift */; };
+		78DF66611CD9422D00963B59 /* CECollectionDynamicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF664F1CD9422D00963B59 /* CECollectionDynamicView.swift */; };
+		78DF66621CD9422D00963B59 /* CEEntryDynamicItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66501CD9422D00963B59 /* CEEntryDynamicItem.swift */; };
+		78DF66631CD9422D00963B59 /* CEThrowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66511CD9422D00963B59 /* CEThrowBehavior.swift */; };
+		78DF66641CD9422D00963B59 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF66521CD9422D00963B59 /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,22 +54,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		787822931CD84CC000F6CC74 /* CECollectionDynamicView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CECollectionDynamicView.swift; sourceTree = "<group>"; };
-		787822941CD84CC000F6CC74 /* CEEntryDetailMapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailMapController.swift; sourceTree = "<group>"; };
-		787822951CD84CC000F6CC74 /* CEEntryDetailTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailTableController.swift; sourceTree = "<group>"; };
-		787822961CD84CC000F6CC74 /* CEEntryDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailViewController.swift; sourceTree = "<group>"; };
-		787822971CD84CC000F6CC74 /* CELocationsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CELocationsManager.swift; sourceTree = "<group>"; };
-		787822981CD84CC000F6CC74 /* CEReminderController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEReminderController.swift; sourceTree = "<group>"; };
-		7878229A1CD84CC000F6CC74 /* CECollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CECollection.swift; sourceTree = "<group>"; };
-		7878229B1CD84CC000F6CC74 /* CEEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntry.swift; sourceTree = "<group>"; };
-		7878229C1CD84CC000F6CC74 /* CEEntryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryViewModel.swift; sourceTree = "<group>"; };
-		7878229E1CD84CC000F6CC74 /* CEGeocodeAddressOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEGeocodeAddressOperation.swift; sourceTree = "<group>"; };
-		7878229F1CD84CC000F6CC74 /* CEOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEOperation.swift; sourceTree = "<group>"; };
-		787822A01CD84CC000F6CC74 /* CESearchForCoffeeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CESearchForCoffeeOperation.swift; sourceTree = "<group>"; };
-		787822A11CD84CC000F6CC74 /* CESetRegionToClosestAddressOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CESetRegionToClosestAddressOperation.swift; sourceTree = "<group>"; };
-		787822A31CD84CC000F6CC74 /* CEEntryDynamicItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDynamicItem.swift; sourceTree = "<group>"; };
-		787822A41CD84CC000F6CC74 /* CEThrowBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEThrowBehavior.swift; sourceTree = "<group>"; };
-		787822A51CD84CC000F6CC74 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7891C6D41CD19057003F9202 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		78BDBD4A1CCADAAA00718798 /* CoffeeExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,8 +69,24 @@
 		78BDBD701CCADAAA00718798 /* CoffeeExchangeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeExchangeUITests.swift; sourceTree = "<group>"; };
 		78BDBD721CCADAAA00718798 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		78BDBD841CCB445E00718798 /* CEEntryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CEEntryView.xib; sourceTree = "<group>"; };
-		78DF66391CD84D6700963B59 /* CETableItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CETableItem.swift; sourceTree = "<group>"; };
-		78DF663B1CD84DFD00963B59 /* CEDetailTableItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEDetailTableItems.swift; sourceTree = "<group>"; };
+		78DF663E1CD9422D00963B59 /* CEEntryDetailMapController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailMapController.swift; sourceTree = "<group>"; };
+		78DF663F1CD9422D00963B59 /* CEEntryDetailTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailTableController.swift; sourceTree = "<group>"; };
+		78DF66401CD9422D00963B59 /* CEEntryDetailTableItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailTableItems.swift; sourceTree = "<group>"; };
+		78DF66411CD9422D00963B59 /* CEEntryDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDetailViewController.swift; sourceTree = "<group>"; };
+		78DF66431CD9422D00963B59 /* CECollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CECollection.swift; sourceTree = "<group>"; };
+		78DF66441CD9422D00963B59 /* CEEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntry.swift; sourceTree = "<group>"; };
+		78DF66451CD9422D00963B59 /* CEEntryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryViewModel.swift; sourceTree = "<group>"; };
+		78DF66461CD9422D00963B59 /* CELocationsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CELocationsManager.swift; sourceTree = "<group>"; };
+		78DF66471CD9422D00963B59 /* CEReminderController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEReminderController.swift; sourceTree = "<group>"; };
+		78DF66481CD9422D00963B59 /* CETableItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CETableItem.swift; sourceTree = "<group>"; };
+		78DF664A1CD9422D00963B59 /* CEGeocodeAddressOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEGeocodeAddressOperation.swift; sourceTree = "<group>"; };
+		78DF664B1CD9422D00963B59 /* CEOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEOperation.swift; sourceTree = "<group>"; };
+		78DF664C1CD9422D00963B59 /* CESearchForCoffeeOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CESearchForCoffeeOperation.swift; sourceTree = "<group>"; };
+		78DF664D1CD9422D00963B59 /* CESetRegionToClosestAddressOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CESetRegionToClosestAddressOperation.swift; sourceTree = "<group>"; };
+		78DF664F1CD9422D00963B59 /* CECollectionDynamicView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CECollectionDynamicView.swift; sourceTree = "<group>"; };
+		78DF66501CD9422D00963B59 /* CEEntryDynamicItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEEntryDynamicItem.swift; sourceTree = "<group>"; };
+		78DF66511CD9422D00963B59 /* CEThrowBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEThrowBehavior.swift; sourceTree = "<group>"; };
+		78DF66521CD9422D00963B59 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,56 +115,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		787822921CD84CC000F6CC74 /* EntryDetailView */ = {
-			isa = PBXGroup;
-			children = (
-				787822931CD84CC000F6CC74 /* CECollectionDynamicView.swift */,
-				787822941CD84CC000F6CC74 /* CEEntryDetailMapController.swift */,
-				787822951CD84CC000F6CC74 /* CEEntryDetailTableController.swift */,
-				787822961CD84CC000F6CC74 /* CEEntryDetailViewController.swift */,
-				787822971CD84CC000F6CC74 /* CELocationsManager.swift */,
-				787822981CD84CC000F6CC74 /* CEReminderController.swift */,
-				78DF663B1CD84DFD00963B59 /* CEDetailTableItems.swift */,
-			);
-			name = EntryDetailView;
-			path = CoffeeExchange/EntryDetailView;
-			sourceTree = "<group>";
-		};
-		787822991CD84CC000F6CC74 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				7878229A1CD84CC000F6CC74 /* CECollection.swift */,
-				7878229B1CD84CC000F6CC74 /* CEEntry.swift */,
-				7878229C1CD84CC000F6CC74 /* CEEntryViewModel.swift */,
-				78DF66391CD84D6700963B59 /* CETableItem.swift */,
-			);
-			name = Models;
-			path = CoffeeExchange/Models;
-			sourceTree = "<group>";
-		};
-		7878229D1CD84CC000F6CC74 /* Operations */ = {
-			isa = PBXGroup;
-			children = (
-				7878229E1CD84CC000F6CC74 /* CEGeocodeAddressOperation.swift */,
-				7878229F1CD84CC000F6CC74 /* CEOperation.swift */,
-				787822A01CD84CC000F6CC74 /* CESearchForCoffeeOperation.swift */,
-				787822A11CD84CC000F6CC74 /* CESetRegionToClosestAddressOperation.swift */,
-			);
-			name = Operations;
-			path = CoffeeExchange/Operations;
-			sourceTree = "<group>";
-		};
-		787822A21CD84CC000F6CC74 /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				787822A31CD84CC000F6CC74 /* CEEntryDynamicItem.swift */,
-				787822A41CD84CC000F6CC74 /* CEThrowBehavior.swift */,
-				787822A51CD84CC000F6CC74 /* ViewController.swift */,
-			);
-			name = ViewController;
-			path = CoffeeExchange/ViewController;
-			sourceTree = "<group>";
-		};
 		78BDBD411CCADAAA00718798 = {
 			isa = PBXGroup;
 			children = (
@@ -173,10 +123,6 @@
 				78BDBD641CCADAAA00718798 /* CoffeeExchangeTests */,
 				78BDBD6F1CCADAAA00718798 /* CoffeeExchangeUITests */,
 				78BDBD4B1CCADAAA00718798 /* Products */,
-				787822921CD84CC000F6CC74 /* EntryDetailView */,
-				787822991CD84CC000F6CC74 /* Models */,
-				7878229D1CD84CC000F6CC74 /* Operations */,
-				787822A21CD84CC000F6CC74 /* ViewController */,
 			);
 			sourceTree = "<group>";
 		};
@@ -193,6 +139,10 @@
 		78BDBD4C1CCADAAA00718798 /* CoffeeExchange */ = {
 			isa = PBXGroup;
 			children = (
+				78DF663D1CD9422D00963B59 /* EntryDetailViewController */,
+				78DF66421CD9422D00963B59 /* Models */,
+				78DF66491CD9422D00963B59 /* Operations */,
+				78DF664E1CD9422D00963B59 /* ViewController */,
 				78BDBD4D1CCADAAA00718798 /* AppDelegate.swift */,
 				78BDBD511CCADAAA00718798 /* Main.storyboard */,
 				78BDBD841CCB445E00718798 /* CEEntryView.xib */,
@@ -220,6 +170,52 @@
 				78BDBD721CCADAAA00718798 /* Info.plist */,
 			);
 			path = CoffeeExchangeUITests;
+			sourceTree = "<group>";
+		};
+		78DF663D1CD9422D00963B59 /* EntryDetailViewController */ = {
+			isa = PBXGroup;
+			children = (
+				78DF663E1CD9422D00963B59 /* CEEntryDetailMapController.swift */,
+				78DF663F1CD9422D00963B59 /* CEEntryDetailTableController.swift */,
+				78DF66401CD9422D00963B59 /* CEEntryDetailTableItems.swift */,
+				78DF66411CD9422D00963B59 /* CEEntryDetailViewController.swift */,
+			);
+			path = EntryDetailViewController;
+			sourceTree = "<group>";
+		};
+		78DF66421CD9422D00963B59 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				78DF66431CD9422D00963B59 /* CECollection.swift */,
+				78DF66441CD9422D00963B59 /* CEEntry.swift */,
+				78DF66451CD9422D00963B59 /* CEEntryViewModel.swift */,
+				78DF66461CD9422D00963B59 /* CELocationsManager.swift */,
+				78DF66471CD9422D00963B59 /* CEReminderController.swift */,
+				78DF66481CD9422D00963B59 /* CETableItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		78DF66491CD9422D00963B59 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				78DF664A1CD9422D00963B59 /* CEGeocodeAddressOperation.swift */,
+				78DF664B1CD9422D00963B59 /* CEOperation.swift */,
+				78DF664C1CD9422D00963B59 /* CESearchForCoffeeOperation.swift */,
+				78DF664D1CD9422D00963B59 /* CESetRegionToClosestAddressOperation.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+		78DF664E1CD9422D00963B59 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				78DF664F1CD9422D00963B59 /* CECollectionDynamicView.swift */,
+				78DF66501CD9422D00963B59 /* CEEntryDynamicItem.swift */,
+				78DF66511CD9422D00963B59 /* CEThrowBehavior.swift */,
+				78DF66521CD9422D00963B59 /* ViewController.swift */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -359,26 +355,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				787822B11CD84CC000F6CC74 /* CESearchForCoffeeOperation.swift in Sources */,
-				787822B31CD84CC000F6CC74 /* CEEntryDynamicItem.swift in Sources */,
-				787822AA1CD84CC000F6CC74 /* CELocationsManager.swift in Sources */,
-				787822A71CD84CC000F6CC74 /* CEEntryDetailMapController.swift in Sources */,
-				787822AD1CD84CC000F6CC74 /* CEEntry.swift in Sources */,
-				787822AF1CD84CC000F6CC74 /* CEGeocodeAddressOperation.swift in Sources */,
-				787822A81CD84CC000F6CC74 /* CEEntryDetailTableController.swift in Sources */,
-				787822AC1CD84CC000F6CC74 /* CECollection.swift in Sources */,
-				78DF663C1CD84DFD00963B59 /* CEDetailTableItems.swift in Sources */,
-				787822AE1CD84CC000F6CC74 /* CEEntryViewModel.swift in Sources */,
-				787822A91CD84CC000F6CC74 /* CEEntryDetailViewController.swift in Sources */,
+				78DF66531CD9422D00963B59 /* CEEntryDetailMapController.swift in Sources */,
+				78DF66621CD9422D00963B59 /* CEEntryDynamicItem.swift in Sources */,
+				78DF665D1CD9422D00963B59 /* CEGeocodeAddressOperation.swift in Sources */,
+				78DF66551CD9422D00963B59 /* CEEntryDetailTableItems.swift in Sources */,
+				78DF66581CD9422D00963B59 /* CEEntry.swift in Sources */,
+				78DF66601CD9422D00963B59 /* CESetRegionToClosestAddressOperation.swift in Sources */,
+				78DF66571CD9422D00963B59 /* CECollection.swift in Sources */,
+				78DF665B1CD9422D00963B59 /* CEReminderController.swift in Sources */,
+				78DF66611CD9422D00963B59 /* CECollectionDynamicView.swift in Sources */,
+				78DF665A1CD9422D00963B59 /* CELocationsManager.swift in Sources */,
+				78DF66641CD9422D00963B59 /* ViewController.swift in Sources */,
+				78DF66561CD9422D00963B59 /* CEEntryDetailViewController.swift in Sources */,
 				78BDBD561CCADAAA00718798 /* CoffeeExchange.xcdatamodeld in Sources */,
-				787822B01CD84CC000F6CC74 /* CEOperation.swift in Sources */,
-				787822B51CD84CC000F6CC74 /* ViewController.swift in Sources */,
+				78DF66591CD9422D00963B59 /* CEEntryViewModel.swift in Sources */,
+				78DF665F1CD9422D00963B59 /* CESearchForCoffeeOperation.swift in Sources */,
+				78DF66541CD9422D00963B59 /* CEEntryDetailTableController.swift in Sources */,
 				78BDBD4E1CCADAAA00718798 /* AppDelegate.swift in Sources */,
-				787822A61CD84CC000F6CC74 /* CECollectionDynamicView.swift in Sources */,
-				787822B21CD84CC000F6CC74 /* CESetRegionToClosestAddressOperation.swift in Sources */,
-				787822B41CD84CC000F6CC74 /* CEThrowBehavior.swift in Sources */,
-				787822AB1CD84CC000F6CC74 /* CEReminderController.swift in Sources */,
-				78DF663A1CD84D6700963B59 /* CETableItem.swift in Sources */,
+				78DF665C1CD9422D00963B59 /* CETableItem.swift in Sources */,
+				78DF66631CD9422D00963B59 /* CEThrowBehavior.swift in Sources */,
+				78DF665E1CD9422D00963B59 /* CEOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
