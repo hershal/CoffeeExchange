@@ -121,7 +121,7 @@ class CEReminderController: NSObject {
         return components
     }
 
-    func errorFromError(error: CEReminderError) -> NSError {
+    private func errorFromError(error: CEReminderError) -> NSError {
         var userInfo = [NSObject: AnyObject]()
 
         switch(error) {
