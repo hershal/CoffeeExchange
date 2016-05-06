@@ -74,7 +74,7 @@ class CECollection {
         }) != 0
     }
 
-    func getEntryWithIdentifier(identifier: String) -> CEEntry? {
+    func entryWithIdentifier(identifier: String) -> CEEntry? {
         for entry in entries {
             if entry.contact.identifier == identifier {
                 return entry

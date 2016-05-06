@@ -63,7 +63,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
         NSLog("selected \(contact.identifier)")
-        if let entry = collection.getEntryWithIdentifier(contact.identifier) {
+        if let entry = collection.entryWithIdentifier(contact.identifier) {
             self.showEntryDetail(entry)
         } else {
             self.showEntryDetail(CEEntry(contact: contact))
