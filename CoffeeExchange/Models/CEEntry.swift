@@ -10,7 +10,11 @@ import Foundation
 import Contacts
 
 // Would this be better as a value-type?
-class CEEntry: NSObject, NSCoding {
+class CEEntry: NSObject, NSSecureCoding {
+
+    static func supportsSecureCoding() -> Bool {
+        return true
+    }
 
     static let balanceKey = "balance"
     static let contactKey = "contact"
@@ -28,8 +32,11 @@ class CEEntry: NSObject, NSCoding {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        contact = aDecoder.decodeObjectForKey(CEEntry.contactKey) as! CNContact
-        balance = aDecoder.decodeIntegerForKey(CEEntry.balanceKey)
+        guard let contact = aDecoder.decodeObjectOfClass(CNContact.self, forKey: CEEntry.contactKey) else {
+            return nil
+        }
+        self.contact = contact
+        self.balance = aDecoder.decodeIntegerForKey(CEEntry.balanceKey)
     }
 
     func encodeWithCoder(aCoder: NSCoder) {
