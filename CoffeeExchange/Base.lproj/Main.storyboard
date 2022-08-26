@@ -155,7 +155,7 @@
                                                     <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-100" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="CB4-DN-XbS">
                                                         <rect key="frame" x="466" y="4" width="94" height="32"/>
                                                         <connections>
-                                                            <action selector="stepperChanged:" destination="f6W-ys-7bx" eventType="valueChanged" id="bbv-gB-jDf"/>
+                                                            <action selector="stepperChangedWithSender:" destination="f6W-ys-7bx" eventType="valueChanged" id="xHS-L6-A3T"/>
                                                         </connections>
                                                     </stepper>
                                                 </subviews>
@@ -241,7 +241,7 @@
                         <outlet property="imageView" destination="G2j-pc-suz" id="caw-Z4-4K4"/>
                         <outlet property="mapView" destination="7jN-eF-RKG" id="PDt-OL-L1G"/>
                         <outlet property="name" destination="u2A-U7-d23" id="iQG-Mq-kp0"/>
-                        <outlet property="stepper" destination="CB4-DN-XbS" id="Bog-bf-Sq9"/>
+                        <outlet property="stepper" destination="CB4-DN-XbS" id="AYY-te-Qfy"/>
                         <outlet property="stepperLabel" destination="RyB-Ln-w2s" id="iEx-LG-Sba"/>
                         <outlet property="stepperSublabel" destination="kWN-xM-tCA" id="d97-S5-jbk"/>
                         <outlet property="tableHeightConstriant" destination="tMu-Mz-zWK" id="YBS-Ne-MTC"/>

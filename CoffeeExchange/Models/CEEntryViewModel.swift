@@ -36,7 +36,8 @@ class CEEntryDetailViewModel: NSObject {
         return initialString.uppercased()
     }()
 
-    dynamic var balance: Int {
+    @objc dynamic var balance: Int
+    {
         get {
             return truth.balance
         }

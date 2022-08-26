@@ -60,7 +60,7 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.addObserver(self, forKeyPath: CEEntry.balanceKey, options: [.new, .initial], context: nil)
+        viewModel.addObserver(self, forKeyPath: #keyPath(CEEntryDetailViewModel.balance), options: [.new, .initial], context: nil)
         stepper.value = Double(viewModel.balance)
         let numItems = tableController.tableView(tableView, numberOfRowsInSection: 0)
         self.tableHeightConstriant.constant = 44.0 * CGFloat(numItems)
@@ -75,7 +75,7 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        viewModel.removeObserver(self, forKeyPath: CEEntry.balanceKey)
+        viewModel.removeObserver(self, forKeyPath: #keyPath(CEEntryDetailViewModel.balance))
         delegate?.detailWillDisappear(detail: self, withEntry: viewModel.truth)
     }
 
