@@ -46,19 +46,14 @@ class CEEntryDynamicItem: UIDynamicItemGroup {
 
         view = CEEntryDynamicItemContainerView(frame: CGRect(x: 0, y: 0, width: 125, height: 100))
         textView = CEEntryDynamicItemTextView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-        let cupTopFrame = CGRect(x: 0, y: 0, width: 100, height: 50)
-        let cupBottomFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        let cupSideFrame = CGRect(x: 75, y: 0, width: 50, height: 50)
-        let cupTop = CEEntryDynamicItemCupTop(frame: cupTopFrame)
-        let cupBottom = CEEntryDynamicItemCupBottom(frame: cupBottomFrame)
-        let cupSide = CEEntryDynamicItemCupSide(frame: cupSideFrame)
-
+        let collisionFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        let collisionView = CEEntryDynamicItemCollisionView(frame: collisionFrame)
+        
         let viewModel = CEEntryDetailViewModel(truth: entry)
-        cupTop.viewModel = viewModel
-        cupBottom.viewModel = viewModel
+        collisionView.viewModel = viewModel
         textView.viewModel = viewModel
 
-        super.init(items: [cupTop, cupBottom, cupSide, textView])
+        super.init(items: [collisionView, textView])
         view.dynamicItem = self
         addSubviews()
     }
@@ -206,22 +201,8 @@ class CEEntryDynamicItemContainerView: UIView {
     }
 }
 
-class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
-    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
-        get {
-            return .rectangle
-        }
-    }
 
-    override func draw(_ rect: CGRect) {
-        if let context = UIGraphicsGetCurrentContext() {
-            UIColor.brown.setFill()
-            context.fill(rect)
-        }
-    }
-}
-
-class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
+class CEEntryDynamicItemCollisionView: CEEntryDynamicItemComponent {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.zPosition = 100
@@ -239,7 +220,7 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
 
     override var collisionBoundingPath: UIBezierPath {
         let path = UIBezierPath()
-        let physicsCenter = CGPoint(x: -12.5, y: 0)
+        let physicsCenter = CGPoint(x: 0, y: 0)
         path.addArc(withCenter: physicsCenter, radius: 50, startAngle: 0, endAngle: CGFloat(2*Float.pi), clockwise: true)
         return path
     }
@@ -248,32 +229,6 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
         if let context = UIGraphicsGetCurrentContext() {
             UIColor.brown.setFill()
             context.fillEllipse(in: rect)
-        }
-    }
-}
-
-class CEEntryDynamicItemCupSide: CEEntryDynamicItemComponent {
-    override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
-        get {
-            return .path
-        }
-    }
-
-    override var collisionBoundingPath: UIBezierPath {
-        let path = UIBezierPath()
-        let physicsCenter = CGPoint(x: 12.5+25, y: -25)
-        path.addArc(withCenter: physicsCenter, radius: 25, startAngle: 0, endAngle: CGFloat(2*Float.pi), clockwise: true)
-        return path
-    }
-
-    override func draw(_ rect: CGRect) {
-        if let context = UIGraphicsGetCurrentContext() {
-            UIColor.brown.set()
-            let handleWidth = CGFloat(12.5)
-            context.beginPath()
-            context.addArc(center: CGPoint(x: bounds.width/2, y: bounds.height/2), radius: bounds.width/2-handleWidth/2, startAngle: CGFloat(Float.pi / 2 + 0.1), endAngle: CGFloat(3 * Float.pi / 2 - 0.1), clockwise: true)
-            context.setLineWidth(handleWidth)
-            context.strokePath()
         }
     }
 }
