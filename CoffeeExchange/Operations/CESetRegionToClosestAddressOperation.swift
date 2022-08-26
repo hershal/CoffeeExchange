@@ -28,8 +28,7 @@ class CESetRegionToClosestAddressOperation: CEOperation {
         NSLog("Executing CESetRegionToClosestAddressOperation")
         let user = locationsManager.userLocation.coordinate
         if let closestPlacemark = locationsManager.closestPlacemarkToUser(),
-            closest = closestPlacemark.placemark.location?.coordinate
-            where closestPlacemark.distance < (10 * CESetRegionToClosestAddressOperation.mileInMeters) {
+           let closest = closestPlacemark.placemark.location?.coordinate, closestPlacemark.distance < (10 * CESetRegionToClosestAddressOperation.mileInMeters) {
             let maxLat = max(closest.latitude, user.latitude)
             let minLat = min(closest.latitude, user.latitude)
             let maxLon = max(closest.longitude, user.longitude)
@@ -43,12 +42,12 @@ class CESetRegionToClosestAddressOperation: CEOperation {
 
             let center = CLLocationCoordinate2D(latitude: centerlat, longitude: centerlon)
 
-            let span = MKCoordinateSpanMake(latDelta*2, lonDelta*2)
+            let span = MKCoordinateSpan.init(latitudeDelta: latDelta*2, longitudeDelta: lonDelta*2)
 
             let region = MKCoordinateRegion(center: center, span: span)
             locationsManager.region = region
 
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async {
                 self.mapView.setRegion(region, animated: false)
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = closest
@@ -59,7 +58,7 @@ class CESetRegionToClosestAddressOperation: CEOperation {
                 }
                 annotation.subtitle = closestPlacemark.placemark.name
                 self.mapView.addAnnotation(annotation)
-            })
+            }
         }
         NSLog("Finished CESetRegionToClosestAddressOperation")
         

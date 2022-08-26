@@ -22,56 +22,56 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
         didSet {
             switch editMode {
             case .EditMode:
-                let doneButton = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(ViewController.toggleEditMode))
-                let clearButton = UIBarButtonItem(title: "Clear All", style: .Plain, target: self, action: #selector(ViewController.clearAll))
-                navigationItem.setRightBarButtonItem(clearButton, animated: true)
-                navigationItem.setLeftBarButtonItem(doneButton, animated: true)
+                let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(ViewController.toggleEditMode))
+                let clearButton = UIBarButtonItem(title: "Clear All", style: .plain, target: self, action: #selector(ViewController.clearAll))
+                navigationItem.setRightBarButton(clearButton, animated: true)
+                navigationItem.setLeftBarButton(doneButton, animated: true)
             case .NormalMode:
-                let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(ViewController.toggleEditMode))
-                let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(ViewController.openContactPicker))
-                navigationItem.setRightBarButtonItem(addButton, animated: true)
-                navigationItem.setLeftBarButtonItem(editButton, animated: true)
+                let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(ViewController.toggleEditMode))
+                let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ViewController.openContactPicker))
+                navigationItem.setRightBarButton(addButton, animated: true)
+                navigationItem.setLeftBarButton(editButton, animated: true)
             }
-            dynamicView.setEditMode(editMode)
+            dynamicView.setEditMode(editMode: editMode)
         }
     }
 
-    func clearAll() {
-        let alertController = UIAlertController(title: "Clear All?", message: "Are you sure you would like to clear all coffee entries? This will permanantly delete all items.", preferredStyle: .ActionSheet)
-        alertController.addAction(UIAlertAction(title: "Clear All", style: .Destructive, handler: { (alertAction) in
+    @objc func clearAll() {
+        let alertController = UIAlertController(title: "Clear All?", message: "Are you sure you would like to clear all coffee entries? This will permanantly delete all items.", preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "Clear All", style: .destructive, handler: { (alertAction) in
             self.collection.removeAll()
             self.dynamicView.reloadData()
             self.toggleEditMode()
         }))
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        presentViewController(alertController, animated: true, completion: nil)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alertController, animated: true, completion: nil)
     }
 
-    func openContactPicker() {
+    @objc func openContactPicker() {
         let picker = CNContactPickerViewController()
         picker.displayedPropertyKeys = [CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactPostalAddressesKey, CNContactThumbnailImageDataKey]
         picker.delegate = self
-        self.presentViewController(picker, animated: true, completion: nil)
+        self.present(picker, animated: true, completion: nil)
     }
 
-    func toggleEditMode() {
+    @objc func toggleEditMode() {
         switch (editMode) {
         case .NormalMode: editMode = .EditMode
         case .EditMode: editMode = .NormalMode
         }
     }
 
-    func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         NSLog("selected \(contact.identifier)")
-        if let entry = collection.entryWithIdentifier(contact.identifier) {
-            self.showEntryDetail(entry)
+        if let entry = collection.entryWithIdentifier(identifier: contact.identifier) {
+            self.showEntryDetail(entry: entry)
         } else {
-            self.showEntryDetail(CEEntry(contact: contact))
+            self.showEntryDetail(entry: CEEntry(contact: contact))
         }
     }
 
     private func saveCollectionData() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global().async {
             self.collection.archive()
         }
     }
@@ -89,9 +89,9 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     func dynamicView(dynamicView: CECollectionDynamicView, didSelectEntry entry: CEEntry) {
         switch (editMode) {
         case .NormalMode:
-            showEntryDetail(entry)
+            showEntryDetail(entry: entry)
         case .EditMode:
-            removeEntry(entry)
+            removeEntry(entry: entry)
         }
     }
 
@@ -102,7 +102,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     func showEntryDetail(entry: CEEntry) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let detailView = mainStoryboard.instantiateViewControllerWithIdentifier("CEEntryDetailViewController") as! CEEntryDetailViewController
+        let detailView = mainStoryboard.instantiateViewController(withIdentifier: "CEEntryDetailViewController") as! CEEntryDetailViewController
         let viewModel = CEEntryDetailViewModel(truth: entry)
         detailView.viewModel = viewModel
         detailView.delegate = self
@@ -123,11 +123,11 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
 
     func collection(collection: CECollection, didChangeCount count: Int) {
         if count > 0 {
-            UIView.animateWithDuration(1, animations: {
+            UIView.animate(withDuration: 1, animations: {
                 self.dynamicView.backgroundView.alpha = 0
             })
         } else {
-            UIView.animateWithDuration(1, animations: {
+                UIView.animate(withDuration: 1, animations: {
                 self.dynamicView.backgroundView.alpha = 1
             })
         }
@@ -135,20 +135,20 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     }
 
     func removeEntry(entry: CEEntry) {
-        if let index = collection.indexOfEntry(entry) {
-            collection.removeAtIndex(index)
-            dynamicView.removeItemAtIndex(index)
+                if let index = collection.indexOfEntry(entry: entry) {
+                    collection.removeAtIndex(index: index)
+                    dynamicView.removeItemAtIndex(index: index)
         }
     }
 
     // MARK: - CEEntryDetailDelegate Methods
     func detailWillDisappear(detail: CEEntryDetailViewController, withEntry entry: CEEntry) {
         if entry.balance == 0 {
-            removeEntry(entry)
-        } else if let index = collection.indexOfEntry(entry) {
-            dynamicView.invalidateItemAtIndex(index)
+            removeEntry(entry: entry)
+        } else if let index = collection.indexOfEntry(entry: entry) {
+            dynamicView.invalidateItemAtIndex(index: index)
         } else {
-            collection.addEntry(entry)
+            collection.addEntry(entry: entry)
         }
         saveCollectionData()
     }
@@ -159,7 +159,7 @@ class ViewController: UIViewController, CNContactPickerDelegate, CEEntryDetailDe
     }
 
     func dynamicView(cellForItemAtIndex index: Int) -> CEEntryDynamicItem {
-        return CEEntryDynamicItem(entry: collection.entryAtIndex(index)!)
+        return CEEntryDynamicItem(entry: collection.entryAtIndex(index: index)!)
     }
 }
 

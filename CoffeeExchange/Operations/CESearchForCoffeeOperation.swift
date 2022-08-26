@@ -20,25 +20,26 @@ class CESearchForCoffeeOperation: CEOperation {
     }
 
     override func main() {
-        if cancelled {
+        if isCancelled {
             state = .Finished
             return
         }
         state = .Executing
         NSLog("Executing CESearchForCoffeeOperation")
 
-        let request = MKLocalSearchRequest()
+        let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = "coffee"
 
         request.region = locationsManager.region != nil ? locationsManager.region! : mapView.region
         let search = MKLocalSearch(request: request)
-        search.startWithCompletionHandler { (response, error) in
+        search.start { (response, error) in
             if let response = response {
                 let annotations = response.mapItems.map { (mapItem) -> CEPointAnnotation in
                     return CEPointAnnotation(mapItem: mapItem)
                 }
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.locationsManager.addMapItems(response.mapItems)
+
+                DispatchQueue.main.async {
+                    self.locationsManager.addMapItems(mapItems: response.mapItems)
                     self.mapView.addAnnotations(annotations)
                     var newRegion = self.mapView.regionThatFits(response.boundingRegion)
                     newRegion.span.latitudeDelta *= 1.1

@@ -48,47 +48,47 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
         tableController.delegate = self
         tableView.delegate = tableController
         tableView.dataSource = tableController
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CEEntryDetailCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CEEntryDetailCell")
         mapController = CEEntryDetailMapController(mapView: mapView, viewModel: viewModel)
 
-        if let contactPicture = viewModel.picture, image = UIImage(data: contactPicture) {
-            imageView.image = renderImagePort(image)
+        if let contactPicture = viewModel.picture, let image = UIImage(data: contactPicture as Data) {
+            imageView.image = renderImagePort(image: image)
         } else {
             imageView.image = renderMonogram()
         }
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.addObserver(self, forKeyPath: CEEntry.balanceKey, options: [.New, .Initial], context: nil)
+        viewModel.addObserver(self, forKeyPath: CEEntry.balanceKey, options: [.new, .initial], context: nil)
         stepper.value = Double(viewModel.balance)
         let numItems = tableController.tableView(tableView, numberOfRowsInSection: 0)
         self.tableHeightConstriant.constant = 44.0 * CGFloat(numItems)
-        UIView.animateWithDuration(0.5) {
+        UIView.animate(withDuration: 0.5) {
             self.tableView.layoutIfNeeded()
         }
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    }
+}
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewModel.removeObserver(self, forKeyPath: CEEntry.balanceKey)
-        delegate?.detailWillDisappear(self, withEntry: viewModel.truth)
+        delegate?.detailWillDisappear(detail: self, withEntry: viewModel.truth)
     }
 
     func setupImageContext(rect: CGRect) {
         UIGraphicsBeginImageContextWithOptions(rect.size, true, 0)
         if let context = UIGraphicsGetCurrentContext() {
-            UIColor.whiteColor().setFill()
-            CGContextFillRect(context, rect)
+            UIColor.white.setFill()
+            context.fill(rect)
         }
     }
 
     func teardownImageContext() -> UIImage {
-        let image = UIGraphicsGetImageFromCurrentImageContext()
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return image
     }
@@ -96,13 +96,13 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
     func renderImagePort(image: UIImage) -> UIImage {
         let rect = CGRect(origin: CGPoint.zero, size: imageView.bounds.size)
 
-        setupImageContext(rect)
+        setupImageContext(rect: rect)
         if let context = UIGraphicsGetCurrentContext() {
-            let path = CGPathCreateMutable()
-            CGPathAddEllipseInRect(path, nil, rect)
-            CGContextAddPath(context, path)
-            CGContextClip(context)
-            image.drawInRect(rect)
+            let path = CGMutablePath()
+            path.addEllipse(in: rect)
+            context.addPath(path)
+            context.clip()
+            image.draw(in: rect)
         }
         return teardownImageContext()
     }
@@ -110,33 +110,32 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
     func renderMonogram() -> UIImage {
         let rect = CGRect(origin: CGPoint.zero, size: imageView.bounds.size)
 
-        setupImageContext(rect)
+        setupImageContext(rect: rect)
         if let context = UIGraphicsGetCurrentContext() {
-            UIColor.lightGrayColor().colorWithAlphaComponent(0.65).setFill()
-            CGContextFillEllipseInRect(context, rect)
+            UIColor.lightGray.withAlphaComponent(0.65).setFill()
+            context.fillEllipse(in: rect)
             let textStyle = NSMutableParagraphStyle()
-            textStyle.alignment = .Center
-            textStyle.lineBreakMode = .ByWordWrapping
-            let textAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(),
-                                  NSFontAttributeName: UIFont.systemFontOfSize(22),
-                                  NSParagraphStyleAttributeName: textStyle]
+            textStyle.alignment = .center
+            textStyle.lineBreakMode = .byWordWrapping
+            let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white,
+                                  NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22),
+                                  NSAttributedString.Key.paragraphStyle: textStyle]
             let string = NSString(string: viewModel.initials)
-            let stringSize = string.sizeWithAttributes(textAttributes)
+            let stringSize = string.size(withAttributes: textAttributes)
             let textRect = CGRect(x: rect.origin.x, y: rect.origin.y + (rect.size.height - stringSize.height)/2, width: rect.width, height: rect.size.height)
-            string.drawInRect(textRect, withAttributes: textAttributes)
+            string.draw(in: textRect, withAttributes: textAttributes)
         }
         return teardownImageContext()
     }
 
     // MARK: - CEEntryDetailTableControllerDelegate Methods
     func tableControllerPresentViewController(viewController: UIViewController) {
-        presentViewController(viewController, animated: true, completion: nil)
+        present(viewController, animated: true, completion: nil)
     }
 
 
     // MARK: - ObjC methods
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard let keyPath = keyPath else {
             NSLog("CEEntryDetailViewModel::ObserveValueForKeyPath::NilKeyPath")
             return
@@ -147,7 +146,7 @@ class CEEntryDetailViewController: UIViewController, CEEntryDetailTableControlle
             stepperLabel.text = viewModel.balanceText
             stepperSublabel.text = viewModel.balanceSubtext
         default:
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 }

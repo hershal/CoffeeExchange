@@ -45,28 +45,28 @@ class CERemindMeTableItem: CETableItemBase, CEReminderControllerDelegate {
     override func action() {
         let reminderController = CEReminderController(viewModel: viewModel)
 
-        let sheet = UIAlertController(title: "Remind Me", message: nil, preferredStyle: .ActionSheet)
+        let sheet = UIAlertController(title: "Remind Me", message: nil, preferredStyle: .actionSheet)
         for (interval, intervalString) in reminderController.reminderIntervalSheetInfo() {
-            sheet.addAction(UIAlertAction(title: intervalString, style: .Default, handler: { (alertAction) in
-                self.didSelectRemindMeWithInterval(interval)
+            sheet.addAction(UIAlertAction(title: intervalString, style: .default, handler: { (alertAction) in
+                self.didSelectRemindMeWithInterval(interval: interval)
             }))
         }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        delegate.tableItemPresentViewController(sheet)
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        delegate.tableItemPresentViewController(viewController: sheet)
     }
 
     func didSelectRemindMeWithInterval(interval: CEReminderInterval) {
         let reminderController = CEReminderController(viewModel: viewModel)
         reminderController.delegate = self
-        reminderController.createReminderWithInterval(interval)
+        reminderController.createReminderWithInterval(interval: interval)
     }
 
     // MARK: - CEReminderControllerDelegate Methods
     func reminderController(reminderController: CEReminderController, couldNotCreateReminderWithError reminderError: CEReminderError) {
-        let alert = UIAlertController(title: "Can't Create Reminder", message: "You have denied access to create reminders. Please enable access in Settings under Privacy.", preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: nil))
-        dispatch_async(dispatch_get_main_queue()) {
-            self.delegate.tableItemPresentViewController(alert)
+        let alert = UIAlertController(title: "Can't Create Reminder", message: "You have denied access to create reminders. Please enable access in Settings under Privacy.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+        DispatchQueue.main.async {
+            self.delegate.tableItemPresentViewController(viewController: alert)
         }
     }
 
@@ -83,7 +83,7 @@ class CEMessageTableItem: CETableItemBase, MFMessageComposeViewControllerDelegat
 
     override var visible: Bool {
         return MFMessageComposeViewController.canSendText()
-            && viewModel.textablePhoneNumbers?.count > 0
+        && viewModel.textablePhoneNumbers!.count > 0
     }
 
     override func action() {
@@ -94,42 +94,42 @@ class CEMessageTableItem: CETableItemBase, MFMessageComposeViewControllerDelegat
 
         // short-circuit
         if phoneNumbers.count == 1 {
-            didSelectMessageWithPhoneNumber(phoneNumbers.first!.1)
+            didSelectMessageWithPhoneNumber(number: phoneNumbers.first!.1)
             return
         }
 
-        let sheet = UIAlertController(title: "Message", message: nil, preferredStyle: .ActionSheet)
+        let sheet = UIAlertController(title: "Message", message: nil, preferredStyle: .actionSheet)
         for (label, number) in phoneNumbers {
-            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
-                self.didSelectMessageWithPhoneNumber(number)
+            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .default, handler: { (action) in
+                self.didSelectMessageWithPhoneNumber(number: number)
             }))
         }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        delegate.tableItemPresentViewController(sheet)
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        delegate.tableItemPresentViewController(viewController: sheet)
     }
 
     func didSelectMessageWithPhoneNumber(number: CNPhoneNumber) {
-        if let number = number.valueForKey("digits") as? String {
+        if let number = number.value(forKey: "digits") as? String {
             if MFMessageComposeViewController.canSendText() {
                 let messageController = MFMessageComposeViewController()
                 messageController.recipients = [number]
                 messageController.body = "Hey, let's get coffee!"
                 messageController.messageComposeDelegate = self
-                delegate.tableItemPresentViewController(messageController)
+                delegate.tableItemPresentViewController(viewController: messageController)
             } else {
                 NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CantSendTexts")
-                let alert = UIAlertController(title: "Can't Send Messages", message: "Your device is not set up to send messages.", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: nil))
-                delegate.tableItemPresentViewController(alert)
+                let alert = UIAlertController(title: "Can't Send Messages", message: "Your device is not set up to send messages.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+                delegate.tableItemPresentViewController(viewController: alert)
             }
         } else {
             NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CouldNotCallNumber: \(number)")
         }
     }
 
-    func messageComposeViewController(controller: MFMessageComposeViewController,
-                                      didFinishWithResult result: MessageComposeResult) {
-        controller.dismissViewControllerAnimated(true, completion: nil)
+    func messageComposeViewController(_ controller: MFMessageComposeViewController,
+                                      didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -140,8 +140,9 @@ class CECallTableItem: CETableItemBase {
     }
 
     override var visible: Bool {
-        return viewModel.callablePhoneNumbers?.count > 0
-            && UIApplication.sharedApplication().canOpenURL(NSURL(string: "telprompt://")!)
+        return viewModel.callablePhoneNumbers!.count > 0
+        && UIApplication.shared.canOpenURL(URL(string: "telprompt://")!)
+        
     }
 
     override func action() {
@@ -152,23 +153,23 @@ class CECallTableItem: CETableItemBase {
 
         // short-circuit
         if phoneNumbers.count == 1 {
-            didSelectCallWithPhoneNumber(phoneNumbers.first!.1)
+            didSelectCallWithPhoneNumber(phoneNumber: phoneNumbers.first!.1)
             return
         }
 
-        let sheet = UIAlertController(title: "Call", message: nil, preferredStyle: .ActionSheet)
+        let sheet = UIAlertController(title: "Call", message: nil, preferredStyle: .actionSheet)
         for (label, number) in phoneNumbers {
-            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .Default, handler: { (action) in
-                self.didSelectCallWithPhoneNumber(number)
+            sheet.addAction(UIAlertAction(title: "\(label) \(number.stringValue)", style: .default, handler: { (action) in
+                self.didSelectCallWithPhoneNumber(phoneNumber: number)
             }))
         }
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        delegate.tableItemPresentViewController(sheet)
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        delegate.tableItemPresentViewController(viewController: sheet)
     }
 
     func didSelectCallWithPhoneNumber(phoneNumber: CNPhoneNumber) {
-        if let phoneNumber = phoneNumber.valueForKey("digits") as? String {
-            UIApplication.sharedApplication().openURL(NSURL(string: "telprompt://\(phoneNumber)")!)
+        if let phoneNumber = phoneNumber.value(forKey: "digits") as? String {
+            UIApplication.shared.open(URL(string: "telprompt://\(phoneNumber)")!)
         }
         NSLog("CEEntryDetailViewController::TableControllerDidSelectCallWithPhoneNumber::CouldNotCallNumber: \(phoneNumber)")
     }

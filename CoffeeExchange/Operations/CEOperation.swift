@@ -22,36 +22,36 @@ func ==(lhs: CEOperationState, rhs: CEOperationState) -> Bool {
     return lhs.rawValue == rhs.rawValue
 }
 
-class CEOperation: NSOperation {
-    class func keyPathsForValuesAffectingIsReady() -> Set<NSObject> {
+class CEOperation: Operation {
+    class func keyPathsForValuesAffectingIsReady() -> Set<String> {
         return ["state"]
     }
 
-    class func keyPathsForValuesAffectingIsExecuting() -> Set<NSObject> {
+    class func keyPathsForValuesAffectingIsExecuting() -> Set<String> {
         return ["state"]
     }
 
-    class func keyPathsForValuesAffectingIsFinished() -> Set<NSObject> {
+    class func keyPathsForValuesAffectingIsFinished() -> Set<String> {
         return ["state"]
     }
 
-    override var finished: Bool {
+    override var isFinished: Bool {
         return state == .Finished
     }
 
-    override var executing: Bool {
+    override var isExecuting: Bool {
         return state == .Executing
     }
 
-    override var ready: Bool {
-        return (state == .Ready && super.ready) || cancelled
+    override var isReady: Bool {
+        return (state == .Ready && super.isReady) || isCancelled
     }
 
     private let stateLock = NSLock()
     var _state: CEOperationState
     var state: CEOperationState {
         set (newState) {
-            willChangeValueForKey("state")
+            willChangeValue(forKey: "state")
 
             stateLock.withCriticalScope {
                 guard _state != .Finished else {
@@ -59,7 +59,7 @@ class CEOperation: NSOperation {
                 }
                 _state = newState
             }
-            didChangeValueForKey("state")
+            didChangeValue(forKey: "state")
         }
         get {
             return stateLock.withCriticalScope {
@@ -73,14 +73,14 @@ class CEOperation: NSOperation {
         super.init()
     }
 
-    override func addDependency(operation: NSOperation) {
+    override func addDependency(_ operation: Operation) {
         assert(state < .Executing, "Dependencies cannot be modified after execution has begun.")
         super.addDependency(operation)
     }
 }
 
 extension NSLock {
-    func withCriticalScope<T>(@noescape block: Void -> T) -> T {
+    func withCriticalScope<T>(block: () -> T) -> T {
         lock()
         let value = block()
         unlock()

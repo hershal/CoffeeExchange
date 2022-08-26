@@ -71,14 +71,14 @@ class CEEntryDynamicItemComponent: UIView {
     override init(frame: CGRect) {
         self.editMode = .NormalMode
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func pointInside(point: CGPoint, withEvent event: UIEvent?) -> Bool {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let isInside = frame.contains(point)
         return isInside
     }
@@ -88,44 +88,44 @@ class CEEntryDynamicItemEditOverlayView: CEEntryDynamicItemComponent {
     func drawEditModeInRect(rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
             let insetRect = rect.insetBy(dx: rect.height/2-22, dy: rect.width/2-22)
-            let tintColor = UIColor.whiteColor()
-            tintColor.colorWithAlphaComponent(0.9).setFill()
-            CGContextFillEllipseInRect(context, insetRect)
+            let tintColor = UIColor.white
+            tintColor.withAlphaComponent(0.9).setFill()
+            context.fillEllipse(in: insetRect)
             let xrect = insetRect.insetBy(dx: 15, dy: 15)
-            UIColor.lightGrayColor().setStroke()
-            CGContextSetLineWidth(context, 1)
-            CGContextMoveToPoint(context, xrect.minX, xrect.minY)
-            CGContextAddLineToPoint(context, xrect.maxX, xrect.maxY)
-            CGContextStrokePath(context)
-            CGContextMoveToPoint(context, xrect.maxX, xrect.minY)
-            CGContextAddLineToPoint(context, xrect.minX, xrect.maxY)
-            CGContextStrokePath(context)
+            UIColor.lightGray.setStroke()
+            context.setLineWidth(1)
+            context.move(to: CGPoint(x: xrect.minX, y: xrect.minY))
+            context.addLine(to: CGPoint(x: xrect.maxX, y: xrect.maxY))
+            context.strokePath()
+            context.move(to: CGPoint(x: xrect.maxX, y: xrect.minY))
+            context.addLine(to: CGPoint(x: xrect.minX, y: xrect.maxY))
+            context.strokePath()
         }
     }
 
-    override func drawRect(rect: CGRect) {
-        drawEditModeInRect(rect)
+    override func draw(_ rect: CGRect) {
+        drawEditModeInRect(rect: rect)
     }
 }
 
 class CEEntryDynamicItemTextView: CEEntryDynamicItemComponent {
     var editOverlayView: CEEntryDynamicItemEditOverlayView
-    let defaultTransform = CGAffineTransformScale(CGAffineTransformIdentity, 0.5, 0.5)
+    let defaultTransform = CGAffineTransform.identity.scaledBy(x: 0.5, y: 0.5)
 
     override var editMode: CEViewControllerEditMode {
         didSet {
-            dispatch_async(dispatch_get_main_queue(), {
-                UIView.animateWithDuration(0.25, animations: {
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.25, animations: {
                     switch (self.editMode) {
                     case .EditMode:
                         self.editOverlayView.alpha = 1
-                        self.editOverlayView.transform = CGAffineTransformIdentity
+                        self.editOverlayView.transform = CGAffineTransform.identity
                     case .NormalMode:
                         self.editOverlayView.alpha = 0
                         self.editOverlayView.transform = self.defaultTransform
                     }
                 })
-            })
+            }
         }
     }
 
@@ -139,11 +139,11 @@ class CEEntryDynamicItemTextView: CEEntryDynamicItemComponent {
     }
 
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
-        return .Path
+        return .path
     }
 
     override var collisionBoundingPath: UIBezierPath {
-        let path = UIBezierPath(rect: CGRect(origin: CGPointZero, size: CGSize(width: 1, height: 1)))
+        let path = UIBezierPath(rect: CGRect(origin: CGPoint.zero, size: CGSize(width: 1, height: 1)))
         return path
     }
 
@@ -151,15 +151,15 @@ class CEEntryDynamicItemTextView: CEEntryDynamicItemComponent {
         fatalError("init(coder:) has not been implemented")
     }
 
-    var textFontAttributes: [String: NSObject] {
+    var textFontAttributes: [NSAttributedString.Key: NSObject] {
         let textStyle = NSMutableParagraphStyle()
-        textStyle.alignment = .Center
-        textStyle.lineBreakMode = .ByWordWrapping
+        textStyle.alignment = .center
+        textStyle.lineBreakMode = .byWordWrapping
 
         let textFontAttributes =
-            [NSFontAttributeName: UIFont.systemFontOfSize(UIFont.smallSystemFontSize()),
-             NSForegroundColorAttributeName: UIColor.whiteColor(),
-             NSParagraphStyleAttributeName: textStyle]
+        [NSAttributedString.Key.font: UIFont.systemFont(ofSize: UIFont.smallSystemFontSize),
+         NSAttributedString.Key.foregroundColor: UIColor.white,
+         NSAttributedString.Key.paragraphStyle: textStyle]
         return textFontAttributes
     }
 
@@ -170,25 +170,25 @@ class CEEntryDynamicItemTextView: CEEntryDynamicItemComponent {
 
         var topRect = rect
         topRect.size.height = rect.height/2
-        topRect = CGRectOffset(topRect, 0, 5)
-        topRect = CGRectInset(topRect, 3, 3)
-        topRect.offsetInPlace(dx: 0, dy: 3)
-        viewModel.truth.fullName.drawWithRect(topRect, options: [.TruncatesLastVisibleLine, .UsesLineFragmentOrigin], attributes: textFontAttributes, context: nil)
+        topRect = topRect.offsetBy(dx: 0, dy: 5)
+        topRect = topRect.insetBy(dx: 3, dy: 3)
+        topRect = topRect.offsetBy(dx: 0, dy: 3)
+        viewModel.truth.fullName.draw(with: topRect, options: [.truncatesLastVisibleLine, .usesLineFragmentOrigin], attributes: textFontAttributes, context: nil)
 
-        var bottomRect = CGRectOffset(rect, 0, rect.height/2 + 5)
+        var bottomRect = rect.offsetBy(dx: 0, dy: rect.height/2 + 5)
         bottomRect.size.height = rect.height/2
-        bottomRect = CGRectInset(bottomRect, 3, 3)
+        bottomRect = bottomRect.insetBy(dx: 3, dy: 3)
         let str = "\(viewModel.absBalance) \(viewModel.balanceDirectionPast)"
-        str.drawInRect(bottomRect, withAttributes: textFontAttributes)
+        str.draw(in: bottomRect, withAttributes: textFontAttributes)
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
-            UIColor.whiteColor().set()
+            UIColor.white.set()
             let circleRect = rect.insetBy(dx: 10, dy: 10)
             let textRect = rect.insetBy(dx: 15, dy: 15)
-            CGContextStrokeEllipseInRect(context, circleRect)
-            drawTextInRect(textRect)
+            context.strokeEllipse(in: circleRect)
+            drawTextInRect(rect: textRect)
         }
     }
 }
@@ -196,27 +196,27 @@ class CEEntryDynamicItemTextView: CEEntryDynamicItemComponent {
 class CEEntryDynamicItemContainerView: UIView {
     weak var dynamicItem: CEEntryDynamicItem?
 
-    override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
-        let subviewHitTests = subviews.map { $0.hitTest(point, withEvent: event) }
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let subviewHitTests = subviews.map { $0.hitTest(point, with: event) }
         let subviewHits = subviewHitTests.filter{ $0 != nil }
         if subviewHits.count != 0 {
             return self
         }
-        return super.hitTest(point, withEvent: event)
+        return super.hitTest(point, with: event)
     }
 }
 
 class CEEntryDynamicItemCupTop: CEEntryDynamicItemComponent {
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
         get {
-            return .Rectangle
+            return .rectangle
         }
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
-            UIColor.brownColor().setFill()
-            CGContextFillRect(context, rect)
+            UIColor.brown.setFill()
+            context.fill(rect)
         }
     }
 }
@@ -233,21 +233,21 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
 
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
         get {
-            return .Path
+            return .path
         }
     }
 
     override var collisionBoundingPath: UIBezierPath {
         let path = UIBezierPath()
         let physicsCenter = CGPoint(x: -12.5, y: 0)
-        path.addArcWithCenter(physicsCenter, radius: 50, startAngle: 0, endAngle: CGFloat(2*M_PI), clockwise: true)
+        path.addArc(withCenter: physicsCenter, radius: 50, startAngle: 0, endAngle: CGFloat(2*Float.pi), clockwise: true)
         return path
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
-            UIColor.brownColor().setFill()
-            CGContextFillEllipseInRect(context, rect)
+            UIColor.brown.setFill()
+            context.fillEllipse(in: rect)
         }
     }
 }
@@ -255,26 +255,25 @@ class CEEntryDynamicItemCupBottom: CEEntryDynamicItemComponent {
 class CEEntryDynamicItemCupSide: CEEntryDynamicItemComponent {
     override var collisionBoundsType: UIDynamicItemCollisionBoundsType {
         get {
-            return .Path
+            return .path
         }
     }
 
     override var collisionBoundingPath: UIBezierPath {
         let path = UIBezierPath()
         let physicsCenter = CGPoint(x: 12.5+25, y: -25)
-        path.addArcWithCenter(physicsCenter, radius: 25, startAngle: 0, endAngle: CGFloat(2*M_PI), clockwise: true)
+        path.addArc(withCenter: physicsCenter, radius: 25, startAngle: 0, endAngle: CGFloat(2*Float.pi), clockwise: true)
         return path
     }
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext() {
-            UIColor.brownColor().set()
+            UIColor.brown.set()
             let handleWidth = CGFloat(12.5)
-            CGContextBeginPath(context)
-            CGContextAddArc(context, bounds.width/2, bounds.height/2, bounds.width/2-handleWidth/2,
-                            CGFloat(M_PI / 2 + 0.1), CGFloat(3 * M_PI / 2 - 0.1), 1)
-            CGContextSetLineWidth(context, handleWidth)
-            CGContextStrokePath(context)
+            context.beginPath()
+            context.addArc(center: CGPoint(x: bounds.width/2, y: bounds.height/2), radius: bounds.width/2-handleWidth/2, startAngle: CGFloat(Float.pi / 2 + 0.1), endAngle: CGFloat(3 * Float.pi / 2 - 0.1), clockwise: true)
+            context.setLineWidth(handleWidth)
+            context.strokePath()
         }
     }
 }

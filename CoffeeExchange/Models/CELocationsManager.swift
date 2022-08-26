@@ -32,7 +32,7 @@ class CELocationsManager: NSObject {
 
     func addMapItems(mapItems: [MKMapItem]) {
         lock.withCriticalScope {
-            self._mapItems.appendContentsOf(mapItems)
+            self._mapItems.append(contentsOf: mapItems)
         }
     }
 
@@ -47,7 +47,7 @@ class CELocationsManager: NSObject {
     func closestPlacemarkToUser() -> (distance: CLLocationDistance, label: String, placemark: CLPlacemark)? {
         var minAssoc: (distance: CLLocationDistance, label: String, placemark: CLPlacemark)?
         placemarks().map { (label, placemark) -> (distance: CLLocationDistance, label: String, placemark: CLPlacemark) in
-            (userLocation.distanceFromLocation(placemark.location!), label, placemark)
+            (userLocation.distance(from: placemark.location!), label, placemark)
         }.forEach { (assoc) in
             if minAssoc == nil || minAssoc!.distance > assoc.distance  {
                 minAssoc = assoc

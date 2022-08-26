@@ -28,7 +28,7 @@ class CEGeocodeAddressOperation: CEOperation {
     }
 
     override func main() {
-        if cancelled {
+        if isCancelled {
             state = .Finished
             return
         }
@@ -39,12 +39,12 @@ class CEGeocodeAddressOperation: CEOperation {
         geocoder.geocodeAddressString(address) { (placemarks, error) in
             if let placemarks = placemarks {
                 for placemark in placemarks {
-                    self.locationsManager.addPlacemark(placemark, withLabel: self.label)
+                    self.locationsManager.addPlacemark(placemark: placemark, withLabel: self.label)
                 }
                 NSLog("CEGeocodeAddressOperation::ObtainedPlacemarkForAddress: \(self.address)")
             } else {
-                self.error = error
-                NSLog("CEGeocodeAddressOperation::FailedWithError: \(error)")
+                self.error = error as NSError?
+                NSLog("CEGeocodeAddressOperation::FailedWithError: \(String(describing: error))")
             }
             self.state = .Finished
         }

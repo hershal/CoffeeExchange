@@ -8,11 +8,12 @@
 
 import Foundation
 import EventKit
+import UIKit
 
 class CEReminderController: NSObject {
-    static let reminderTitle = "Coffee"
-    static let userInfoTitle = "title"
-    static let userInfoDescription = "description"
+    static let reminderTitle: String = "Coffee"
+    static let userInfoTitle: String = "title"
+    static let userInfoDescription: String = "description"
 
     var delegate: CEReminderControllerDelegate?
     var eventStore: EKEventStore
@@ -25,16 +26,16 @@ class CEReminderController: NSObject {
     }
 
     private func getCoffeeCalendar() -> EKCalendar? {
-        let calendars = self.eventStore.calendarsForEntityType(.Reminder)
+        let calendars = self.eventStore.calendars(for: .reminder)
         let filtered = calendars.filter { (calendar) -> Bool in
             calendar.title == CEReminderController.reminderTitle
         }
         if let first = filtered.first {
             return first
         } else {
-            let calendar = EKCalendar(forEntityType: .Reminder, eventStore: eventStore)
+            let calendar = EKCalendar(for: .reminder, eventStore: eventStore)
             calendar.title = CEReminderController.reminderTitle
-            calendar.source = eventStore.defaultCalendarForNewReminders().source
+            calendar.source = eventStore.defaultCalendarForNewReminders()?.source
             do {
                 try eventStore.saveCalendar(calendar, commit: true)
                 return calendar
@@ -46,11 +47,11 @@ class CEReminderController: NSObject {
 
     func reminderIntervalSheetInfo() -> [CEReminderInterval: String] {
         let date = NSDate()
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.setLocalizedDateFormatFromTemplate("EEEE")
-        let dayName = dateFormatter.stringFromDate(date)
+        let dayName = dateFormatter.string(from: date as Date)
 
-        let dayNumber = NSCalendar.currentCalendar().component(.Weekday, fromDate: date)
+        let dayNumber = NSCalendar.current.component(.weekday, from: date as Date)
         var whichWeek = "This"
         var enumWeek: CEReminderInterval = .ThisWeekend
         if dayNumber == 1 || dayNumber == 6 || dayNumber == 7 {
@@ -63,11 +64,11 @@ class CEReminderController: NSObject {
 
     func createReminderWithInterval(interval: CEReminderInterval) {
         eventStore = EKEventStore()
-        eventStore.requestAccessToEntityType(.Reminder) { (granted, error) in
+        eventStore.requestAccess(to: .reminder) { (granted, error) in
             if granted {
-                self._createReminderWithInterval(interval)
+                self._createReminderWithInterval(interval: interval)
             } else {
-                self.delegate?.reminderController(self, couldNotCreateReminderWithError: .CouldNotAccessReminders)
+                self.delegate?.reminderController(reminderController: self, couldNotCreateReminderWithError: .CouldNotAccessReminders)
             }
         }
     }
@@ -78,65 +79,65 @@ class CEReminderController: NSObject {
             let reminder = EKReminder.init(eventStore: eventStore)
             reminder.title = "Coffee with \(viewModel.truth.fullName)"
             reminder.calendar = calendar
-            let reminderDateComponents = dateComponentsFromInterval(interval)
-            let reminderDate = NSCalendar.currentCalendar().dateFromComponents(reminderDateComponents)
+            let reminderDateComponents = dateComponentsFromInterval(interval: interval)
+            let reminderDate = NSCalendar.current.date(from: reminderDateComponents)
             let alarm = EKAlarm(absoluteDate: reminderDate!)
             reminder.alarms = [alarm]
             reminder.dueDateComponents = reminderDateComponents
             do {
-                try eventStore.saveReminder(reminder, commit: true)
-                delegate?.reminderController(self, didCreateReminder: reminder, inCalendar: calendar, withInterval: interval)
+                try eventStore.save(reminder, commit: true)
+                delegate?.reminderController(reminderController: self, didCreateReminder: reminder, inCalendar: calendar, withInterval: interval)
                 return nil
             } catch {
-                delegate?.reminderController(self, couldNotCreateReminderWithError: .CouldNotCreateReminder)
-                return errorFromError(.CouldNotCreateReminder)
+                delegate?.reminderController(reminderController: self, couldNotCreateReminderWithError: .CouldNotCreateReminder)
+                return errorFromError(error: .CouldNotCreateReminder)
             }
         } else {
-            delegate?.reminderController(self, couldNotCreateReminderWithError: .CouldNotCreateReminderList)
-            return errorFromError(.CouldNotCreateReminderList)
+            delegate?.reminderController(reminderController: self, couldNotCreateReminderWithError: .CouldNotCreateReminderList)
+            return errorFromError(error: .CouldNotCreateReminderList)
         }
     }
 
-    private func dateComponentsFromInterval(interval: CEReminderInterval) -> NSDateComponents {
-        let calendar = NSCalendar.currentCalendar()
-        var date = NSDate()
-        var components = NSDateComponents()
+    private func dateComponentsFromInterval(interval: CEReminderInterval) -> DateComponents {
+        let calendar = Calendar.current
+        var date = Date()
+        var components = DateComponents()
 
         switch interval {
         case .NextWeekend:
             components.weekOfYear = 1
-            date = calendar.dateByAddingComponents(components, toDate: date, options: [])!
-            date = calendar.dateBySettingUnit(.Day, value: 7, ofDate: date, options: [])!
+            date = calendar.date(byAdding: components, to: date)!
+            date = calendar.date(bySetting: .day, value: 7, of: date)!
         case .ThisWeekend:
-            date = calendar.dateBySettingUnit(.Day, value: 7, ofDate: date, options: [])!
+            date = calendar.date(bySetting: .day, value: 7, of: date)!
         case .NextWeekThisDay:
             components.weekOfYear = 1
-            date = calendar.dateByAddingComponents(components, toDate: date, options: [])!
+            date = calendar.date(byAdding: components, to: date)!
         case .Tomorrow:
             components.weekday = 1
-            date = calendar.dateByAddingComponents(components, toDate: date, options: [])!
+            date = calendar.date(byAdding: components, to: date)!
         }
-        date = calendar.dateBySettingHour(9, minute: 0, second: 0, ofDate: date, options: [])!
-        components = calendar.components([.Era, .Year, .Month, .Day, .Hour, .Minute, .Second], fromDate: date)
+        date = calendar.date(bySettingHour: 9, minute: 0, second: 0, of: date)!
+        components = calendar.dateComponents([.era, .year, .month, .day, .hour, .minute, .second], from: date)
         return components
     }
 
     private func errorFromError(error: CEReminderError) -> NSError {
-        var userInfo = [NSObject: AnyObject]()
+        var userInfo = [String: Any]()
 
         switch(error) {
         case .CouldNotCreateReminder:
-            userInfo[CEReminderController.userInfoTitle] = "Can't Create Reminder"
-            userInfo[CEReminderController.userInfoDescription] = "I couldn't create the reminder."
+            userInfo[CEReminderController.userInfoTitle] = "Can't Create Reminder" as Any
+            userInfo[CEReminderController.userInfoDescription] = "I couldn't create the reminder." as Any
         case .CouldNotCreateReminderList:
-            userInfo[CEReminderController.userInfoTitle] = "Can't Create Reminder List"
-            userInfo[CEReminderController.userInfoDescription] = "I couldn't create the \(CEReminderController.reminderTitle) reminder list."
+            userInfo[CEReminderController.userInfoTitle] = "Can't Create Reminder List" as Any
+            userInfo[CEReminderController.userInfoDescription] = "I couldn't create the \(CEReminderController.reminderTitle) reminder list." as Any
         case .CouldNotAccessReminders:
-            userInfo[CEReminderController.userInfoTitle] = "Can't Access Reminders"
-            userInfo[CEReminderController.userInfoDescription] = "You have denied access to create reminders. Please enable access in Settings under Privacy."
+            userInfo[CEReminderController.userInfoTitle] = "Can't Access Reminders" as Any
+            userInfo[CEReminderController.userInfoDescription] = "You have denied access to create reminders. Please enable access in Settings under Privacy." as Any
         }
-        let nsError = NSError(domain: self.description, code: error.hashValue, userInfo: userInfo)
-        return nsError
+        let error = NSError(domain: self.description, code: error.hashValue, userInfo: userInfo)
+        return error
     }
 }
 

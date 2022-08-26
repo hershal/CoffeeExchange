@@ -27,29 +27,29 @@ class CEEntryDetailTableController: NSObject, UITableViewDataSource, UITableView
     }
 
     // MARK: - UITableViewDataSource
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
-        if let dequeuedCell = tableView.dequeueReusableCellWithIdentifier("CEEntryDetailCell") {
+        if let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: "CEEntryDetailCell") {
             cell = dequeuedCell
         } else {
-            cell = UITableViewCell(style: .Default, reuseIdentifier: "CEEntryDetailCell")
+            cell = UITableViewCell(style: .default, reuseIdentifier: "CEEntryDetailCell")
         }
         cell.textLabel?.text = tableItems[indexPath.item].cellText
         return cell
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableItems.count
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableItems[indexPath.item].action()
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
     }
 
     // MARK: - CETableItemDelegate
     func tableItemPresentViewController(viewController: UIViewController) {
-        delegate?.tableControllerPresentViewController(viewController)
+        delegate?.tableControllerPresentViewController(viewController: viewController)
     }
 }
 

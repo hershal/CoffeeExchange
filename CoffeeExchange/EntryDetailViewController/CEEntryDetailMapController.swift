@@ -16,7 +16,7 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
     let viewModel: CEEntryDetailViewModel
     var locationManager: CLLocationManager
     var locationDidInitialize = false
-    var operationQueue: NSOperationQueue
+    var operationQueue: OperationQueue
 
     var userLocation: CLLocation?
     var locationsManager: CELocationsManager!
@@ -25,7 +25,7 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         self.mapView = mapView
         self.viewModel = viewModel
         self.locationManager = CLLocationManager()
-        self.operationQueue = NSOperationQueue()
+        self.operationQueue = OperationQueue()
         super.init()
         mapView.delegate = self
 
@@ -44,7 +44,7 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
 
     func beginOperationsWithCurrentLocation(location: CLLocation) {
 
-        operationQueue.suspended = true
+        operationQueue.isSuspended = true
         // TODO: construct operations front to back so that dependencies can be added
         let searchOperation = CESearchForCoffeeOperation(mapView: mapView, locationsManager: locationsManager)
         let setRegionOperation = CESetRegionToClosestAddressOperation(mapView: mapView, locationsManager: locationsManager, viewModel: viewModel)
@@ -59,22 +59,22 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         searchOperation.addDependency(setRegionOperation)
         operationQueue.addOperation(setRegionOperation)
         operationQueue.addOperation(searchOperation)
-        operationQueue.suspended = false
+        operationQueue.isSuspended = false
     }
 
     // MARK: - MKMapViewDelegate Methods
-    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? CEPointAnnotation {
-            var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier("CEPointAnnotationView") as? MKPinAnnotationView
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "CEPointAnnotationView") as? MKPinAnnotationView
             if annotationView == nil {
                 annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "CEPointAnnotationView")
             }
 
-            let button = CEOpenMapsButton(type: .DetailDisclosure)
+            let button = CEOpenMapsButton(type: .detailDisclosure)
             button.mapItem = annotation.mapItem
-            button.addTarget(self, action: #selector(CEEntryDetailMapController.showMapItemDetail(_:)), forControlEvents: .TouchUpInside)
+            button.addTarget(self, action: #selector(CEEntryDetailMapController.showMapItemDetail(sender:)), for: .touchUpInside)
             annotationView!.rightCalloutAccessoryView = button
-            annotationView!.pinTintColor = UIColor.brownColor()
+            annotationView!.pinTintColor = UIColor.brown
             annotationView!.animatesDrop = true
             annotationView?.canShowCallout = true
             return annotationView
@@ -82,25 +82,25 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         return nil
     }
 
-    func showMapItemDetail(sender: AnyObject) {
+    @objc func showMapItemDetail(sender: AnyObject) {
         if let sender = sender as? CEOpenMapsButton {
-            sender.mapItem.openInMapsWithLaunchOptions(nil)
+            sender.mapItem.openInMaps(launchOptions: nil)
         }
     }
 
     func openItemsInMaps() {
         let mapItems = locationsManager.mapItems()
         if mapItems.count > 0 {
-            MKMapItem.openMapsWithItems(mapItems, launchOptions: nil)
+            MKMapItem.openMaps(with: mapItems, launchOptions: nil)
         } else {
             let userLocation = locationsManager.userLocation
             let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: userLocation.coordinate, addressDictionary: nil))
-            mapItem.openInMapsWithLaunchOptions(nil)
+            mapItem.openInMaps(launchOptions: nil)
         }
     }
 
     // MARK: - CLLocationManagerDelegate Methods
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {
             NSLog("CEEntryDetailMapController::LocationManagerDidUpdateLocation::CouldNotObtainLocation")
             return
@@ -112,14 +112,15 @@ class CEEntryDetailMapController: NSObject, MKMapViewDelegate, CLLocationManager
         if !locationDidInitialize {
             locationsManager = CELocationsManager(userLocation: location)
             mapView.setRegion(region, animated: false)
-            beginOperationsWithCurrentLocation(location)
+            beginOperationsWithCurrentLocation(location: location)
         }
         locationDidInitialize = true
     }
 
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         NSLog("CEEntryDetailViewController::LocationManagerDidFailWithError: \(error)")
     }
+
 }
 
 extension CNPostalAddress {

@@ -15,7 +15,7 @@ class CEThrowBehavior: UIDynamicBehavior {
     var topBoundsCollision: UICollisionBehavior
     var boundsCollision: UICollisionBehavior
     var motionManager: CMMotionManager
-    var motionQueue: NSOperationQueue
+    var motionQueue: OperationQueue
 
     var itemsInView: Set<CEEntryDynamicItem>
 
@@ -25,21 +25,21 @@ class CEThrowBehavior: UIDynamicBehavior {
         boundsCollision = UICollisionBehavior()
         topBoundsCollision = UICollisionBehavior()
         motionManager = CMMotionManager()
-        motionQueue = NSOperationQueue()
-        motionQueue.suspended = false
+        motionQueue = OperationQueue()
+        motionQueue.isSuspended = false
         itemsInView = Set<CEEntryDynamicItem>()
         super.init()
 
-        motionManager.startDeviceMotionUpdatesToQueue(motionQueue) { (motion, error) in
+        motionManager.startDeviceMotionUpdates(to: motionQueue) { (motion, error) in
             if let motion = motion {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async {
                     let gravityMotion = motion.gravity
                     let x = gravityMotion.x
                     let y = -gravityMotion.y + 0.2
                     let vector = CGVector(dx: x, dy: y)
                     self.gravity.gravityDirection = vector
                     self.gravity.magnitude = 2.0
-                })
+                }
             }
         }
         [gravity, initialBehavior, boundsCollision, topBoundsCollision].forEach { (behavior) in
@@ -51,7 +51,7 @@ class CEThrowBehavior: UIDynamicBehavior {
     func updateAction() {
         for item in gravity.items {
             if let item = item as? CEEntryDynamicItem {
-                item.textView.transform = CGAffineTransformIdentity
+                item.textView.transform = CGAffineTransform.identity
                 if !itemsInView.contains(item) && item.center.y > (64 + item.bounds.height/2) {
                     self.itemsInView.insert(item)
                     self.topBoundsCollision.addItem(item)
@@ -70,23 +70,23 @@ class CEThrowBehavior: UIDynamicBehavior {
         let frameTr = CGPoint(x: frame.maxX, y: frame.minY+64)
 
         boundsCollision.removeAllBoundaries()
-        boundsCollision.addBoundaryWithIdentifier("top", fromPoint: tl, toPoint: tr)
-        boundsCollision.addBoundaryWithIdentifier("bottom", fromPoint: bl, toPoint: br)
-        boundsCollision.addBoundaryWithIdentifier("left", fromPoint: tl, toPoint: bl)
-        boundsCollision.addBoundaryWithIdentifier("right", fromPoint: tr, toPoint: br)
+        boundsCollision.addBoundary(withIdentifier: "top" as NSCopying, from: tl, to: tr)
+        boundsCollision.addBoundary(withIdentifier: "bottom" as NSCopying, from: bl, to: br)
+        boundsCollision.addBoundary(withIdentifier: "left" as NSCopying, from: tl, to: bl)
+        boundsCollision.addBoundary(withIdentifier: "right" as NSCopying, from: tr, to: br)
 
         topBoundsCollision.removeAllBoundaries()
-        topBoundsCollision.addBoundaryWithIdentifier("top", fromPoint: frameTl, toPoint: frameTr)
+        topBoundsCollision.addBoundary(withIdentifier: "top" as NSCopying, from: frameTl, to: frameTr)
     }
 
     func addItem(dynamicItem: UIDynamicItem) {
         gravity.addItem(dynamicItem)
         boundsCollision.addItem(dynamicItem)
         initialBehavior.addItem(dynamicItem)
-        initialBehavior.addAngularVelocity(CGFloat.srandom()*CGFloat(M_PI), forItem: dynamicItem)
-        initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000+500, y: CGFloat.random()*1000+500), forItem: dynamicItem)
+        initialBehavior.addAngularVelocity(CGFloat.srandom()*CGFloat(Float.pi), for: dynamicItem)
+        initialBehavior.addLinearVelocity(CGPoint(x: CGFloat.srandom()*1000+500, y: CGFloat.random()*1000+500), for: dynamicItem)
         initialBehavior.elasticity = 0.25
-        dynamicItem.transform = CGAffineTransformRotate(dynamicItem.transform, CGFloat.random()*2*CGFloat(M_PI))
+        dynamicItem.transform = (dynamicItem.transform).rotated(by: CGFloat.random()*2*CGFloat(Float.pi))
     }
 
     func removeItem(dynamicItem: UIDynamicItem) {

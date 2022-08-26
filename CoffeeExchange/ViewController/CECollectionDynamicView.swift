@@ -28,7 +28,7 @@ class CECollectionDynamicView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        dynamicBehavior.layoutCollisions(frame)
+        dynamicBehavior.layoutCollisions(frame: frame)
     }
 
     private func distanceFrom(point: CGPoint, to: CGPoint) -> CGFloat {
@@ -40,7 +40,7 @@ class CECollectionDynamicView: UIView {
     private func itemsIntersectWithItem(dynamicItem: CEEntryDynamicItem) -> Bool {
         let doesIntersect = dynamicItems
             .map { (item) -> Bool in
-                distanceFrom(dynamicItem.center, to: item.center) < (item.bounds.radius)
+                distanceFrom(point: dynamicItem.center, to: item.center) < (item.bounds.radius)
             }
             .filter { (element) -> Bool in element == true }
             .first
@@ -54,25 +54,25 @@ class CECollectionDynamicView: UIView {
     private func addView(dynamicItem: CEEntryDynamicItem) {
         dynamicItem.center.x = bounds.width/2
 
-        while (itemsIntersectWithItem(dynamicItem)) {
+        while (itemsIntersectWithItem(dynamicItem: dynamicItem)) {
             dynamicItem.center.y -= dynamicItem.view.bounds.radius
         }
 
         dynamicItems.append(dynamicItem)
         addSubview(dynamicItem.view)
-        dynamicBehavior.addItem(dynamicItem)
-        dynamicItem.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(CECollectionDynamicView.handleTap(_:))))
+        dynamicBehavior.addItem(dynamicItem: dynamicItem)
+        dynamicItem.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(CECollectionDynamicView.handleTap(tapGestureRecognizer:))))
     }
 
     func setEditMode(editMode: CEViewControllerEditMode) {
         dynamicItems.forEach { (item) in
-            item.setEditMode(editMode)
+            item.setEditMode(editMode: editMode)
         }
     }
 
-    func handleTap(tapGestureRecognizer: UITapGestureRecognizer) {
+    @objc func handleTap(tapGestureRecognizer: UITapGestureRecognizer) {
         guard let view = tapGestureRecognizer.view as? CEEntryDynamicItemContainerView,
-            item = view.dynamicItem else {
+              let item = view.dynamicItem else {
                 NSLog("CECollectionDynamicView::HandleTap::CouldNotFindContainerView: \(tapGestureRecognizer)")
                 return
         }
@@ -81,7 +81,7 @@ class CECollectionDynamicView: UIView {
             NSLog("CECollectionDynamicView:HandleTap::NoDelegate!")
             return
         }
-        delegate.dynamicView(self, didSelectEntry: item.entry)
+        delegate.dynamicView(dynamicView: self, didSelectEntry: item.entry)
     }
 
     func invalidateItemAtIndex(index: Int) {
@@ -93,7 +93,7 @@ class CECollectionDynamicView: UIView {
     }
 
     func removeItemAtIndex(index: Int) {
-        removeView(dynamicItems[index])
+        removeView(dynamicItem: dynamicItems[index])
     }
 
     func appendItem() {
@@ -102,11 +102,11 @@ class CECollectionDynamicView: UIView {
             return
         }
 
-        let dataSourceCount = dataSource.dynamicViewNumberOfItems(self)
+        let dataSourceCount = dataSource.dynamicViewNumberOfItems(dynamicView: self)
         let selfCount = dynamicItems.count
         if dataSourceCount == (selfCount + 1) {
             let cell = dataSource.dynamicView(cellForItemAtIndex: selfCount)
-            addView(cell)
+            addView(dynamicItem: cell)
         } else {
             NSLog("CECollectionDynamicView::AppendItem::DataSourceCountOutOfSync: \(dataSourceCount) != (\(selfCount) + 1)")
             reloadData()
@@ -114,15 +114,15 @@ class CECollectionDynamicView: UIView {
     }
 
     private func removeView(dynamicItem: CEEntryDynamicItem) {
-        guard let index = dynamicItems.indexOf(dynamicItem) else {
+        guard let index = dynamicItems.firstIndex(of: dynamicItem) else {
             NSLog("CECollectionDynamicView::RemoveView::ViewNotFound: \(dynamicItem)")
             return
         }
-        dynamicItems.removeAtIndex(index)
-        UIView.animateWithDuration(0.5, animations: {
+        dynamicItems.remove(at: index)
+        UIView.animate(withDuration: 0.5, animations: {
             dynamicItem.view.alpha = 0.0
             }, completion: { (finished) in
-                self.dynamicBehavior.removeItem(dynamicItem)
+                self.dynamicBehavior.removeItem(dynamicItem: dynamicItem)
                 dynamicItem.removeFromSuperview()
         })
     }
@@ -135,16 +135,16 @@ class CECollectionDynamicView: UIView {
 
         // Clear items
         while dynamicItems.count > 0 {
-            removeView(dynamicItems.first!)
+            removeView(dynamicItem: dynamicItems.first!)
         }
 
         // Ask for new items from the dataSource and add them to the view
-        let count = dataSource.dynamicViewNumberOfItems(self)
+        let count = dataSource.dynamicViewNumberOfItems(dynamicView: self)
         for var i in 0..<count {
             // To suppress (incorrect) compiler warning
             i = i+0
             let cell = dataSource.dynamicView(cellForItemAtIndex: i)
-            addView(cell)
+            addView(dynamicItem: cell)
         }
     }
 }

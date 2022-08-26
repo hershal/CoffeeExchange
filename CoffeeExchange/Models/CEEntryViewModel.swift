@@ -9,6 +9,11 @@
 import UIKit
 import Contacts
 
+
+internal protocol CNLabeledPhoneNumberOrPostalValue : NSCopying, NSSecureCoding {
+    
+}
+
 class CEEntryDetailViewModel: NSObject {
 
     var truth: CEEntry
@@ -22,13 +27,13 @@ class CEEntryDetailViewModel: NSObject {
         var initialString = ""
         let givenName = self.truth.contact.givenName
         let familyName = self.truth.contact.familyName
-        if givenName.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+        if givenName.lengthOfBytes(using: String.Encoding.utf8) > 0 {
             initialString.append(givenName[givenName.startIndex])
         }
-        if familyName.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0 {
+        if familyName.lengthOfBytes(using: String.Encoding.utf8) > 0 {
             initialString.append(familyName[familyName.startIndex])
         }
-        return initialString.uppercaseString
+        return initialString.uppercased()
     }()
 
     dynamic var balance: Int {
@@ -69,7 +74,7 @@ class CEEntryDetailViewModel: NSObject {
     }
 
     var picture: NSData? {
-        return truth.contact.thumbnailImageData
+        return truth.contact.thumbnailImageData as NSData?
     }
 
     lazy var hasPhoneNumber: Bool = {
@@ -82,9 +87,9 @@ class CEEntryDetailViewModel: NSObject {
             return nil
         }
         let labeledValues = self.truth.contact.phoneNumbers.filter { (labeledValue) -> Bool in
-            self.callablePhoneLabels.contains(labeledValue.label)
+            self.callablePhoneLabels.contains(labeledValue.label!)
         }
-        return self.zipLabeledPhoneValues(labeledValues)
+        return self.zipLabeledPhoneValues(labeledValues: labeledValues)
     }()
 
     lazy var textablePhoneNumbers: [(String, CNPhoneNumber)]? = {
@@ -92,26 +97,25 @@ class CEEntryDetailViewModel: NSObject {
             return nil
         }
         let labeledValues = self.truth.contact.phoneNumbers.filter { (labeledValue) -> Bool in
-            self.textablePhoneLabels.contains(labeledValue.label)
+            self.textablePhoneLabels.contains(labeledValue.label!)
         }
-        return self.zipLabeledPhoneValues(labeledValues)
+        return self.zipLabeledPhoneValues(labeledValues: labeledValues)
     }()
 
-    private func zipLabeledPhoneValues(labeledValues: [CNLabeledValue]) -> [(String, CNPhoneNumber)] {
+    
+    private func zipLabeledPhoneValues(labeledValues: [CNLabeledValue<CNPhoneNumber>]) -> [(String, CNPhoneNumber)] {
         var phoneLabels = [String]()
         var phoneNumbers = [CNPhoneNumber]()
 
         for labeledValue in labeledValues {
-            if let value = labeledValue.value as? CNPhoneNumber {
-                phoneNumbers.append(value)
-                if let label = humanPhoneLabels[labeledValue.label] {
-                    phoneLabels.append(label)
-                } else {
-                    phoneLabels.append("")
-                }
+            phoneNumbers.append(labeledValue.value)
+            if let label = humanPhoneLabels[labeledValue.label!] {
+                phoneLabels.append(label)
+            } else {
+                phoneLabels.append("")
             }
         }
-        return Array(Zip2Sequence(phoneLabels, phoneNumbers))
+        return Array(zip(phoneLabels, phoneNumbers))
     }
 
     private let callablePhoneLabels = [CNLabelPhoneNumberiPhone, CNLabelPhoneNumberMobile, CNLabelPhoneNumberMain, CNLabelHome, CNLabelWork, CNLabelOther]
@@ -128,24 +132,22 @@ class CEEntryDetailViewModel: NSObject {
             return nil
         }
         let labeledValues = self.truth.contact.postalAddresses
-        return self.zipLabeledPostalValues(labeledValues)
+        return self.zipLabeledPostalValues(labeledValues: labeledValues)
     }()
 
-    private func zipLabeledPostalValues(labeledValues: [CNLabeledValue]) -> [(String, CNPostalAddress)] {
+private func zipLabeledPostalValues(labeledValues: [CNLabeledValue<CNPostalAddress>]) -> [(String, CNPostalAddress)] {
         var addressLabels = [String]()
         var addresses = [CNPostalAddress]()
 
         for labeledValue in labeledValues {
-            if let value = labeledValue.value as? CNPostalAddress {
-                addresses.append(value)
-                if let label = humanPostalAddressLabels[labeledValue.label] {
-                    addressLabels.append(label)
-                } else {
-                    addressLabels.append("")
-                }
+            addresses.append(labeledValue.value)
+            if let label = humanPostalAddressLabels[labeledValue.label!] {
+                addressLabels.append(label)
+            } else {
+                addressLabels.append("")
             }
         }
-        return Array(Zip2Sequence(addressLabels, addresses))
+        return Array(zip(addressLabels, addresses))
     }
 
     let humanPostalAddressLabels = [CNLabelHome: "Home", CNLabelWork: "Work", CNLabelOther: ""]

@@ -27,10 +27,10 @@ class CECollection {
     }
 
     lazy private var archiveLocation: String = {
-        let location = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first!
+        let location = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         let url = NSURL(string: location)
-        let saveLocation = url!.URLByAppendingPathComponent(CECollection.archiveName)
-        return saveLocation.absoluteString
+        let saveLocation = url!.appendingPathComponent(CECollection.archiveName)
+        return saveLocation!.absoluteString
     }()
 
     func addEntry(entry: CEEntry) {
@@ -40,19 +40,19 @@ class CECollection {
         }
         entries.append(entry)
         NSLog("CECollection:: Added entry: \(entry.contact.identifier)")
-        delegate?.collection(self, didAddEntry: entry)
-        delegate?.collection(self, didChangeCount: count)
+        delegate?.collection(collection: self, didAddEntry: entry)
+        delegate?.collection(collection: self, didChangeCount: count)
     }
 
     func unarchive() {
         entries.removeAll()
-        if let unarchivedEntries = NSKeyedUnarchiver.unarchiveObjectWithFile(archiveLocation) as? [CEEntry] {
-            entries.appendContentsOf(unarchivedEntries)
+        if let unarchivedEntries = NSKeyedUnarchiver.unarchiveObject(withFile: archiveLocation) as? [CEEntry] {
+            entries.append(contentsOf: unarchivedEntries)
         }
         NSLog("CECollection::DidUnarchiveFrom: \(archiveLocation)")
         NSLog("CECollection::Loaded \(entries.count) items")
-        delegate?.collectionDidFinishLoading(self)
-        delegate?.collection(self, didChangeCount: count)
+        delegate?.collectionDidFinishLoading(collection: self)
+        delegate?.collection(collection: self, didChangeCount: count)
     }
 
     func archive() {
@@ -60,16 +60,16 @@ class CECollection {
         NSLog("CECollection::DidArchiveTo: \(archiveLocation)")
     }
 
-    func contains(entry entry: CEEntry) -> Bool {
+    func contains(entry: CEEntry) -> Bool {
         return contains(contact: entry.contact)
     }
 
-    func contains(contact contact: CNContact) -> Bool {
+    func contains(contact: CNContact) -> Bool {
         return contains(identifier: contact.identifier)
     }
 
-    func contains(identifier identifier: String) -> Bool {
-        return entries.reduce(0, combine: { (accum, iter) -> Int in
+    func contains(identifier: String) -> Bool {
+        return entries.reduce(0, { (accum, iter) -> Int in
             return iter.contact.identifier == identifier ? 1 : 0
         }) != 0
     }
@@ -85,17 +85,17 @@ class CECollection {
 
     func removeAll() {
         entries.removeAll()
-        delegate?.collection(self, didChangeCount: count)
+        delegate?.collection(collection: self, didChangeCount: count)
         archive()
     }
 
     func removeAtIndex(index: Int) {
-        entries.removeAtIndex(index)
-        delegate?.collection(self, didChangeCount: count)
+        entries.remove(at: index)
+        delegate?.collection(collection: self, didChangeCount: count)
     }
 
     func indexOfEntry(entry: CEEntry) -> Int? {
-        let index = entries.indexOf(entry)
+        let index = entries.firstIndex(of: entry)
         if index != NSNotFound {
             return index
         }
